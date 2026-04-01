@@ -1,0 +1,76 @@
+!
+hostname LAB-R01-C02-R01
+!
+ip domain name data.labnet.local
+!
+username student privilege 10 secret pxl
+!
+track 1 interface GigabitEthernet0/0/1 line-protocol
+ delay down 2
+!
+interface g0/0/0.99
+ description VLAN99-Native
+!
+interface g0/0/0.10
+ description VLAN10-Management
+ encapsulation dot1Q 10
+ ip address 172.16.1.130 255.255.255.240
+ vrrp 10 ip 172.16.1.129
+ vrrp 10 priority 110
+ vrrp 10 track 1 decrement 50
+ vrrp 10 preempt delay minimum 30
+!
+interface g0/0/0.20
+ description VLAN20-VM-Hosts
+ encapsulation dot1Q 20
+ ip address 172.16.1.146 255.255.255.240
+ vrrp 20 ip 172.16.1.145
+ vrrp 20 priority 110
+ vrrp 20 track 1 decrement 50
+ vrrp 20 preempt delay minimum 30
+!
+interface g0/0/0.30
+ description VLAN30-Appliance-Servers
+ encapsulation dot1Q 30
+ ip address 172.16.1.162 255.255.255.240
+ vrrp 30 ip 172.16.1.161
+ vrrp 30 priority 110
+ vrrp 30 track 1 decrement 50
+ vrrp 30 preempt delay minimum 30
+!
+interface g0/0/0.40
+ description VLAN40-Data-Users
+ encapsulation dot1Q 40
+ ip address 172.16.1.178 255.255.255.240
+ vrrp 40 ip 172.16.1.177
+ vrrp 40 priority 110
+ ip helper-address 10.199.64.66
+ vrrp 40 track 1 decrement 50
+ vrrp 40 preempt delay minimum 30
+!
+interface GigabitEthernet0/0/0
+ no shutdown
+!
+interface GigabitEthernet0/0/1
+ no shutdown
+ ip address 10.199.66.102 255.255.255.224
+!
+! OSPF via network statements:
+!
+router ospf 10
+ router-id 10.199.66.102
+ passive-interface GigabitEthernet0/0/0.10
+ passive-interface GigabitEthernet0/0/0.40
+ network 10.199.66.102 0.0.0.0 area 0
+ network 172.16.1.128 0.0.0.15 area 0
+ network 172.16.1.176 0.0.0.15 area 0
+!
+line vty 0 15
+ login local
+ transport input ssh
+!
+ntp server 10.199.64.66
+!
+crypto key generate rsa
+ 1024
+!
