@@ -1,0 +1,139 @@
+--- Digital sovereignty ----
+
+-> Why a trend?
+-> Def
+-> What are hypercalers doing?
+-> Levels
+-> Design
+-> Offerings
+-> Data & AI
+-> What's next?
+
+-------------
+
+Artikel CIO.com 20 aug 2025
+> terugkomen van cloud-first principe en meer terug gaan kijken naar on-prem, vooral na geopolitieke issues, post-globalizatie. Effecten op hyperscalers
+
+Artikel van Gartner.com (analist en authoriteit)
+> 10 grote strategische trens, 10e is "geopatriation", daar positioneren/deployen waar men controle heeft, waar men zeker is dat de data teogankelijk zal zijn. Spreken van geopolitical risk
+
+Sovereignty is niet uniek voor Europa maar Europa is overgereguleerd (GDPR, data-act, dora, ai-act, quantum-act), maar de regeling is gemaakt om de sovereignty mogelijk te maken
+
+Cloud sovereignty framework in Europa, framework om score te bepalen van de sovereingty score van een leverancier
+
+-------------
+
+Refers to the capacity to govern the creation, storage, processing, and use of digital assets and technologies under a self-determined legal, technical and economic framework, while preserving strategic autonomy and resilience.
+
+Voorbeeld 1: stad Hasselt - aws - extern consulting company, database in België: not sovereign, low level of control, legal exposure and strategic dependency
+Voorbeeld 2: stad Hasselt- eigen datacenter - data encryption - sovereign/trusted cloud - open source software: sovereign, autonomy of decision, no isolation
+
+Not binary, is a spectrum, geen exacte wetenschap: question is not: do we use foreign technology. But, can we still decide, switch and protect our interests if things go wrong?
+
+Verschil sovereign IT (implementatie van het idee van digital sovereignty) <-> digital sovereingty
+
+Betere definitie mss (op basis van Duits artikel)
+- can be operated in a legally compliant/GDPR-compliant manner
+- has the ability to switch (no vendor lock-in)
+- ensures control (in the event of failure, blocking or change of service providers)
+- transparancy (through viewable source code)
+- customizable and shapeable (through further development in the community of service providers)
+
+-------------
+
+Evolution: data residency as sovereignty -> Snowden and the rise of jurisdictional awareness -> the conflict of law emerges -> technology as mitigation, not resolution -> courts and policy are the only true resolution
+
+1: keep data in-country to keep it under local law
+2: klokkenluider, revealed that foreign governments could access data even if stored locally through legal powers over providers, shifted the focus from where data sits to who controls it and under which law
+3: US laws give US authorities rights to access data held by US-headquartered companies regardless of where the data is stored, EU laws prohibit transferring EU personal data to foreign authorities unless through formal channels
+4: Encryption, client managed keys and local data centers to reduce risk (bring your own key, keep your own key), help but cannot eliminate the legal conflict
+5: possible new international agreements (toekomst)
+
+Hyperscalers invest billions in sovereignty:
+- strategic market capture
+- risk positioning and procuremtn eligiblity
+- perception and competitive differentiation
+
+Stakeholders: ondernemingen, publieke organisaties (overheid enz, eindklant burger), politieke wereld
+- Data protection
+- Business control
+- Technology optionality
+- Cyber security
+Sovereignty is a design principle
+
+Cloud sovereignty, core principles:
+- Data sovereignty: information is subject to the rules of its originating jursidiction (backups, veiligheid van data)
+- Operational sovereignty: the degree to which a customer or organization has transparancy into and control over the provider's operations (eigen kennis)
+- Technological sovereignty: the degree to which a customer or organization can assure the continuity and control its rights to technological autonomy (keuze van software/hardware)
+
+-------------
+
+Toevoeging aan core principles: digital sovereigny (umbrella term)
+
+paar voorbeelden, wij moesten zeggen onder welke term het het meest paste (data, operational, technological of digital)
+
+Levels of sovereignty, guiding principles
+Digital:
+- governance authority, repeatable and enforceable rules around permissions of digital assets
+- transparancy, ability to audit processes, validate working and changes needed
+- clearance/certified or technical assured, achieving supply chain control through portability of data and technology
+-> digital sovereignty is the organization's control over its own digital assets
+Operational:
+- locality, choices of placement and management according to local regulations
+- autonomy or stack independence
+- resiliency
+- cybersecurity
+Data & AI:
+- privacy, protect personal or sensitive data
+- residency, compliant with applicable data residency laws and regulations
+- accessibility, prevent unlawful access
+-> basis for trusted data and business continuity
+technology:
+- optionality, infrastructure and code replaceability (makkelijk overstappen)
+- openness, open standards and open source
+-> strenghtens digital resilience and ensures long-term competitiveness
+
+Information classification levels:
+- restricted, beperkt aantal mensen heeft toegang (bv. defensie budget), sensitive but not critical
+- highly confidential (bv. waar troepen zich gaan bewegen), higher protection than restricted
+- top secret (bv. toegang tot nucleaire installaties)
+
+Word to remember: optionality
+sovereignty (full independence) <-> autonomy (self-rule under supervision)
+maximum optionality <-> conditional optionality
+
+-------------
+
+Sovereignty by design:
+
+Digital systems are intentionally architected from the outset to ensure control over data, infrastructure and operations in accordance with a defined jurisdiction's laws, values and strategic autonomy, rather than trying to add sovereignty controls later
+
+Requirements:
+- enforcement and immutability of controls and evidence collection
+- zero touch environment
+- all violations and drifts need to be detected and reported
+
+Reference architecture (model met alle logische/technische componenten in) voorbeelden zijn TOGA, SAFe
+
+Framing the threat landscape
+- What are we protecting us against?
+- how to mitigate?
+- how to enforce?
+- can we verify?
+
+Voorbeeld Bank: threats, risks, controls, platforms, evidence
+
+Hyper-converged infrastructure layer: hardware en software tegelijkertijd aanbieden (integratie)
+
+-------------
+
+AI sovereingty: keep end-to-end control about all your AI & data, bias and drift uitsluiten, waar draait het systeem, waar is het gelokaliseerd
+
+Toekomst: in EU AI factories en antennas (samenwerken met factories), giga factories en partnerships buiten Europa
+
+-------------
+
+What's next?
+
+Sovereignty framing workshops, sovereign architectural workshops, technology discovery for sovereignty
+4 vragen: what are my threats? where am i at risk? what are my controls? evidence of compliance?

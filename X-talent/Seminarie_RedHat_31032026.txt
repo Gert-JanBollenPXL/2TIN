@@ -1,0 +1,40 @@
+--- Red Hat ---
+
+Automation engineer: day one on the job
+-> ssh into each machine manually (old)
+-> write a bash script and  hope for no typos (not as old)
+-> run a playbook and grab a coffee (now)
+
+Why is Red Hat here?
+
+-> safety net, gives tools like ansible etc
+
+agenda:
+
+- open source revolution
+- modern tech stack
+- case study: datacom
+- blueprint
+- lab
+
+What is open source?
+
+source code developed and maintained through open collaboration, anyone can use, examine, alter and redistribute OSS as they see fit typically at no cost
+- free to use and share
+- can see the source code
+- anyone can improve it
+- built by communities, not just by companies
+
+How does Red Hat work?
+
+- contribute to open source projects and communities (contribute)
+- assembly of community platform (integrate)
+- integration, validation and packaging (stabilize)
+
+-> Red Hat enterprise Linux: lightweight, security enhanced, accelerated cloud adoption, AI
+-> Cockpit, CLI but interface (opensource)
+-> Red Hat Linux lightspeed, Integrated AI into CLI
+-> OpenShift, kubernetes enterprise that unifies all environments (on prem, virtual and cloud)
+-> Podman: docker but containers are run rootless
+-> Ansible automation platform
+ansible -> awx -> ansible tower (deprecated) > automation controller
