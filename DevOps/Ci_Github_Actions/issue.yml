@@ -1,0 +1,19 @@
+name: Issue trigger
+
+on:
+  issues:
+   types: [opened]
+
+jobs:
+ log-issue:
+   runs-on: ubuntu-latest
+
+   steps:
+    - name: Show issue details
+      env:
+       ISSUE_TITLE: ${{ github.event.issue.title }}
+       ISSUE_BODY: ${{ github.event.issue.body }}
+      run: |
+       echo "Nieuwe issue aangemaakt!"
+       echo "Titel: $ISSUE_TITLE"
+       echo "Body: $ISSUE_BODY"

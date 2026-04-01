@@ -1,0 +1,107 @@
+{
+	"info": {
+		"_postman_id": "763b6eba-edd6-40d2-9160-8eaacb25fe1b",
+		"name": "api-testcollection-groep2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "50716138",
+		"_collection_link": "https://gert-janbollen-3641249.postman.co/workspace/Gert-Jan-Bollen's-Workspace~e34a2bf2-32d1-4c31-8665-cf58dc81c9f2/collection/50716138-763b6eba-edd6-40d2-9160-8eaacb25fe1b?action=share&source=collection_link&creator=50716138"
+	},
+	"item": [
+		{
+			"name": "Get all students",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Students list is not empty\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData.length).to.be.above(0);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "key",
+						"value": "2TINDEVOPS",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://devops.d-ries.be/api/students",
+					"protocol": "https",
+					"host": [
+						"devops",
+						"d-ries",
+						"be"
+					],
+					"path": [
+						"api",
+						"students"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get specific student",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Student name is present\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('name');",
+							"});",
+							"",
+							"pm.test(\"Student group is present\", function () {",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('group');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "key",
+						"value": "2TINDEVOPS",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://devops.d-ries.be/api/students/6939740fa90a661ce6dd4d9a",
+					"protocol": "https",
+					"host": [
+						"devops",
+						"d-ries",
+						"be"
+					],
+					"path": [
+						"api",
+						"students",
+						"6939740fa90a661ce6dd4d9a"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

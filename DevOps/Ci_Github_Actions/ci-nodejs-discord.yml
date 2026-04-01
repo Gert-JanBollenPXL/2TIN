@@ -1,0 +1,74 @@
+name: CI Discord uitbreiding
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5.0.0
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with: 
+          node-version: '20'
+
+      - name: Build the code
+        run: npm install && npm run zip --if-present
+
+      - name: Test the code
+        run: npm test -- --coverage --json --outputFile=test-results.json
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v4
+        with:
+          name: node-app
+          path: build.zip
+
+      - name: Better Test Reports Action
+        uses: mridang/action-test-reporter@v1.7.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          coverage-file: ./coverage/clover.xml
+          working-directory: ./
+
+      - name: Extract test results
+        id: tests
+        run: |
+          PASSED=$(jq '.numPassedTests' test-results.json)
+          FAILED=$(jq '.numFailedTests' test-results.json)
+          echo "passed=$PASSED" >> $GITHUB_OUTPUT
+          echo "failed=$FAILED" >> $GITHUB_OUTPUT
+
+      - name: Send status to Discord for main branch push
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: nebularg/actions-discord-webhook@v1
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
+          status: ${{ job.status }}
+
+      - name: Send status to Discord for pull requests
+        if: github.event_name == 'pull_request' && github.base_ref == 'main'
+        uses: nebularg/actions-discord-webhook@v1
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
+          status: ${{ job.status }}
+
+      - name: Comment on PR with build status
+        if: github.event_name == 'pull_request' && github.base_ref == 'main'
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            **CI Build Status:** ${{ job.status }}
+            **Tests Passed:** ${{ steps.tests.outputs.passed }}
+            **Tests Failed:** ${{ steps.tests.outputs.failed }}

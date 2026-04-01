@@ -1,0 +1,30 @@
+name: Conditional Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Choose environment'
+        required: true
+        default: 'development'
+        type: choice
+        options:
+          - development
+          - staging
+          - production
+
+jobs:
+  conditional-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to production
+        if: ${{ github.event.inputs.environment == 'production' }}
+        run: echo "Deploying to production!"
+
+      - name: Deploy to staging
+        if: ${{ github.event.inputs.environment == 'staging' || github.event.inputs.environment == 'development' }}
+        run: echo "Running in test mode"
+
+      - name: Show selected environment
+        if: always()
+        run: echo "Selected environment is ${{ github.event.inputs.environment }}"

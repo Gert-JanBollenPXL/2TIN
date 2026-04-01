@@ -1,0 +1,19 @@
+name: steps-example
+on:
+ workflow_dispatch:
+
+jobs:
+ hello-world:
+  runs-on: ubuntu-latest
+  steps:
+  - name: make directory
+    run: mkdir -p testmachine
+  
+  - name: execute uname command
+    run: uname -a > testmachine/output.txt
+
+  - name: check directory output
+    run: ls -alhR
+
+  - name: check contents of txt file
+    run: cat testmachine/output.txt

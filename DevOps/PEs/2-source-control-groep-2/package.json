@@ -1,0 +1,26 @@
+{
+  "name": "calculator-app",
+  "version": "1.0.0",
+  "description": "Simple calculator app",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "jest"
+  },
+  "author": "Dries Swinnen",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "jest": "^27.0.6",
+    "supertest": "^6.1.4"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/public"
+    ]
+  }
+}

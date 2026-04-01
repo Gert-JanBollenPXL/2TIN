@@ -1,0 +1,22 @@
+name: Build example
+
+on:
+ push:
+  branches:
+   - main
+
+jobs:
+ build:
+  runs-on: ubuntu-latest
+
+  steps:
+   - name: Checkout
+     uses: actions/checkout@v5.0.0
+     
+   - name: Setup Node.js environment
+     uses: actions/setup-node@v4
+     with: 
+      node-version: '20'
+
+   - name: Build the code
+     run: npm install && rm -f build.zip && zip -r build.zip *.js Dockerfile docker-compose.yml .dockerignore public/ node_modules/

@@ -1,0 +1,33 @@
+name: CI
+
+on:
+ push:
+  branches:
+   - main
+ pull_request:
+
+jobs:
+ build:
+  runs-on: ubuntu-latest
+
+  steps:
+   - name: Checkout
+     uses: actions/checkout@v5.0.0
+     
+   - name: Setup Node.js environment
+     uses: actions/setup-node@v4
+     with: 
+      node-version: '20'
+
+   - name: Build the code
+     run: npm install
+
+   - name: Test the code
+     run: npm test -- --coverage
+
+   - name: Better Test Reports Action
+     uses: mridang/action-test-reporter@v1.7.0
+     with:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+      coverage-file: ./coverage/clover.xml
+      working-directory: ./

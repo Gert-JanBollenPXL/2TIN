@@ -1,0 +1,10 @@
+- Hoe bepaal je de opsplitsing van de taken?
+    -> Onderling bespreken wie wat doet.
+- Op welke manier werk je samen & communiceer je als team binnen & buiten de lesuren?
+    -> Discord.
+- Hoe zorg je ervoor dat alle teamleden op de hoogte blijven van alle taken?
+    -> Iedereen weet vanaf het begin van een opdracht welke zijn taken zijn. (zie ook antwoord volgende vraag)
+- Hoe doe je aan kennisoverdracht binnen je groep?
+    -> Samenkomen (bv. videocalls) om aan de anderen de gemaakte opdrachten uit te leggen.
+- Wie is verantwoordelijk voor de eindoplevering? Hoe pak je dit als team aan?
+    -> Iedereen. We zijn een team, we houden elkaar verantwoordelijk voor de taken die er gemaakt moeten worden.

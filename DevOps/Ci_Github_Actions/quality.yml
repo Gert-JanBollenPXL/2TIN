@@ -1,0 +1,30 @@
+name: Quality exercise PE
+
+on:
+ pull_request:
+  branches:
+   - main
+
+jobs:
+ build:
+  runs-on: ubuntu-latest
+
+  steps:
+   - name: Fetch code
+     uses: actions/checkout@v5.0.0
+
+   - name: Install dependencies
+     run: npm install
+
+   - name: Check code Quality
+     run: npm run lint
+
+   - name: Unittests
+     run: npm test -- --coverage
+
+   - name: Better Test Reports Action
+     uses: mridang/action-test-reporter@v1.7.0
+     with:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+      coverage-file: ./coverage/clover.xml
+      working-directory: ./

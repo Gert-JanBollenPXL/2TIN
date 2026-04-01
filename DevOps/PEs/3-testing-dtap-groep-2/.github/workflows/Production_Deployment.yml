@@ -1,0 +1,53 @@
+name: Production_Deployment
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+         username: ${{ vars.DOCKERHUB_USERNAME }}
+         password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Pull Production Deployment
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ vars.PROD_IP }}
+          username: ubuntu
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            docker pull ${{ vars.DOCKERHUB_USERNAME }}/calculator-app-finished:latest
+
+      - name: Start Production Deployment
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ vars.PROD_IP }}
+          username: ubuntu
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            docker stop calculator-app-finished || true
+            docker rm calculator-app-finished || true
+            docker run -d --name calculator-app-finished -p 80:3000 ${{ vars.DOCKERHUB_USERNAME }}/calculator-app-finished:latest
+
+      - name: Test Production Deployment
+        run: |
+         for i in {1..10}; do
+          status=$(curl -s -o /dev/null -w "%{http_code}" http://${{ vars.PROD_IP }} || true)
+          if [ "$status" = "200" ]; then
+           echo "Deployment successful!"
+           exit 0
+          fi
+          echo "Waiting for service... ($i)"
+          sleep 3
+         done
+         echo "Service failed to respond in time"
+         exit 1
+

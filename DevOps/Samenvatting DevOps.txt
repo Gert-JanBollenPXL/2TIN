@@ -1,0 +1,392 @@
+-------------------
+- 1. Introduction -
+-------------------
+
+-> Levenscyclus van een applicatie
+
+	plan => develop => test => deploy => maintain (repeat in a circle)
+
+-> Flow van een applicatie
+
+	- Plannen tot bouwen totdat de applicatie live staat
+		=> stappen die ertussen zitten (en wat moet er gebeuren tijdens)
+
+	- Development
+		=> ontwikkelen, schrijven unit testen, dependencies installeren
+	- Ops
+		=> Runnen in testomgeving
+	- QA
+		=> Functionele/integratietesten, end-to-end testen
+	-> Ops
+		=> Deployment naar (productie)omgeving (feedback meenemen naar nieuwe cyclus)
+
+-> Demo
+
+	- Geen communicatie
+	- Geen automatisatie (op elk vlak)
+	- Geen single point of truth (centraal beheer van code/configuratie/…)
+	
+
+---------------------
+- 2. The three ways -
+---------------------
+
+-> Agile vs. Waterfall
+
+	- DevOps uit voortgekomen (Communicatie tussen development en operations)
+		=> Niet nieuw: begon in 1957, "Dev" and "Ops" 'tie the knot' in 2009
+
+-> Filosofie: The 3 ways
+
+	- The principles of flow ("Create a delivery system")
+		
+		=> Waterfall: boven naar beneden
+		=> Agile: boven naar beneden (in loops)
+		=> DevOps: links naar rechts naar links, altijd in beweging
+		
+		-> Hoe?
+			- Kleine stapjes, meer releases:
+				=> Minder WiP
+				=> Makkelijker om fouten te vinden/oplossen
+				=> Werk is zichtbaarder
+		-> Onderdelen die ervoor zorgen dat het business-idee omgezet wordt in een realiteit
+				=> Code, infrastructuur, data, testen, nieuwe features = Flow
+				=> Pipeline maken : 1 systeem ipv verschillende silos
+		-> Pipeline: "It ensures that all code checked into Version control is automatically built and tested in a production-like environment"
+
+	- The principles of feedback ("Amplify feedback loops")
+		
+		=> Waterfall: op het einde
+		=> Agile: op het einde van de sprint
+		=> DevOps: continu
+
+		-> Hoe?
+			- Continu monitoring & testing
+			- Problemen opmerken zodra ze gebeuren, aanpakken en oplossen vooraleer verder te gaan
+			- "Test alles vanaf het moment dat het kan"
+			- "Test automatisch om Continous integration te bekomen"
+				=> A comprehensive and reliable set of automated tests that validate if we are in a deployable state
+				=> A culture that "stops the entire production line" when our validation tests fail (digital andon cord)
+			-> "Stop de pipeline, gooi het probleem in de groep en los het op" (swarming zorgt ervoor dat dit snel en efficiënt kan)
+				=> Voorkomt technical debt
+	
+	- The third way ("Learn and experiment continuously")
+		
+		=> " The creation of a generative, high-trust culture that supports a dynamic disciplined and scientific approach to experimentation and risk-taking, fascilitating the creation of organizational learning, both from our resources and failures."
+		
+			- Enable safety
+			- Improvement of daily work
+			- Local discoveries to global imporvements
+			- Inject resilience
+			
+			-> Moeilijkste, vaak een "culture-shift" nodig in bedrijven
+
+	- DevOps = Agile?
+		
+		-> No, differences:
+			
+	Achieving end-to-end solution <-> scrum methodology/sprints
+	Operations as deployment is small part of Ops (others: configuration management,...) <-> Link between Design Thinking and DevOps
+	Aligns Ops with stability (scripting deployment/standardizing app builds) <-> Aligns development with business prio's, focus on speeding up the dev. process
+	Bridge the line between cross-functional teams (dev, QA, monitoring,...) by simplifying the process <-> Gap between teams is bridged in daily scrum calls
+	Aims at faster deliveries through automation (using various tools) <-> Aims at streamlined delivery (using different tools), these help in project management, planning and collaboration
+
+-> DevOps inifinty loop
+
+	DEV:
+	Plan → Code → Build → Test → Release
+
+	OPS:
+	Release → Deploy → Operate → Monitor → (back to Plan in DEV)
+
+=> (tried making diagram, failed miserably LOL)
+
+DEV                                 OPS
+ ( PLAN -> CODE -> BUILD -> TEST )  ( RELEASE -> DEPLOY -> OPERATE -> MONITOR )
+      \__________<_____________________<___________________<___________/
+
+---------------------
+- 3. source control -
+---------------------
+
+-> Waarom?
+	- Single point of truth
+	- Samenwerken als team aan dezelfde code
+	- Feedback over nieuwe releases
+
+-> General use
+	- Waar? Software code, Infrastructure as Code, …
+	- Git, SVN, TFS,...
+
+	Working =(add)> Staging index =(commit)> Repository
+
+	- Commit messages
+		=> Feedback over wijzigingen
+		=> Duidelijke flow in aanpassingen code
+		=> Multi-line
+	- Pushing code to a remote, central location
+	
+		<=================(checkout)================
+	Working Directory =(add)> Staging area =(commit)> local .git <=(push/fetch)=> remote [github]
+		<==================================(pull)====================================
+
+	- Merge conflicts
+		=> Changes on the same line
+		=> Changes in a deleted file
+
+-> Branching strategie
+
+	- (Samen)werken met versiebeheer
+	- Aftakkingen van de main branch tijdens ontwikkelen
+	- Duidelijke flow tijdens ontwikkelproces
+
+	- Pull requests:
+		=> nieuwe feature in aparte branch
+		=> push naar centrale repository op Github
+		=> pull request wordt aangemaakt
+		=> rest van het team evalueert de code, geeft feedback, past aan, …
+		=> verantwoordelijke merged de wijzigingen naar de main branch en sluit pull request
+		
+		-> Signaal dat code klaar is voor merge
+		-> Templates mogelijk (pull_request_template.md in /)
+
+-----------------------------------------------------
+- 4. Continious integration & Continious deployment -
+-----------------------------------------------------
+
+	Code - Dependencies - (unit)test - build - archive artifact - Deploy to QA - Deploy to production
+ 	===========================(CI)============================   ================(CD)===============
+
+
+-> Continious integration
+
+	- Fetching code
+		=> In pipeline brengen
+	- Dependencies
+		=> Bundelen van dependencies in omgeving (afhankelijk van taal/omgeving)
+			- PHP : Composer install
+			- Javascript : npm install
+	- Test
+		=> automatisatie van testen mbv code
+			- Code quality
+			- Linting
+			- Unittesten
+		=> Geen QA omgeving nodig
+	- Build
+		=> Automatiseren van compileren & builden applicatie
+			- java : mvn/ant -> jar
+			- .net core : dotnet publish -> exe
+	- Archive artifact
+		=> Beheer van paketten
+			- Centraal? Verschillende versies/per build?
+			- Build once, deploy anywhere
+
+-> Continuous Delivery/Deployment
+
+	- Deploying software
+		=> Wat is er nodig?
+			- Gecompileerde code
+			- Dependencies
+			- Omgeving specifieke parameters
+			- …
+
+		=> Automatiseren van deployment
+			- Vertrekken van artifact vanuit de CI pipeline
+			- Omgeving in orde maken (zie "wat is er nodig?")
+
+		-> Development
+			- Developers (duh)
+			- No client data
+		-> Testing
+			- QA engineers
+			- No client data
+		-> Staging
+			- QA engineers/clients for UAT
+			- Limited production data
+		-> Production
+			- Clients (live)
+			- Full production data
+
+-> Structuur ligt niet vast! Elk bedrijf/omgeving heeft zijn eigen accenten
+
+-> Waarom?
+	
+	- Big changes (lots of code) = big risks <-> small changes = less risk/mastery of the process
+	-> Affects TTR (time to resolution)
+	-> (micro)-services, APIs, front-end & back-end, MDM
+	-> Pipeline tooling: Jenkins/Github Actions
+
+----------------------------------
+- 5. Pipelines in Github Actions -
+----------------------------------
+
+-> Github ecosysteem
+	
+	- Meer dan code repositories
+		=> Issue tracking
+		=> Kanban & projectomgeving
+		=> Wiki & documentatie
+		=> Releases
+		=> Security/dependency scans
+		=> CI/CD
+	
+-> Github Actions: Workflows
+
+	- Configureerbaar geautomatiseerd proces dat 1 of meerder jobs gaat uitvoeren
+		=> YAML bestand
+		=> uitgevoerd door triggers/events/manueel
+		=> in .github/workflows
+	
+	- Zie Github actions Cheat sheet
+
+---------------------------
+- 6. CI in Github Actions -
+---------------------------
+
+-> Environment variabelen
+
+	- Systeemvariabelen (info over workflow run, repository, job, environment/secrets, …)
+	- Zelf evironmentvariabelen aanmaken (env)
+
+-> Secret management
+
+	- Plaintekst = security risk!
+		=> secret store in Github (aanspreekbaar in workflow files via ${{ secrets.x }})
+
+-> Continuous Integration
+
+	- Installing dev dependencies (npm, pip, composer, …)
+	- Unit testing (JUnit, Jest, …)
+		=> Rapportering default in console, mogelijk eruit trekken adhv actions (bv. test-reporter)
+	- Build/Bundle (afhankelijk van technologiestack)
+		=> bv. NodeJS vaak zip van de nodige bestanden
+		=> Docker!
+	- Artifacts (bestanden die je wil bewaren na het uitvoeren van een workflow run)
+		=> Uitvoerbare file(s) van de applicatie
+		=> Logs
+		=> Test resultaten
+		=> Rapporten
+	- Extra
+		=> Readme CI integration in markdown
+		=> publishing artifacts (bv. docker containers met tags
+			-> Integratie met dockerhub! (authenticatie adhv secrets)
+
+---------------------------------------------------
+- 7. CD in Github Actions: Environments on Demand -
+---------------------------------------------------
+
+-> DTAP : Development - Test - Acceptation - Production (together with Disaster recovery)
+	==Development Team===  =======Operations Team====================================
+	=ProductOwners= ====Key Users====   =========All Users===========================
+
+-> Differentiëring per omgeving
+
+	- Configuration management (!= ITIL)
+		=> WEL configuratie parameters zoals: IP adressen, API endpoints, Credentials, (test)data
+		=> Manueel/semi-geautomatiseerd (best practice)
+			- Aparte repository voor configuration data (single source of truth)
+			- Georganiseerd per omgeving
+			- In-line toevoegen aan deploy in Github Actions
+		=> Later automatisch met configuration management tools (bv. Ansible), nu semi-automatisch via bv. ssh, scp, docker
+
+-> Application Release: Automation made easier
+	- "Build once, deploy anywhere"
+
+	- Docker (runs anywhere*, dependencies included, promotes immutable infrastructure)
+		=> Mutable infrastructure leads to configuration drift (some services have different versions due to updates over time)
+			- Can result in bugs, difficult to diagnose and reproduce
+		=> Immutable infrastructure fixes this (infrastructure as code)
+			- Reduces configuration drift
+			- Makes automated testing more effective
+		=> Moeten idempotent zijn! (altijd hetzelfde resultaat: na 1 run, of na 1000)
+
+	- Pets (legacy infrastructure) <-> Cattle (cloud infrastructure) debate
+		
+		=> Depends on use-case
+		=> Mutable: Team needs to be aware of the infrastructure history
+		=> Immutable: generally better for stateless applications
+
+-------------------------
+- 8. Integrated Testing -
+-------------------------
+
+-> Unit testing
+	
+	- Testen software componenten los van het geheel
+	- Kwaliteitscontrole op code-niveau
+	=> NUnit, JUnit, TestNG, PHPUnit, Mockito
+
+-> Integratie testen
+		
+	- Integraties met andere software (meestal via API's)
+	=> SoapUI, Postman, Katalon, Assertible, APIgee, REST-assured, Tricentis, Karate, …
+		
+	-> Postman (grafische applicatie)/Newman (CLI applicatie)
+
+-> Functionele testen (E2E)
+
+	- Testen van UI
+	- Applicatie moet functioneel zijn
+	- Applicatie wordt getest als (sub)geheel
+	=> Katalon, Appium, Selenium, Playwright
+
+	-> Playwright (Lightweight package, werkt met Javascript/Typescript)
+		=> testen worden standaard headless uitgevoerd (zonder ui, in memory)
+
+-> Non-functionele testen
+
+	- Performance testing
+	=> Lighthouse, Webpagetest, Gattling, Apache Jmeter
+	- Security testing
+	=> OWASP Zed Attack Proxy, Acunetix
+
+-----------------------------
+- 9. Monitoring & reporting -
+-----------------------------
+
+-> Monintoring (bv. Task manager)
+
+-> Metrics : Meet punten (bv. Temp van HDD's, CPU percentage, netwerksnelheid, network logging, …)
+	- Log files : var/log/syslog var/log/kern
+	- Local logs : Windows (Event viewer), *nix (cockpit, webmin)
+
+-> Log aggregatie (Graylog, Nagios log server, splunk)
+
+-> Monitoring history
+
+	- Begin: Simple Network Monitoring Protocol (1988, verschillende versies)
+		=> Elk apparaat/software kon Management information Base files hebben (definieert metrics, zorgt ervoor dat data hiërargisch weergegeven wordt)
+		=> Monitoring tools: Munin, PRTG (in het begin) (aggregeerden enkel SNMP data en toonde die)
+		=> Alerting tools: PRTG (nu), Nagios, Check_mk (doen iets met de monitoring data, wel nog steeds erg gefocussed op hardware en "klassieke" servers)
+
+	- Agent software (om beter en diepgaander te kunnen monitoren)
+		=> Focus op "internet" tools en external monitoring
+		=> Pingdom, Freshping, Uptimerobot (overlap met testtools zoals bv. Webpagetest.org)
+
+	-  APM - Application Performance Management is born! (+- 2012)
+		=> Mix van agent software, business logic en predictive/proactive monitoring
+		=> Zabbix, Datadog, New Relic
+
+	- AI Ops (+-2016)
+		=> Mix van voorgaande met business logic en predictive/proactive monitoring
+		=> BigPanda, Dynatrace, Anodot
+
+=> Doel: Generating real-time feedback
+
+-> Monitoring in functie van development
+
+	- Updaten van applicaties brengt extra uitdagingen met zich mee
+		=> Downtime tijdens updates (of na?)
+		=> Bugs
+		=> Rollback is niet eenvoudig
+		=> Alles of niets
+	
+	- Extra data & real-time feedback op de deploy fase : Low(er) risk releases!
+
+	- Soorten deploys
+
+		=> Classic (simple, fast and cheap BUT risk, outages, slow rollback
+		=> Rolling (simple, cheap, relatively cheap to rollback, less risk BUT app/db needs to support new and old artefacts, manual checks/verification take long)
+		=> Blue/green (simple, fast, well understood, less risk, rapid rollback BUT complex and expensive, coverage may not identify all anomalies
+		=> Canary (deploy in small phases, test in production, cheaper than Blue/green, safe rollback BUT scripting maybe complex, required monitoring/instrumentation for testing in production
+		=> A/B Testing (fast, easy and cheap way to test new features BUT experiments can break app/service/user experience, scripting maybe complex, db compatability
