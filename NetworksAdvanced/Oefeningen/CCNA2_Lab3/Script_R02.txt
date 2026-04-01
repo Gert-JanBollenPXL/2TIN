@@ -1,0 +1,70 @@
+!
+hostname LAB-R01-C02-R02
+!
+ip domain name data.labnet.local
+ip route 0.0.0.0 0.0.0.0 10.199.65.200
+!
+username student privilege 15 secret pxl
+!
+track 1 interface GigabitEthernet0/0/1 line-protocol
+ delay down 2
+!
+interface g0/0/0.99
+ description VLAN99-Native
+!
+interface g0/0/0.15
+ description VLAN15-Management
+ encapsulation dot1Q 15
+ ip address 172.17.1.67 255.255.255.240
+ vrrp 15 ip 172.17.1.65
+ vrrp 15 priority 100
+ vrrp 15 track 1 decrement 50
+ vrrp 15 preempt delay minimum 30
+!
+interface g0/0/0.16
+ description VLAN16-Data_Users
+ encapsulation dot1Q 16
+ ip address 172.17.1.83 255.255.255.240
+ vrrp 16 ip 172.17.1.81
+ vrrp 16 priority 100
+ ip helper-address 10.199.64.66
+ vrrp 16 track 1 decrement 50
+ vrrp 16 preempt delay minimum 30
+!
+interface g0/0/0.17
+ description VLAN17-Voice_Users
+ encapsulation dot1Q 17
+ ip address 172.17.1.99 255.255.255.240
+ vrrp 17 ip 172.17.1.97
+ vrrp 17 priority 100
+ vrrp 17 track 1 decrement 50
+ vrrp 17 preempt delay minimum 30
+!
+interface g0/0/0.18
+ description VLAN18-Reserved
+ encapsulation dot1Q 18
+ ip address 172.17.1.115 255.255.255.240
+ vrrp 18 ip 172.17.1.113
+ vrrp 18 priority 100
+ vrrp 18 track 1 decrement 50
+ vrrp 18 preempt delay minimum 30
+!
+interface GigabitEthernet0/0/0
+ no shutdown
+!
+interface GigabitEthernet0/0/1
+ no shutdown
+ ip address 10.199.65.202 255.255.255.224
+!
+line vty 0 4
+ login local
+ transport input ssh
+line vty 5 15
+ login local
+ transport input ssh
+!
+ntp server 10.199.64.66
+!
+crypto key generate rsa
+ 1024
+!

@@ -1,0 +1,13 @@
+SWITCH:
+- hostname
+- VLAN
+- IP + subnet
+- DG
+- Username (privilege 15)
+- SSH config
+- IP domain
+- NTP
+- STP (rapid-pvst)
+- Trunk
+- Etherchannel
+- Access port

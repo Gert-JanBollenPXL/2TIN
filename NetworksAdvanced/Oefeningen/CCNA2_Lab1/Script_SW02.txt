@@ -1,0 +1,57 @@
+!
+hostname LAB-R01-A02-SW02
+!
+ip domain name data.labnet.local
+!
+vlan 15
+ name Management
+vlan 16
+ name Data_Users
+vlan 17
+ name Voice_Users
+vlan 18
+ name Reserved
+vlan 99
+ name Native
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+spanning-tree vlan 15-18,99 root secondary
+!
+username student privilege 15 secret pxl
+!
+interface GigabitEthernet0/0
+ no ip address
+!
+interface GigabitEthernet1/0/1
+ switchport access vlan 16
+ switchport mode access
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/24
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 15-18
+ switchport mode trunk
+ spanning-tree link-type point-to-point
+!
+interface Vlan1
+ no ip address
+!
+interface Vlan15
+ ip address 172.18.1.6 255.255.255.240
+!
+ip default-gateway 172.18.1.65
+!
+line vty 0 4
+ login local
+ transport input ssh
+line vty 5 15
+ login local
+ transport input ssh
+!
+!
+ntp server 10.199.64.66
+!
+crypto key generate rsa
+ 1024
+!
