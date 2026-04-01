@@ -1,0 +1,94 @@
+INBOUND PORT: LEAVE *
+
+1. DENY ALL VNET TRAFFIC
+- Inbound
+Name: deny-vnet-inbound
+Direction: Inbound
+Source: VirtualNetwork
+Destination: VirtualNetwork
+Port: *
+Protocol: Any
+Action: Deny
+Priority: 4000
+- Outbound
+Name: deny-vnet-outbound
+Direction: Outbound
+Source: VirtualNetwork
+Destination: VirtualNetwork
+Port: *
+Protocol: Any
+Action: Deny
+Priority: 4001
+
+2. FRONTEND → BACKEND (port 3000)
+- Outbound (Frontend → Backend)
+Name: allow-frontend-to-backend-outbound
+Direction: Outbound
+Source: 10.1.10.0/24 (frontend)
+Destination: 10.1.20.0/24 (backend)
+Port: 3000
+Protocol: TCP
+Action: Allow
+Priority: 1000
+- Inbound (Frontend → Backend)
+Name: allow-frontend-to-backend-inbound
+Direction: Inbound
+Source: 10.1.10.0/24
+Destination: 10.1.20.0/24
+Port: 3000
+Protocol: TCP
+Action: Allow
+Priority: 1001
+
+3. BACKEND → DATABASE (port 5432)
+- Outbound (Backend → DB)
+Name: allow-backend-to-db-outbound
+Direction: Outbound
+Source: 10.1.20.0/24
+Destination: 10.1.30.0/24
+Port: 5432
+Protocol: TCP
+Action: Allow
+Priority: 1100
+- Inbound (Backend → DB)
+Name: allow-backend-to-db-inbound
+Direction: Inbound
+Source: 10.1.20.0/24
+Destination: 10.1.30.0/24
+Port: 5432
+Protocol: TCP
+Action: Allow
+Priority: 1101
+
+4. BASTION ACCESS (SSH + RDP)
+- Inbound ONLY
+Name: allow-bastion-inbound
+Direction: Inbound
+Source: 168.63.129.16
+Destination: VirtualNetwork
+Port: 22,3389
+Protocol: TCP
+Action: Allow
+Priority: 1200
+
+5. OUTBOUND INTERNET ACCESS
+HTTP (port 80)
+- Outbound
+Name: allow-http-outbound
+Direction: Outbound
+Source: VirtualNetwork
+Destination: Internet
+Port: 80
+Protocol: TCP
+Action: Allow
+Priority: 1300
+DNS (port 53)
+- Outbound
+Name: allow-dns-outbound
+Direction: Outbound
+Source: VirtualNetwork
+Destination: Internet
+Port: 53
+Protocol: UDP
+Action: Allow
+Priority: 1301

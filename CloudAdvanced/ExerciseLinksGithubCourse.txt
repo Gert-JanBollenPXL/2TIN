@@ -1,0 +1,38 @@
+--- Cloud Advanced ---
+
+pxl-student
+2025_PXL!
+
+Exercise links:
+1.2. Azure CLI
+https://pxl-cloud-advanced-tin.code-coaching.dev/course/99-labs/1-AzureFundamentals/azurecli.html
+
+1.4. Cost Management
+https://pxl-cloud-advanced-tin.code-coaching.dev/course/99-labs/1-AzureFundamentals/costmanagement.html
+
+2.1. Outbound traffic
+https://pxl-cloud-advanced-tin.code-coaching.dev/course/99-labs/2-AzureNetworking/egresspersonal
+
+2.2. Load Balancer
+https://pxl-cloud-advanced-tin.code-coaching.dev/course/99-labs/2-AzureNetworking/loadbalancer.html
+
+2.3. Bastion
+https://pxl-cloud-advanced-tin.code-coaching.dev/course/99-labs/2-AzureNetworking/bastionDev.html
+
+2.4. Network Security Groups
+https://pxl-cloud-advanced-tin.code-coaching.dev/course/99-labs/2-AzureNetworking/nsgpersonal.html
+
+2.5. 2-tier app deployment
+https://pxl-cloud-advanced-tin.code-coaching.dev/course/99-labs/2-AzureNetworking/2tierapp.html
+
+3.1. First Terraform deployment
+https://pxl-cloud-advanced-tin.code-coaching.dev/course/99-labs/3-AzureAutomation/firstTerraformDeployment.html
+
+3.2. Network Deployment:
+https://pxl-cloud-advanced-tin.code-coaching.dev/course/99-labs/3-AzureAutomation/NetworkDeployment.html
+
+3.3. Virtual machine deployment
+https://pxl-cloud-advanced-tin.code-coaching.dev/course/99-labs/3-AzureAutomation/Terraformvariables.html
+
+3.4. 3-tier app deployment
+https://pxl-cloud-advanced-tin.code-coaching.dev/course/99-labs/3-AzureAutomation/3tierappDeployment.html
