@@ -1,0 +1,18 @@
+﻿@model IEnumerable<Question>
+
+<div class="text-center">
+    <h1 class="display-4">Pick a question:</h1>
+    <a href="@Url.Action("Index", "Question")">Back</a>
+</div>
+<hr />
+
+<div class="row">
+    @foreach (var question in Model)
+    {
+        <a class="text-reset text-decoration-none" href="@Url.Action("QuestionWithAnswers", "Question", new { id = question.Id })">
+            <div class="col card m-1 p-5">
+                @question.QuestionString
+            </div>
+        </a>
+    }
+</div>

@@ -1,0 +1,19 @@
+﻿@model IList<Smurf>
+@{
+    ViewData["Title"] = "Overview";
+}
+<div class="container py-4">
+    <div class="mb-4 text-center">
+        <h1 class="display-5 mb-1">Overview</h1>
+        <p class="text-muted mb-0">Here you can smurf up all the smurfs</p>
+    </div>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 row-cols-lg-6 g-4">
+        @foreach (var smurf in Model)
+        {
+            <partial name="_SmurfCard" model="smurf" />
+        }
+    </div>
+    <div class="text-center mt-4">
+        <a id="add-new" class="btn btn-success btn-lg shadow" asp-controller="Smurf" asp-action="AddOrUpdate">Smurf a new Smurf</a>
+    </div>
+</div>

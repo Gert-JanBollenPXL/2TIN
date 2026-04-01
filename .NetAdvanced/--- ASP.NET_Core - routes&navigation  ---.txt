@@ -1,0 +1,88 @@
+--- ASP.NET_Core - routes&navigation ---
+
+-> Routing = mapping incoming HTTP requests to an endpoint (configured at startup in program.cs)
+
+	- In ASP.NET Core MVC requests are handled by action methods in controllers, MVC maps requests to correct action methods on the correct controllers
+
+	- For example: `app.MapGet( "/", () => "Hello World!");`
+	- When HTTP GET is sent to root url, it will execute the delegate and that will send "Hello World!" back in the response
+
+-> An application will have one or more endpoints, these are defined in the configuration of the application, typically program.cs
+
+	- app.UseRouting() (Brings route matching capability to the pipeline)
+	- app.UseEndpoints() (Add endpoint execution)
+		-> No longer needed in program.cs, ASP.NET Core adds these by default
+
+--------------------
+- Types of Routing -
+--------------------
+
+- Convention-based: Matching using route templates, used for controllers that return views (HTML response)
+- Attribute-based: Matching based on attributes in controllers, used for API controllers (JSON or XML response)
+
+-> Convention-based routing
+
+	- Define routes using app.MapControllerRoute()
+	- For example: "www.bethanyspieshop.com/Pie/List"
+	=> made up out of the host and several segments: "www.bethanyspieshop.com" (host), "Pie" and "List"
+
+		- Typically the first segment points to the controller and the second to the action, this is defined using "MapControllerRoute" in program.cs
+		- So the request to Pie/List will be handled by the List action on the PieController
+		- In program.cs: app.MapControllerRoute(name:"default", pattern:"{controller}/{action}");
+
+-> Convention-based route with parameter
+	
+	- For example: "www.bethanyspieshop.com/Pie/Details/1"
+	- In program.cs: app.MapControllerRoute(name:"default", pattern:"{controller}/{action}/{id}");
+	- A new segment added: "id", this value will be passed to the method parameter
+
+-> Convention-based routing – Route defaults
+
+	- It is possible to define default values for segments
+	- For example: app.MapControllerRoute(name:"default", pattern:"{controller=home}/{action=index}");
+	- When a request comes in that does not specify a segment, the default value is used:
+		 www.bethanyspieshop/Pie/List (Controller = Pie, Action = List)
+		 www.bethanyspieshop/Home/Index (Controller = Home, Action = Index)
+		 www.bethanyspieshop/Home (Controller = Home, Action = Index)
+		 www.bethanyspieshop (Controller = Home, Action = Index)
+
+-> Convention-based routing – Optional segment
+
+	- Segments in the pattern can have a question mark (e.g. {id?}) making it optional
+	- For example: app.MapControllerRoute(name:"default", pattern:"{controller}/{action}/{id?}");
+		 www.bethanyspieshop/Pie/List (Controller = Pie, Action = List)
+		 www.bethanyspieshop/Pie/Details/1 (Controller = Pie, Action = Details, Id = 1)
+
+-> Convention-based routing – Constraints
+
+	- It is possible to check the content of a segment (E.g. {id:int} enforces the id segment to be an integer)
+	- For example: app.MapControllerRoute(name:"default", pattern:"{controller}/{action}/{id:int?}");
+		 www.bethanyspieshop/Pie/Details/1 (Controller = Pie, Action = Details, Id = 1) WILL WORK
+		 www.bethanyspieshop/Pie/Details/banana WILL NOT WORK
+
+-> The default convention-based route
+
+	- The pattern "{controller=Home}/{action=Index}/{id?}" is very common, it is possible to use "app.MapDefaultControllerRoute();" to add this pattern
+	- This utility method matches this pattern: "app.MapControllerRoute(name:"default", pattern:"{controller}/{action}/{id?}");"
+	- In real life applications, multiple templates will often be needed and will have to be manually added!
+
+-> Navigating with Tag helpers
+
+	- Razor code in cshtml files
+	- For example:
+		<a asp-controller="Pie" asp-action="List">
+		  View Pie List
+		</a>
+	- Will result in HTML:
+		<a href="Pie/list"> View Pie List</a>
+	- These tag helpers will help create the correct link to navigate to the List action on the pie controller, this is markup code that is executed server-side
+	=> To be able to use these tag helpers, we need to add it to each view individually OR add it to _ViewImports.cshtml:
+		- "@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers"
+
+-> Some more Tag helpers
+
+	- asp-controller (Specify the controller route parameter)
+	- asp-action (Specify the action route parameter)
+	- asp-route-* (E.g. asp-route-id=“1”, specifies a route parameter with name id and value 1)
+	- asp-route (Force to use a specific route by name)
+	- ...

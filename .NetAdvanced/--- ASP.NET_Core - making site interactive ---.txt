@@ -1,0 +1,82 @@
+--- ASP.NET_Core - making site interactive ---
+
+-> Disadvantages of server-side rendering
+
+	- Full page needs to refresh
+	- More data (HTML) over the wire
+	- Slower
+	- ‘Data’ is not accessible for third-party
+
+	=> Update parts of the page!
+
+-> Creating an API
+	
+	- JSON (or XML), data in a key-value format
+	- Same concepts as before using controllers
+	- Same HTTP verbs as normal (GET, POST, PUT, PATCH, DELETE)
+	- API Controller (!= MVC Controller)
+	- Action methods return data (instead of a view) - JsonResult or ObjectResult -> IActionResult
+	- Attribute-based routing (instead of convention-based routing)
+	- Other concepts are identical (Dependency Injection, ...)
+
+-> Configuring the application
+	
+	- For Dependency Injection we need to add: builder.Services.AddControllers(); (Not needed when builder.Services.AddControllersWithViews(); is present)
+		=> JsonSerializerOptions: ignore cycles
+	- For example:
+
+		builder.Services.AddControllersWithViews().AddJsonOptions(options =>
+		{
+   			options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+		});
+
+	- Middleware configuration, Activates attribute-based routing:  app.MapControllers(); (Not needed when app.MapDefaultControllerRoute(); is present.)
+
+-> API controller
+
+	- Name ends with "controller"
+	- Inherits from ControllerBase
+	- Has attribute [ApiController]
+	- Contains action methods
+
+-> Attribute-based routing
+
+	- Controller gets a [Route] attribute - [Route("api/[controller]")] ([controller] is replaced by the name of the controller)
+	- For example:
+		
+		[Route("api/[controller]")]
+		[ApiController]
+		public class PiesApiController : ControllerBase
+
+	- Use Http verbs to route to different actions ([HttpGet], [HttpGet("{id}")], [HttpPost], [HttpDelete("{id}")], [HttpPost("search")], ...)
+
+-> The API response
+
+	- Contains: the data, typically in JSON format and a status code
+	- ControllerBase has several helper methods: 
+		▪ Ok(data) -> Return status 200 and data
+		▪ BadRequest() -> Return status 400
+		▪ NotFound() -> Return status 404
+		▪ NoContent() -> Return status 204
+		▪ CreatedAtAction() -> Return status 201
+		▪ …
+
+-> OpenAPI / Swagger
+
+	- There are two main OpenAPI-implementations for .NET that also provide a Swagger.UI: Swashbuckle and NSwag
+	- Basic setup:  - Install the NuGet Package ‘Swashbuckle.AspNetCore’
+			- Add the Json deserialization to program.cs
+			- Add to program.cs to enable swagger: 
+
+				if (app.Environment.IsDevelopment())
+				{
+    					app.UseSwagger();
+    					app.UseSwaggerUI();
+				}
+
+			- Swagger is now available at /swagger
+
+-> Consume an API from a browser
+
+	- Include JS script in the search.cshtml file
+	- This will making async calls to our API and then refresh that part of the page and update the view

@@ -1,0 +1,82 @@
+--- ASP.NET_Core - Forms & Model Binding ---
+
+-> Built-in Tag Helpers in Forms
+
+	- Makes it possible for us to work with forms
+
+-> Label Tag Helper
+
+	- generates a label for a property on a model object:
+
+		<label asp-for="FirstName">
+		</label>
+
+	=> becomes:
+
+		<label for="FirstName">
+		Firstname
+		</label>
+
+-> Tag helpers Form tag
+
+	- Form tag helper: <form asp-action="Checkout" method="post" role="form">
+		=> Generates <form> action attribute; also generates a hidden token against Cross-site request forgery attacks (enabled by default)
+
+-> Creating The Order Form Demo
+	
+	- Things to do: - Create domain Classes: Order and OrderDetail
+			- Add DbSet (remember to "add-migration" and "update-database")
+			- Create IOrderRepository interface (CreateOrder method)
+			- Implement the interface, use DI injection for the DbContext and the shoppingcart
+			- Add the OrderRepository to the DI container in program.cs
+			- Create the OrderController, use DI injection for the repository and the shoppingcart
+			- Create the view (Views/Order directory with checkout.cshtml), use tag helpers to create the form using: 
+				<label asp-for="..." class="form-label"></label>, 
+				<input asp-for="..." class="form-control" />, 
+				<span asp-validation-for="..." class="text-danger"></span> (validation, more on this down below)
+			- On the shoppingcart index view, make sure to add an asp-controller and asp-action tag helpers to redirect to checkout when pressing the button
+				<a class="btn btn-secondary" asp-controller="Order" asp-action="Checkout"><h4>Check out now!</h4></a>
+
+-> Model Binding
+
+	- Model binding automatically maps incoming request data (query strings, form fields, route values) to action method parameters and complex types
+	- Works for both simple types (e.g., int id) and complex types (e.g., Order object)
+	- Different model binders: route values → form data → query string (in that order, as soon as a match is found, the process stops)
+
+-> Accessing Posted Data Demo
+	
+	- Things to do: - Add [HttpPost] attribute to ordercontroller action checkout (in checkout.cshtml we have <form asp-action="Checkout" method="post" role="form">
+				=> see: 'method="post"'
+				=> If nothing is added as attribute it will default to [HttpGet]
+			- Implement the Checkout action using ModelState, a byproduct of model binding. You can use the IsValid property 
+				=> If ModelState.IsValid passes, we create the order, clear the cart and "return RedirectToAction("CheckoutComplete");"
+				=> If not, we "return View(order);", we pass the order again so it will repopulate all the fields (the user doesnt have to enter everything again)
+
+-> Validation
+
+	- ModelState contains binding and validation errors
+		=> ModelState.IsValid (Model validation in one go)
+		=> ModelState.GetValidationState (accepts a single property for validation)
+		=> ModelState.AddModelError (If we are performing any manual validation rules, we can also manually add model errors)
+	- By default validation is pretty basic
+	- More in depth validation can be done with: attributes on model classes ([Required], [StringLength], [Range], [RegularExpression], [EmailAdress], [Phone], ...)
+	- For example: 
+
+		[Required(ErrorMessage = "Please enter your first name")]
+		[Display(Name = "First name")]
+		[StringLength(50)]
+		public string FirstName { get; set; } = string.Empty;
+
+	- Length and DeniedValues are also attributes
+
+-> Displaying a Validation Summary
+
+	- Displayed using Tag helpers
+		- <div asp-validation-summary="All" class="text-danger"></div> (for showing all errors)
+		- <span asp-validation-for="..." class="text-danger"></span> (for showing errors for a single thing)
+
+-> Adding client-side validation
+
+	- Done by using client-side packages (jquery-validate and jQuery validation unobtrusive)
+		=> right click on the project, Add, Client-Side Library
+	- Added to Libman.json

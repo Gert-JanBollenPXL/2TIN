@@ -1,0 +1,29 @@
+﻿@model QuestionViewModel
+
+<div class="text-center">
+    <h1>@Model.Question.QuestionString</h1>
+    <a href="@Url.Action("QuestionsInCategory", "Question", new { id = Model.Question.CategoryId })">Back</a>
+</div>
+<hr />
+
+<div class="row">
+    @foreach (var answer in Model.Question.Answers)
+    {
+        if (answer.IsCorrect)
+        {
+            <a class="col col-sm-6 text-reset text-decoration-none" onclick="$(this).children()[0].style.backgroundColor='green';">
+                <div class="card p-5 text-center">
+                    @answer.AnswerText
+                </div>
+            </a>
+        }
+        else
+        {
+            <a class="col col-sm-6 text-reset text-decoration-none" onclick="$(this).children()[0].style.backgroundColor='red';">
+                <div class="card p-5 text-center">
+                    @answer.AnswerText
+                </div>
+            </a>
+        }
+    }
+</div>

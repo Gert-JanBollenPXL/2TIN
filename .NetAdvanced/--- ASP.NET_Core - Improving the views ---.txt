@@ -1,0 +1,66 @@
+--- ASP.NET_Core - Improving the views ---
+
+-> Partial views
+	
+	- Code reuse, is just a view but is used as part of another view
+	- Typed (using @model)
+	- Name starts with _ and lives in the "shared" folder under views OR in the folder in which the view that uses it is located
+	- To use the partial view we use the "partial" tag helper:
+		@foreach (var pie in Model.Pies)
+		{
+			<partial name="_PieCard" model="pie"/>
+		}
+	- Doesn't execute the _ViewStart code
+
+-> Session state
+	
+	- Web is stateless, after response, the server forgets about the request
+	- To improve we can make use of GUIDs stored in a session variable placed in a cookie (the specific user GUID is also stored in the database along with for example the items in a shoppingcart)
+	- This way it is possible to store data on the server in between requests
+
+-> Using Session State
+
+	- Not enabled by default
+	- Register framework service in program.cs:
+		- builder.Services.AddSession(); (support for sessions)
+		...
+		- app.UseSession(); (plug middleware for sessions)
+
+-> ShoppingCart Demo
+
+	- Things to do: - Create Entity class and DbSet (remember to "add-migration" and "update-database")
+			- Create ShoppingCartItem model class (ShoppingCartItemId, Pie, Amount and ShoppingCartId (GUID) as properties)
+				=> This means that when we surf to the site we will get a ShoppingCartId, used to store any items we add to our shoppingcart using shoppingcartitems
+			- Create ShoppingCart interface with several methods (AddToCart, RemoveFromCart, GetShoppingCartItems,ClearCart and GetShoppingCartTotal)
+			- Dependency Injection for the DbContext and the ShoppingCartId
+			- Make the constructor private and create a factory method for creating ShoppingCart instances, this method needs session and a context
+			- DI for shoppingcarts:
+				builder.Services.AddScoped<IShoppingCart, ShoppingCart>(provider =>
+				{
+    					IHttpContextAccessor httpContextAccessor = provider.GetRequiredService<IHttpContextAccessor>();
+    					ISession? session = httpContextAccessor.HttpContext?.Session;
+   					BethanysPieShopDbContext dbContext = provider.GetRequiredService<BethanysPieShopDbContext>();
+
+    					return ShoppingCart.GetCart(session, dbContext);
+				});
+			=> Access to the session information is needed, gotten from HttpContext, "builder.Services.AddHttpContextAccessor();" is needed for the the DI-container to be able to create an IHttpContextAccessor. We retrieve the session, create the dbcontext and call GetCart to obtain the cart instance that the DI-container will return
+			- Create a controller, inject IPieRepository and an IShoppingCart using DI
+			- Controller has: Index action, AddToShoppingCart and RemoveFromShoppingCart methods (receive PieId and then redirect back to the Index action: 						- "return RedirectToAction("Index");"
+			- Create View: new folder (ShoppingCart, same name as controller) and Index.cshtml file (action name)
+			- Create redirect button to ShoppingCart in _PieCard and Details page to AddToShoppingCart action using tag helpers (asp-controller, asp-action and asp-route-pieId
+
+-> View Component
+	
+	- Similar to partial views
+	- Partial views are limited: Data gets passed to them from their calling view, view components are different
+	- Works with data and dependency injection
+	- Not a standalone component, always invoked by parent view but can execute code to load different data
+	- Used in: login panels, dynamic navigation, shopping cart, …
+	- Name ends in "ViewComponent" and uses the ViewComponent base class
+	- MUST be public, non-abstract and non-nested (like controllers)
+	- Functionality is added in the invoke method (NOT an override)
+	- View parts live in the Views/Shared/Components folder, each viewcomponent will get a seperate subfolder in this directory
+	- The view files are usually called default.cshtml
+	- Using the viewcomponents:
+		> @await Component.InvokeAsync("shoppingCartSummary")
+		> <vc:shopping-cart-summary></vc:shopping-cart-summary>
