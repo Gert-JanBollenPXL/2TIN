@@ -5,10 +5,10 @@ This repository contains all the work I completed during my second year of Appli
 
 The repository includes:
 
-Notes – lecture notes and summaries
-Exercises – practical assignments
-PEs – Evaluations during the year
-Exams – past exams for practice
+- **Notes** – lecture notes and summaries
+- **Exercises** – practical assignments
+- **PEs** – Evaluations during the year
+- **Exams** – past exams for practice
 
 This repository is a personal archive. Please do not request additions or changes.
 
