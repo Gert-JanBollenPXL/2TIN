@@ -1,0 +1,25 @@
+--- ARCHIBALD HDD DUMP ---
+
+Tue, 27 Jan 2026 19:19:32 | Rare mail van: pigeonracerofficial@gmail.com (X-Sender-IP: 209.85.221.45) (Received: from TheCoop (d54C24E18.access.telenet.be. [84.194.78.24]))
+2026-01-27 19:17:11 CET | Archibald surft naar http://10.0.2.4:5173/login (mogelijk iets: MIME Type:application/x-sqlite3 ?)
+2026-01-22 11:56:10 CET	Date accessed| C:\Users\Archibald\Documents\CertificateOfOwnership.pdf -> pidgeon cert?
+2026-01-22 11:56:37 CET	Time deleted | C:\Users\Archibald\Documents\FinancieenNovDec2025.xlsx -> mogelijks interessant?
+2026-01-25 15:06:00 CET | Archibald surft naar https://www.prevention.com/sex/relationships/g26267590/signs-of-cheating-partner/ | 15 Signs of Cheating, According to Therapists
+2026-01-25 15:05:37 CET | Archibald surft naar https://domains.atom.com/lpd/name/pigeonracer.com | pigeonracer: The domain name pigeonracer.com is for sale
+2026-01-25 15:05:59 CET | Archibald surft naar bing.com	en zoekt op: 10 signs your spouse is cheating
+2026-01-22 11:56:29 CET | C:\Users\Archibald\Documents\Backup.zip bevat Diefstalverzekering.pdf en Note.txt	
+
+Edith heeft foto's van "Lieverd" en "Me", is lieverd Archibald of Nico?
+
+2026-01-23 07:52:31 CET | Mail naar Nico deze persoon (Edith) praat over Archibald en over een soort van relatie met Nico
+2026-01-22 08:41:12 CET | Mail naar Nico onderaan getekend door "E.", E heeft een relatie met Nico
+2026-01-22 09:06:48 CET | Mail van Nico naar Edith, bevestigt relatie tussen de twee
+=> Edit gaat vreemd met Nico
+2026-01-24 08:43:46 CET | Mails naar Archibald ivm verjaardag zus van Edith
+
+
+--- NICO RAM DUMP ---
+
+0x9f8cec19ba30  \Users\pigeonlover67\Desktop\phigeon-tracker\phigeon-tracker\backend\logs\login-attempts.log
+0x9f8cec19b8a0  \Users\pigeonlover67\Desktop\phigeon-tracker\phigeon-tracker\phishing.txt
+0x9f8cec384650  \Users\pigeonlover67\Pictures\Love.png
