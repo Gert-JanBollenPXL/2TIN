@@ -1,0 +1,10 @@
+---
+- name: Render webservers list
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Render template to file
+      ansible.builtin.template:
+        src: webservers.j2
+        dest: /tmp/webservers.txt

@@ -1,0 +1,12 @@
+---
+- name: Config edit with lineinfile
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Disable SSH root login
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/ssh_config
+        regexp: '^PermitRootLogin\\s+'
+        line: 'PermitRootLogin no'
+        backup: true

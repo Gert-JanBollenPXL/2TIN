@@ -1,0 +1,13 @@
+---
+- name: Basic lookups
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    etc_hostname: "{{ lookup('file', '/etc/hostname') }}"
+    current_user: "{{ lookup('env', 'USER') }}"
+  tasks:
+    - name: eads the contents of /etc/hostname with the file lookup
+      ansible.builtin.debug:
+        msg: Hostname {{ etc_hostname }} current user is {{ current_user}}

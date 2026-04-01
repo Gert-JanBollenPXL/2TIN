@@ -1,0 +1,34 @@
+# Merged .gitignore and .gitignore copy
+
+# Ansible
+ansible_facts/
+ansible.log
+.ansible/
+*.retry
+hosts
+*.vault
+
+# Ansible logs
+*.log
+
+
+# Vagrant
+.vagrant/
+*.box
+*.vbox
+*.vbox-prev
+*.backup
+*.vmdk
+
+# Log files
+*.log
+
+# cache files
+.cache
+
+# Generated files
+*.ova
+
+# Environment Variables
+.env
+

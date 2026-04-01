@@ -1,0 +1,22 @@
+---
+- hosts: all
+  become: true
+  vars_files:
+    - var_file.yml
+
+  tasks:
+    - name: Generate file from template
+      ansible.builtin.template:
+        src: motd.j2
+        dest: /etc/motd
+
+# This will check if the motd was generated correctly
+# !! THIS MAKES CHANGES SO IT WILL SHOW "changed=1", remove below to make the exercise only show "ok(no changes)" !!
+
+    - name: Read MOTD file
+      ansible.builtin.command: cat /etc/motd
+      register: motd_output
+
+    - name: Show MOTD content
+      ansible.builtin.debug:
+        var: motd_output.stdout

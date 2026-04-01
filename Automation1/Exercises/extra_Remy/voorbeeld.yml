@@ -1,0 +1,44 @@
+---
+- name: voorbeeld
+  hosts: webservers
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: installeer nginx
+      ansible.builtin.package:
+        name: nginx
+        state: present
+
+    - name: starten en enablen
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+
+    - name: plaats via template
+      ansible.builtin.template:
+        src: index.html.j2
+        dest: /var/www/html/index.html
+        mode: '0644'
+
+    - name: maak de server_status directory aan
+      ansible.builtin.file:
+        path: /opt/server_status
+        state: directory
+        mode: '755'
+
+    - name: controleer of het laatste_check.txt bestand al bestaat
+      ansible.builtin.stat:
+        path: /opt/server_status/laatste_check.txt
+      register: file_check
+
+    - name: haal de uptime van de server op
+      ansible.builtin.command: uptime -p
+      register: uptime_result
+
+    - name: maak logbestanden aan met uptime 
+      ansible.builtin.copy:
+        dest: /opt/server_status/laatste_check.txt
+        content: "De server uptime is: {{ uptime_result.stdout }}\n"
+        when: not file_check.stat.exists

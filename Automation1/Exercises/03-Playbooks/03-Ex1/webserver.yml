@@ -1,0 +1,23 @@
+---
+- name: Excercise 1
+  hosts: app
+  become: true
+
+  tasks:
+   -  name: install nginx
+      ansible.builtin.dnf:
+        name: nginx
+        state: present
+
+   - name: Start nginx
+     ansible.builtin.service:
+      name: nginx
+      state: started
+      enabled: true
+
+   - name: Deploy configuration
+     ansible.builtin.copy:
+      src: index.html
+      dest: /usr/share/nginx/html/index.html
+      owner: root
+      mode: '0644'

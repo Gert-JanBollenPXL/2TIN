@@ -1,0 +1,9 @@
+---
+- name: My playbook
+  hosts: localhost
+  vars:
+    my_var: playbook_value
+  tasks:
+    - name: Display playbook variable value
+      ansible.builtin.debug:
+        var: my_var

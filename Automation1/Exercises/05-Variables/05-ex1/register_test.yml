@@ -1,0 +1,13 @@
+---
+- name: Configure time synchronization
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Run date command
+      ansible.builtin.command: date
+      register: date_output
+
+    - name: Print stdout of the command
+      ansible.builtin.debug:
+        var: date_output.stdout

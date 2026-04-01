@@ -1,0 +1,163 @@
+---
+- name: Automation PE
+  hosts: dbservers
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: install postgresql-server
+      ansible.builtin.package:
+        name: postgresql-server
+        state: present
+
+    - name: install postgresql
+      ansible.builtin.package:
+        name: postgresql
+        state: present
+
+    - name: Copy postgresql init script
+      ansible.builtin.copy:
+        src: init_postgres.sh
+        dest: /usr/bin/init_postgres.sh
+        owner: root
+        mode: '0755'
+
+    - name: Stop service firewalld, if started
+      ansible.builtin.service:
+       name: firewalld
+       state: stopped
+       enabled: false
+
+    - name: Run init_postgres.sh script
+      ansible.builtin.command: /usr/bin/init_postgres.sh
+
+    - name: Start postgresql service
+      ansible.builtin.service:
+        name: postgresql
+        state: started
+        enabled: true
+
+    - name: Create /opt/pe1/db-scripts directory
+      ansible.builtin.file:
+        path: "{{ sql_script_directory }}"
+        state: directory
+        mode: '755'
+
+    - name: Template for init.sql
+      ansible.builtin.template:
+        src: init.sql.j2
+        dest: /opt/pe1/db-scripts/init.sql
+        mode: '0644'
+
+    - name: Get stats for init.sql
+      ansible.builtin.stat:
+        path: /opt/pe1/db-scripts/init.sql
+      register: p
+
+    - name: Print stats for init.sql
+      ansible.builtin.debug:
+        msg: |
+          "Exists: {{ p.stat.exists }}
+          Path: {{ p.stat.path }}"
+
+- name: Environment
+  hosts: all
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Set environment line 1
+      ansible.builtin.lineinfile:
+        path: /etc/environment
+        line: 'ENV1= {{ my_environment}}'
+
+    - name: Set environment line 2
+      ansible.builtin.lineinfile:
+        path: /etc/environment
+        line: 'ENV2= {{ my_env_name}}'
+
+    - name: Print environment variables
+      ansible.builtin.command: cat /etc/environment
+      register: env_output
+
+    - name: Display environment variables
+      ansible.builtin.debug:
+        msg: "{{ env_output.stdout }}"
+
+- name: Web
+  hosts: webservers
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Create /opt/pe1/web directory
+      ansible.builtin.file:
+        path: /opt/pe1/web
+        state: directory
+        mode: '755'
+
+    - name: Template for data
+      ansible.builtin.template:
+        src: data.j2
+        dest: /opt/pe1/web/data
+        mode: '0644'
+
+    - name: display data file
+      ansible.builtin.command: cat /opt/pe1/web/data
+      register: data_output
+
+    - name: Display data file content
+      ansible.builtin.debug:
+        msg: "{{ data_output.stdout }}"
+
+- name: Apache2
+  hosts: webservers
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Install apache2
+      ansible.builtin.package:
+        name: httpd
+        state: present
+
+    - name: Stop firewalld, if started
+      ansible.builtin.service:
+        name: firewalld
+        state: stopped
+        enabled: false
+
+    - name: Create web_root directory
+      ansible.builtin.file:
+        path: "{{ web_root }}"
+        state: directory
+        owner: apache
+     
+    - name: Template for pe1.conf
+      ansible.builtin.template:
+        src: pe1.conf.j2
+        dest: /etc/httpd/conf.d/pe1.conf
+        mode: '0644'
+
+    - name: Start httpd service
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: true
+
+    - name: Template for index.html
+      ansible.builtin.template:
+        src: index.html.j2
+        dest: /var/www/pe1/index.html
+        mode: '0644'
+
+    - name: Get stats for index.html
+      ansible.builtin.stat:
+        path: /var/www/pe1/index.html
+      register: p
+
+    - name: Print stats for index.html
+      ansible.builtin.debug:
+        msg: |
+          "Exists: {{ p.stat.exists }}
+          Path: {{ p.stat.path }}"

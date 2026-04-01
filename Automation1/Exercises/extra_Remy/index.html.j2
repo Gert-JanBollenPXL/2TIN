@@ -1,0 +1,4 @@
+<h1>Welkom bij de {{ app_name }}!</h1>
+<p>Deze server draait op: {{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_version'] }}</p>
+<p>De hostname is: {{ ansible_facts['hostname'] }}</p>
+<p>Beheerder: {{ admin_email }}</p>

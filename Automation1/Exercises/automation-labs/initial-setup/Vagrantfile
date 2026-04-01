@@ -1,0 +1,84 @@
+#
+# Vagrantfile to create PXL Labs (libvirt + AlmaLinux)
+#
+
+# --------------------------------
+# Update host /etc/hosts (once, on first vagrant up)
+# Runs in the main Vagrant process which has the user's TTY
+# --------------------------------
+if ARGV[0] == 'up' && !File.read('/etc/hosts').include?('PXL_LAB_BEGIN')
+  system(<<~SHELL)
+    printf '\n# PXL_LAB_BEGIN\n10.10.0.10 webserver1.pxldemo.local webserver1\n10.10.0.11 webserver2.pxldemo.local webserver2\n10.10.0.20 dbserver1.pxldemo.local dbserver1\n# PXL_LAB_END\n' \
+      | sudo tee -a /etc/hosts > /dev/null
+  SHELL
+end
+
+Vagrant.configure("2") do |config|
+
+  # ----- Base Box (hard pinned) -----
+  config.vm.box = "generic/alma9"
+  config.vm.box_version = "4.3.12"
+
+  MEMORY = 2048
+  CPUS   = 2
+
+  # Disable default /vagrant sync folder
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  # SSH config - reuse insecure key
+  config.ssh.forward_agent = true
+  config.ssh.insert_key = false
+  config.ssh.private_key_path = "~/.vagrant.d/insecure_private_key"
+
+  # --------------------------------
+  # Libvirt Provider Configuration
+  # --------------------------------
+  config.vm.provider :libvirt do |lv|
+    lv.memory = MEMORY
+    lv.cpus   = CPUS
+    lv.driver = "kvm"
+
+
+  end
+
+  # -------------------------
+  # Guest /etc/hosts 
+  # -------------------------
+  HOSTS_BLOCK = <<~SHELL
+    if ! grep -q "PXL_LAB_BEGIN" /etc/hosts; then
+      printf '\n# PXL_LAB_BEGIN\n10.10.0.10 webserver1.pxldemo.local webserver1\n10.10.0.11 webserver2.pxldemo.local webserver2\n10.10.0.20 dbserver1.pxldemo.local dbserver1\n# PXL_LAB_END\n' >> /etc/hosts
+    fi
+  SHELL
+
+
+  # -------------------------
+  # Web Server 1
+  # -------------------------
+  config.vm.define "webserver1" do |server|
+    server.vm.hostname = "webserver1.pxldemo.local"
+    server.vm.network "forwarded_port", guest: 8080, host: 8080
+    server.vm.network "private_network", ip: "10.10.0.10"
+    server.vm.provision "shell", inline: HOSTS_BLOCK
+  end
+
+  # -------------------------
+  # Web Server 2
+  # -------------------------
+  config.vm.define "webserver2" do |server|
+    server.vm.hostname = "webserver2.pxldemo.local"
+    server.vm.network "private_network", ip: "10.10.0.11"
+    server.vm.network "forwarded_port", guest: 8080, host: 8081
+    server.vm.provision "shell", inline: HOSTS_BLOCK
+  end
+
+  # -------------------------
+  # DB Server
+  # -------------------------
+  config.vm.define "dbserver1" do |server|
+    server.vm.hostname = "dbserver1.pxldemo.local"
+    server.vm.network "private_network", ip: "10.10.0.20"
+    server.vm.provision "shell", inline: HOSTS_BLOCK
+  end
+
+  config.vm.post_up_message = "PXL Lab build complete."
+end

@@ -1,0 +1,6 @@
+---
+database: app_db
+table_users: users
+sql_script_directory: /opt/pe1/db-scripts/
+my_environment: dv-env
+my_env_name: Database Servers

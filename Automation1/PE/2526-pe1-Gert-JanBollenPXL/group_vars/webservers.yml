@@ -1,0 +1,8 @@
+---
+my_environment: web-env
+my_env_name: Webservers
+service_name: web
+service_id: 42
+web_root: /var/www/pe1
+index_file: index.html
+apache_port: 8080

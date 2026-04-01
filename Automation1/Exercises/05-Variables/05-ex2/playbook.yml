@@ -1,0 +1,6 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Display variable value
+      ansible.builtin.debug:
+        msg: "Distribution: {{ ansible_distribution }}"

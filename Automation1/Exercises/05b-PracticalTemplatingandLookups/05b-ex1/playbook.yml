@@ -1,0 +1,13 @@
+---
+- hosts: localhost
+
+  vars:
+        users:
+         - ALICE
+         - BOB
+         - CHARLIE
+
+  tasks:
+    - name: Print names in lowercase
+      ansible.builtin.debug:
+        msg: "{{ lookup('template', 'jinjaloop.j2') }}"

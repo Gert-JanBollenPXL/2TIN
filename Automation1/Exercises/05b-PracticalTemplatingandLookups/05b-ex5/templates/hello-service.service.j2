@@ -1,0 +1,13 @@
+[Unit]
+Description=Hello Service
+After=network.target
+
+[Service]
+Type=exec
+User=root
+WorkingDirectory=/opt/hello-service
+ExecStart=/usr/bin/python3 /opt/hello-service/app.py
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

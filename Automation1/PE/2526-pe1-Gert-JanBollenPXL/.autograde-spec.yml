@@ -1,0 +1,174 @@
+---
+assignment_id: pe1-assignment-1
+student_facing_file: README.md
+entrypoint: playbook.yml
+
+notes:
+  - This file is the exact grader contract.
+  - Keep README.md concise for students.
+  - Check implementation details here, not in the student brief.
+
+static_checks:
+  - id: inventory_groups_exist
+    description: inventory defines webservers and dbservers groups and a parent production group including both
+    type: inventory_graph
+    inventory: inventory.ini
+    expect_groups:
+      - webservers
+      - dbservers
+      - production
+    expect_children:
+      production:
+        - webservers
+        - dbservers
+
+  - id: group_vars_layout
+    description: solution uses group_vars for shared and group-specific values
+    type: files_exist
+    paths:
+      - group_vars/all.yml
+      - group_vars/webservers.yml
+      - group_vars/dbservers.yml
+
+  - id: required_variable_names_present
+    description: required variable names exist in the expected group_vars files
+    type: yaml_keys
+    files:
+      group_vars/all.yml:
+        - team_name
+        - environment_name
+        - report_root
+      group_vars/webservers.yml:
+        - dashboard_title
+        - dashboard_message
+        - web_service_name
+      group_vars/dbservers.yml:
+        - db_package_name
+        - db_service_name
+        - db_port
+
+  - id: vars_file_loaded
+    description: playbook loads vars/company.yml with vars_files
+    type: text_match
+    file: playbook.yml
+    patterns:
+      - "vars_files:"
+      - "vars/company.yml"
+
+  - id: jinja_templates_used
+    description: solution contains the required templates
+    type: files_exist
+    paths:
+      - templates/host-summary.j2
+      - templates/index.html.j2
+
+runtime_checks:
+  - id: syntax_check
+    description: playbook syntax is valid
+    command: ansible-playbook playbook.yml --syntax-check
+
+  - id: first_run
+    description: playbook completes successfully
+    command: ansible-playbook playbook.yml
+
+  - id: second_run_idempotent
+    description: second run reports zero changes
+    command: ansible-playbook playbook.yml
+    expect_changed: 0
+
+managed_host_checks:
+  - id: host_summary_web
+    host: webserver1
+    command: cat /opt/pe1/host-summary.txt
+    must_contain:
+      - PXL Automation
+      - Platform Operations
+      - production-lab
+      - webserver1
+      - support@pxldemo.local
+
+  - id: host_summary_db
+    host: dbserver1
+    command: cat /opt/pe1/host-summary.txt
+    must_contain:
+      - PXL Automation
+      - Platform Operations
+      - production-lab
+      - dbserver1
+      - support@pxldemo.local
+
+  - id: build_env_present
+    host: webserver1
+    command: cat /opt/pe1/build.env
+    must_contain:
+      - ENV_NAME=production-lab
+
+  - id: build_env_present_db
+    host: dbserver1
+    command: cat /opt/pe1/build.env
+    must_contain:
+      - ENV_NAME=production-lab
+
+  - id: db_service_active
+    host: dbserver1
+    command: systemctl is-active mariadb
+    expect_stdout: active
+
+  - id: db_ready_file
+    host: dbserver1
+    command: cat /opt/pe1/db-ready.txt
+    must_contain:
+      - dbserver1
+      - mariadb
+      - "3306"
+
+  - id: nginx_active
+    host: webserver1
+    command: systemctl is-active nginx
+    expect_stdout: active
+
+  - id: dashboard_page_content
+    host: webserver1
+    command: curl -s http://127.0.0.1
+    must_contain:
+      - Operations Snapshot
+      - Generated from Ansible
+      - webserver1
+      - production-lab
+      - support@pxldemo.local
+      - dbserver1
+
+override_checks:
+  - id: extra_vars_override
+    command: ansible-playbook playbook.yml -l webservers -e "dashboard_title=Emergency Snapshot"
+
+  - id: override_visible_on_page
+    host: webserver1
+    command: curl -s http://127.0.0.1
+    must_contain:
+      - Emergency Snapshot
+
+implementation_checks:
+  - id: named_tasks_present
+    description: playbook uses named tasks
+    type: text_match
+    file: playbook.yml
+    patterns:
+      - "- name:"
+
+  - id: registered_variable_used
+    description: playbook stores a service task result in a registered variable and prints the state
+    type: text_match
+    file: playbook.yml
+    patterns:
+      - "register:"
+      - "ansible.builtin.debug"
+      - "ansible.builtin.service"
+
+  - id: inventory_query_and_env_lookup_used
+    description: dashboard uses inventory query and control-node environment lookup
+    type: text_match
+    file: playbook.yml
+    patterns:
+      - "inventory_hostnames"
+      - "lookup('env', 'USER')"

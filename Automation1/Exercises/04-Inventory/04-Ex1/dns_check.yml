@@ -1,0 +1,8 @@
+---
+- name: Check DNS Configuration
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Display DNS Server
+      ansible.builtin.debug:
+        msg: "Host {{ inventory_hostname }} uses DNS {{ dns_server }}"

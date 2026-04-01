@@ -1,0 +1,36 @@
+#
+# Vagrantfile to create PXL Labs (libvirt + Ubuntu)
+#
+
+Vagrant.configure("2") do |config|
+
+  # ----- Base Box (hard pinned) -----
+  config.vm.box = "cloud-image/ubuntu-26.04"
+
+  # Disable default /vagrant sync folder
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  # SSH config - reuse insecure key
+  config.ssh.forward_agent = true
+  config.ssh.insert_key = false
+  config.ssh.private_key_path = "~/.vagrant.d/insecure_private_key"
+
+  # --------------------------------
+  # Libvirt Provider Configuration
+  # --------------------------------
+  config.vm.provider :libvirt do |lv|
+    lv.driver = "kvm"
+    lv.uri = 'qemu:///system'
+
+  end
+
+  # -------------------------
+  # Web Server 1
+  # -------------------------
+  config.vm.define "webserver1" do |server|
+    server.vm.hostname = "webserver1.pxldemo.local"
+    server.vm.network "private_network", ip: "10.10.0.10"
+  end
+
+  config.vm.post_up_message = "PXL Lab build complete."
+end

@@ -1,0 +1,40 @@
+---
+- name: Deploy and run hello-service
+  hosts: app
+  become: true
+  gather_facts: false
+
+  vars:
+    bind_address: "0.0.0.0"
+    port: 3000
+    response_text: "Hello from PXL template service"
+
+  tasks:
+    - name: Create app directory
+      ansible.builtin.file:
+        path: /opt/hello-service
+        state: directory
+        mode: '0755'
+
+    - name: Deploy Python app
+      ansible.builtin.template:
+        src: templates/app.py.j2
+        dest: /opt/hello-service/app.py
+        mode: '0755'
+
+    - name: Deploy systemd
+      ansible.builtin.template:
+        src: templates/hello-service.service.j2
+        dest: /etc/systemd/system/hello-service.service
+
+    - name: Reload and start service
+      ansible.builtin.systemd_service:
+        name: hello-service
+        daemon_reload: true
+        enabled: true
+        state: started
+
+# Validation: run these commands
+# ansible app -a "curl http://127.0.0.1:3000"
+# ansible app -b -a "systemctl status hello-service"
+# ansible app -b -a "systemctl cat hello-service"

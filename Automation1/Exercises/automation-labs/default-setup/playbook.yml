@@ -1,0 +1,16 @@
+---
+- name: Configure time synchronization
+  hosts: multi
+  become: true
+
+  tasks:
+    - name: Install chrony package
+      ansible.builtin.dnf:
+        name: chrony
+        state: present
+
+    - name: Start and enable chronyd service
+      ansible.builtin.service:
+        name: chronyd
+        state: started
+        enabled: true
