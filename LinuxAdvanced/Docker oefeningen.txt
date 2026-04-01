@@ -1,0 +1,212 @@
+Docker oefeningen 
+-----------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+-> Container Management:
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Oef 1:
+
+docker run --rm alpine echo "hello world"
+
+Oef 2:
+
+docker run -d --name myubuntu ubuntu tail -f /dev/null OF docker run -d --name myubuntu ubuntu sleep infinity
+docker exec -it myubuntu bash
+apt upgrade
+apt update
+apt install curl
+echo hello world
+docker logs myubuntu > krijgt geen logs want deze container is opgestart met tail -f /dev/null of sleep infinity
+docker top myubuntu > laat de process tree zien, hier is dit sleep infinity
+
+Oef 3:
+
+docker run --name mywebsite -p 8080:80 -d -v "$(pwd)/usr/local/apache2/conf/httpd.conf" httpd
+
+Oef 4:
+
+docker pull v4tech/imagemagick
+docker run --rm -v "C:\Users\12401891\Pictures:/imgs" v4tech/imagemagick convert /imgs/PXL.png /imgs/output.jpg
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+-> Dockerfile intro:
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Oef 1:
+
+
+
+Oef 2:
+
+dockerfile:
+
+FROM postgres:16
+
+ENV POSTGRES_USER=myuser
+ENV POSTGRES_PASSWORD=mypassword
+ENV POSTGRES_DB=mydb
+
+EXPOSE 5432
+
+> commands:
+
+docker build -t my-postgres .
+docker run -d --name mypg -p 5432:5432 my-postgres
+docker run -it --network="host" postgres:16  psql -h localhost -U myuser -d mydb
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+-> Docker images:
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Oef 1:
+
+docker run -it --name myubuntu ubuntu bash
+touch file
+docker inspect myubuntu
+
+Oef 2: 
+
+docker run -d --name mybox busybox sleep infinity
+docker stop mybox
+docker start mybox
+docker exec -it mybox sh
+docker exec mybox ps
+docker exec mybox kill 1 => werkt niet meer in de nieuwere versies van docker
+
+Oef 3:
+docker import gaat niet, dit importeerd alleen het file system zonder image metadata: docker load doet dit wel!
+
+docker load -i ubcounter_image.tar
+docker run -it ubcounter /bin/bash
+docker ps OF docker container ls (in another terminal)
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+-> Docker networking:
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Oef 1:
+
+docker run -it --name busybox1 busybox sh
+ip a
+docker inspect --format '{{ .NetworkSettings.IPAddress }}' busybox1
+
+Oef 2:
+
+docker network create custom_network
+docker run -it -d --name busybox1 --network custom_network busybox
+docker run -it -d --name busybox2 --network custom_network busybox
+docker inspect --format '{{ .NetworkSettings.Networks.custom_network.IPAddress }}' busybox1
+docker inspect --format '{{ .NetworkSettings.Networks.custom_network.IPAddress }}' busybox2
+docker exec busybox2 ping -c 3 busybox1
+docker exec busybox2 ping -c 3 busybox2
+docker stop busybox1 busybox2
+docker rm busybox1 busybox2
+
+Oef 3:
+
+docker network create --subnet 172.18.0.0/16 network1
+docker network create --subnet 172.19.0.0/16 network2
+docker run -it -d --name busybox1 --network network1 busybox
+docker network connect network2 busybox1
+docker inspect --format '{{ .NetworkSettings.Networks.network1.IPAddress }}' busybox1
+docker inspect --format '{{ .NetworkSettings.Networks.network2.IPAddress }}' busybox1
+docker stop busybox1
+docker rm busybox1
+docker network rm network1
+docker network rm network2
+
+Oef 4:
+
+nslookup pxl.be
+docker run -it --name myGooglePing --dns 8.8.8.8 --dns 8.8.4.4 busybox
+echo 194.78.96.231 GJ >> /etc/hosts
+ping -c 3 pxl.be
+ping -c 3 GJ
+docker stop myGooglePing
+docker rm myGooglePing
+
+Oef 5:
+
+docker network create --subnet 172.25.0.0/24 isolated_network
+docker run -it -d --name busybox1 busybox
+docker network connect isolated_network busybox1
+docker run -it -d --name busybox2 --network isolated_network busybox
+docker inspect --format '{{ .NetworkSettings.Networks.isolated_network.IPAddress }}' busybox1
+docker inspect --format '{{ .NetworkSettings.Networks.isolated_network.IPAddress }}' busybox2
+docker exec busybox2 ping -c 3 busybox1
+docker exec busybox1 ping -c 3 busybox2
+docker stop busybox1 busybox2
+docker rm busybox1 busybox2
+docker network rm isolated_network
+
+Oef 6:
+
+docker run -d --name mynginx -p 5000:80 nginx
+netstat -ano | findstr :5000 OF Get-NetTCPConnection -LocalPort 5000 | Select *
+Get-Process -Id 1234
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+-> Data persistence:
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Oef 1:
+
+mkdir nginx_site1
+mkdir nginx_site2
+code index.html > basic html file maken en "nginx site 1" of "nginx site 2" laten zien
+docker run -d --name nginx1 -p 8080:80 -v ${PWD}/nginx_site1:/usr/share/nginx/html nginx
+OF
+docker run -d --name nginx1 -p 8080:80 --mount type=bind,src=${PWD}/nginx_site1:/usr/share/nginx/html nginx
+docker run -d --name nginx2 -p 9090:80 -v ${PWD}/nginx_site2:/usr/share/nginx/html nginx
+OF
+docker run -d --name nginx2 -p 9090:80 --mount type=bind,src=${PWD}/nginx_site2:/usr/share/nginx/html nginx
+
+Oef 2:
+
+docker volume create shared_data
+docker run -dit --name busybox1 -v shared_data:/data busybox
+docker exec -it busybox1 sh -c "echo Hello from container 1 >> /data/message.txt"
+docker run -dit --name busybox2 -v shared_data:/data busybox
+docker exec -it busybox2 sh -c "cat /data/message.txt"
+docker volume inspect shared_data
+
+Oef 3:
+
+docker volume create mysql_data
+docker network create my_network
+docker run -dit --name my_mysql -e MYSQL_ROOT_PASSWORD=mysecretpassword -v mysql_data:/var/lib/mysql -p 3306:3306 --network my_network mysql
+docker run -dit --name my_phpmyadmin -p 8081:80 -e PMA_HOST=my_sql --network my_network phpmyadmin
+docker volume inspect mysql_data
+
+Oef 4:
+
+docker volume create logs_data
+docker run -d --name nginx_container -p 8080:80 -v logs_data:/var/log/nginx nginx
+docker run -d --name httpd_container -p 8081:80 -v logs_data:/usr/local/apache2/logs httpd
+curl http://localhost:8080
+curl http://localhost:8081
+docker run --rm -it -v logs_data:/logs busybox sh
+ls /logs
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+-> SSH:
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Oef 1:
+
+docker run -d -p 2222:22 --name ssh-serverex1 ssh-lab-ssh-server1
+Get-NetIPAddress | Where-Object { $_.InterfaceAlias -like "*WSL*" -and $_.AddressFamily -eq "IPv4" } | Select-Object -ExpandProperty IPAddress
+ssh student@172.17.0.1 -p 2222
+
+Oef 2:
+
+ssh-keygen -t rsa -b 4096 -C "student@docker" -f $env:USERPROFILE\.ssh\id_rsa_docker
+docker exec -it ssh-serverex1 mkdir -p /home/student/.ssh
+docker exec -it ssh-serverex1 chmod 700 /home/student/.ssh
+type $env:USERPROFILE\.ssh\id_rsa_docker.pub | docker exec -i ssh-serverex1 sh -c "cat >> /home/student/.ssh/authorized_keys"
+docker exec -it ssh-serverex1 chmod 600 /home/student/.ssh/authorized_keys
+docker exec -it ssh-serverex1 chown -R student:student /home/student/.ssh
+ssh -i $env:USERPROFILE\.ssh\id_rsa_docker -p 2222 student@localhost

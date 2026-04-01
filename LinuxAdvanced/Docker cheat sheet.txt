@@ -1,0 +1,125 @@
+LINUX ADVANCED
+--------------
+
+-> poort geblokkeerd: 
+	 netstat -ano | findstr :[port]
+
+-> welke service is dit?
+	tasklist /FI "PID eq [servicenumber]"
+
+-> alle containers verwijderen:
+	docker rm -f -v $(docker ps -aq)
+
+	> gefilterd op name
+	docker rm -f -v $(docker ps -aq --filter name=contain[1-5])
+
+-> show all containers
+	docker ps -a
+
+-> show all images
+	docker images
+	docker image ls
+
+-> inspect an image (also possible on running containers)
+	docker inspect [name of image]
+
+-> create dockerfile
+	code Dockerfile
+
+-> build a docker image
+	docker build -t  my-ubuntu:1.0 .
+
+-> show image history
+	docker history my-ubuntu:1.0
+
+-> run a container, make it interactive and start shell
+	docker run -it --name my-alpine-container alpine:latest /bin/sh
+
+-> after making changes to a container, commit it (save) to an image
+	docker commit my-alpine-container my-alpine-image
+
+-> pull an image from the hub
+	docker pull busybox
+
+-> save the image in a tarr
+	docker save -o bussybox.tar bussybox
+
+-> load an imagefile from a tarr 
+	docker load -i busybox.tar
+
+-> remove an image
+	docker image rm busybox
+
+-> show ip-address of a container (contain1 in this case)
+	docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' contain1
+
+-> create a network
+	docker network create my_custom_network
+
+-> create a subnet network
+	docker network create --subnet 172.25.0.0/24 isolated_nw
+
+-> inspect a network
+	docker network inspect isolated_nw
+
+-> add a network to a container
+	docker network connect isolated_nw contain1
+
+-> start a shell in a running container
+	docker exec -it contain1 sh
+
+-> disconnect a container from a network
+	docker network disconnect isolated_nw contain1
+
+-> remove a network
+	docker network rm -f isolated_nw
+
+-> remove all networks that aren't coupled to containers
+	docker network prune -f
+
+-> start a container and add an extra host
+	docker run --add-host=docker:23.185.0.4 --rm -it alpine
+
+-> start a container and add custom dns
+	docker run --rm -itd --dns 8.8.8.8 --dns 8.8.4.4 --name dnsgoogle busybox
+
+-> inspect container and filter on dns
+	 docker inspect -f '{{.HostConfig.Dns}}' dnsgoogle
+
+-> create a volume 
+	docker volume create mydata
+
+-> start a container and sync with volume
+	docker run --name mynginx1 -d -v mydata:/usr/share/nginx/html nginx
+
+-> inspect a volume
+	docker volume inspect mydata
+
+-> start a container and show everythin in the /data directory
+	docker run --rm -it -v mydata:/data alpine ls /data
+
+-> start a container and add a file in /data
+	docker run --rm -it -v mydata:/data alpine touch /data/test.txt
+
+-> start a container and do an 'echo' and add that string to /data/test.txt
+	docker run --rm -it -v mydata:/data alpine sh -c 'echo "Hello, World!" > /data/test.txt'
+
+-> remove the known hosts (public keys) incase we remove the container and volume so we don't get an error message
+	 ssh-keygen -f '/root/.ssh/known_hosts' -R 'ssh-server2'
+
+-> maak ed25519 keypair aan (staat in .ssh map)
+	ssh-keygen -t ed25519
+
+-> kopieer public key naar host en log in via ssh, hierna kunnen we gewoon inloggen zonder ww
+	ssh-copy-id student@ssh-server2
+
+-> add passphrase to exising private key
+	ssh-keygen -p -f /root/.ssh/id_ed25519
+
+-> add passphrase to ssh-agent
+	ssh-agent bash
+	ssh-add /root/.ssh/id_ed25519
+	<passphrase ingeven voor id_ed25519>
+
+-> laat logs zien terwijl je met ssh inlogt
+	ssh student@ssh-server2 -vvv
