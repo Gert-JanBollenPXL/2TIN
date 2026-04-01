@@ -1,0 +1,54 @@
+CLOUD ESSENTIALS - CONCEPTS
+---------------------------
+
+-> define cloud computing: - shared pools of configurable computer system resources
+				> built own datacenters
+			   - higher level services
+				> compute, storage, database, ...
+			   - rapidly provisioned
+				> self service (management console, cli, sdk's, 3rd party tools)
+			   - often over the internet
+
+-> User perspective: - required minimal management
+		     - dramatic cost savings  (DEPENDS ON THE CASE!)
+		     - pay as you go (change of mind-set from before)
+-> Back end: - establishment of complex networking, storage and server configurations 
+	     - configured to be self-monitoring and self-healing
+
+-> Essential characters (NIST):
+	- on demand self-service (anywhere, anytime, any location)
+		> choose a datacenter close to the most end-users (lower network latency)
+	- broad network acces (from any device over the internet)
+	- resource pooling (increase efficiency
+	- rapid elasticity (scaling can be done very fast if neccesary, depending on real-time demand)
+		> elasticity and scalability
+		> why scaling? (Always have a buffer)
+		> vertical scaling: give the machine more resources (pets)
+		> horizontal scaling - in/out scaling: providing more instances on additional vm's and divide the load (cattle)
+	- measured service (pay as you go)
+		> monitoring by the provider AND consumer (can also be a service)
+
+-> Container tech became cloud benefits
+
+-> Service models: seperation of responsibilities
+	- SaaS: software as a service (users)
+	- PaaS: platform as a service (software engineer)
+	- IaaS: infrastructure as a service (system asmin)
+	- On premises
+
+-> Deployment models
+	- private/internal
+		> one organization
+		> managed internally/3rd party, hosted internally or externally
+		> high cost (space, hardware, environmental controls)
+		> needs updates regularly -> more costs
+	- public/external
+		> available over a network open to the public
+		> similar to private, but security concerns differ greatly
+		> serve broad public user base
+		> providers like: AWS, Azure, Google cloud platform
+	- hybrid
+		> combines public and private
+		> sensitive data on private cloud
+		> public cloud used for scalable, high-demand apps
+		> offers flexibilty, choosing where to run apps based on cost, performance, security needs

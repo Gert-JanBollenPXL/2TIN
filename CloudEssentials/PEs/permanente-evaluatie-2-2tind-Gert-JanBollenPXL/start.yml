@@ -1,0 +1,168 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Resources:
+  PE2VPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: '10.0.0.0/16'
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: PE2-VPC
+
+  PublicSubnet1:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref PE2VPC
+      CidrBlock: '10.0.2.0/24'
+      AvailabilityZone: us-east-1a
+      MapPublicIpOnLaunch: true
+      Tags:
+      - Key: Name
+        Value: PE2-Public-a
+
+  PublicSubnet2:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref PE2VPC
+      CidrBlock: '10.0.3.0/24'
+      AvailabilityZone: us-east-1b
+      MapPublicIpOnLaunch: true
+      Tags:
+      - Key: Name
+        Value: PE2-Public-b
+
+  InternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+  
+  VPCGatewayAttachment:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref PE2VPC
+      InternetGatewayId: !Ref InternetGateway
+
+  RouteTable1:
+    Type: "AWS::EC2::RouteTable"
+    Properties:
+      VpcId: !Ref PE2VPC
+      Tags:
+        - Key: Name
+          Value: PE2-RouteTable1
+  
+  RouteTable2:
+    Type: "AWS::EC2::RouteTable"
+    Properties:
+      VpcId: !Ref PE2VPC
+      Tags:
+        - Key: Name
+          Value: PE2-RouteTable2
+
+  PublicSubnet1RouteTableAssociation1:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      RouteTableId: !Ref RouteTable1
+      SubnetId: !Ref PublicSubnet1
+
+  PublicSubnet1RouteTableAssociation2:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      RouteTableId: !Ref RouteTable2
+      SubnetId: !Ref PublicSubnet2
+
+  InternetRoute1:
+    Type: "AWS::EC2::Route"
+    Properties:
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: !Ref InternetGateway
+      RouteTableId: !Ref RouteTable1
+  
+  InternetRoute2:
+    Type: "AWS::EC2::Route"
+    Properties:
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: !Ref InternetGateway
+      RouteTableId: !Ref RouteTable2
+
+  Ec2IncomingHttpSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupName: ec2 incoming http
+      GroupDescription: Allow incoming HTTP traffic on port 80
+      VpcId: !Ref PE2VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+  Labo2InstanceA:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: ami-063d43db0594b521b
+      InstanceType: t2.micro
+      SecurityGroupIds:
+        - !Ref Ec2IncomingHttpSecurityGroup
+      SubnetId: !Ref PublicSubnet1
+      KeyName: vockey
+      Tags:
+        - Key: Name
+          Value: hash-api
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash
+          sudo dnf update -y
+          # install docker
+          sudo dnf install -y docker
+          sudo systemctl start docker
+          sudo systemctl enable docker
+          sudo usermod -aG docker ec2-user
+          sudo su ec2-user
+          docker run -d --restart always -p 80:80 driessw/cloud-pe:latest
+  pxlApi:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: ami-063d43db0594b521b
+      InstanceType: t2.micro
+      SecurityGroupIds:
+        - !Ref Ec2IncomingHttpSecurityGroup
+      SubnetId: !Ref PublicSubnet1
+      KeyName: vockey
+      Tags:
+        - Key: Name
+          Value: pxl-api
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash
+          sudo dnf update -y
+          # install docker
+          sudo dnf install -y docker
+          sudo systemctl start docker
+          sudo systemctl enable docker
+          sudo usermod -aG docker ec2-user
+          # install docker compose plugin
+          sudo mkdir -p /usr/local/lib/docker/cli-plugins
+          sudo curl -sL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-"$(uname -m)" -o /usr/local/lib/docker/cli-plugins/docker-compose
+          sudo chown root:root /usr/local/lib/docker/cli-plugins/docker-compose
+          sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+          # add docker compose file stuff
+          cd /home/ec2-user
+          base64 -d <<< dmVyc2lvbjogJzMuOCcKc2VydmljZXM6CiAgYXBwOgogICAgaW1hZ2U6IGRyaWVzc3cvY2xvdWQtcGUtMjpsYXRlc3QKICAgIGNvbnRhaW5lcl9uYW1lOiBhcGkKICAgIHJlc3RhcnQ6IGFsd2F5cwogICAgZW52aXJvbm1lbnQ6CiAgICAgIERCX05BTUU6IHB4bAogICAgICBEQl9VU0VSOiBkYnVzZXIKICAgICAgREJfUEFTU1dPUkQ6IGRicGFzc3dvcmQKICAgICAgREJfSE9TVDogcmRzdXJsCiAgICAgIERCX0RJQUxFQ1Q6IHBvc3RncmVzCiAgICAgIERCX1BvcnQ6IDU0MzIKICAgIHBvcnRzOgogICAgICAtICI4MDozMDAwIgo= >docker-compose.yml
+          sudo chown ec2-user:ec2-user docker-compose.yml
+
+          
+
+  StudentsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: students
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH  # Partition key
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5

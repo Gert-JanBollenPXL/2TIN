@@ -1,0 +1,31 @@
+{
+  "name": "PXL University College Codespace",
+  "image": "mcr.microsoft.com/devcontainers/universal:linux",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/aws-cli:1": {}
+  },
+  
+  "customizations": {
+    "vscode": {
+      "extensions": [
+  
+        "-github.copilot",
+        "-github.copilot-chat",
+        
+        "-tabnine.tabnine-vscode",
+        "-visualstudioexptteam.vscodeintellicode",
+        "-amazonwebservices.aws-toolkit-vscode",
+        "/tmp/pixel-lint-0.0.3.vsix"
+      ],
+      
+      "settings": {
+      }
+    }
+  },
+  
+  "onCreateCommand": "wget -q -P /tmp https://github.com/d-ries/pixel-lint-release/releases/download/stable/pixel-lint-0.0.3.vsix",
+  "postStartCommand": "bash /workspaces/*/.devcontainer/start.sh",
+  
+  "forwardPorts": []
+}

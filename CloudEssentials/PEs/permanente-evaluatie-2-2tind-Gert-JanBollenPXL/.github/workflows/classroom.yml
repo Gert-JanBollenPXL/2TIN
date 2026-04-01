@@ -1,0 +1,214 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]' && github.event.head_commit.message == 'einde examen'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: postgres-basic-settings test
+      id: postgres-basic-settings-test
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: postgres-basic-settings test
+        setup-command: cd .github/aws-autograde && npm i
+        command: export $(grep -v '^#' creds.txt | xargs) && node .github/aws-autograde/postgres.js
+        input: ''
+        expected-output: correct
+        comparison-method: exact
+        timeout: 10
+        max-score: 10
+    - name: postgres-web test
+      id: postgres-web-test
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: postgres-web test
+        setup-command: cd .github/aws-autograde && npm i
+        command: export $(grep -v '^#' creds.txt | xargs) && node .github/aws-autograde/postgres-web.js
+        input: ''
+        expected-output: correct
+        comparison-method: exact
+        timeout: 10
+        max-score: 10
+    - name: loadbalancer-general test
+      id: loadbalancer-general-test
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: loadbalancer-general test
+        setup-command: cd .github/aws-autograde && npm i
+        command: export $(grep -v '^#' creds.txt | xargs) && node .github/aws-autograde/loadbalancer.js
+        input: ''
+        expected-output: correct
+        comparison-method: exact
+        timeout: 10
+        max-score: 10
+
+    - name: loadbalancer-listener test
+      id: loadbalancer-listener-test
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: loadbalancer-listener test
+        setup-command: cd .github/aws-autograde && npm i
+        command: export $(grep -v '^#' creds.txt | xargs) && node .github/aws-autograde/listener.js
+        input: ''
+        expected-output: correct
+        comparison-method: exact
+        timeout: 10
+        max-score: 10
+
+    - name: loadbalancer-web test
+      id: loadbalancer-web-test
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: loadbalancer-web test
+        setup-command: cd .github/aws-autograde && npm i
+        command: export $(grep -v '^#' creds.txt | xargs) && node .github/aws-autograde/loadbalancer-web.js
+        input: ''
+        expected-output: correct
+        comparison-method: exact
+        timeout: 10
+        max-score: 10
+
+    - name: get-students test
+      id: get-students-test
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: get-students test
+        setup-command: cd .github/aws-autograde && npm i
+        command: export $(grep -v '^#' creds.txt | xargs) && node .github/aws-autograde/getStudents.js
+        input: ''
+        expected-output: correct
+        comparison-method: exact
+        timeout: 10
+        max-score: 10
+
+    - name: post-students test
+      id: post-students-test
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: post-students test
+        setup-command: cd .github/aws-autograde && npm i
+        command: export $(grep -v '^#' creds.txt | xargs) && node .github/aws-autograde/postStudents.js
+        input: ''
+        expected-output: correct
+        comparison-method: exact
+        timeout: 10
+        max-score: 10
+
+    - name: agw-hash test
+      id: agw-hash-test
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: agw-hash test
+        setup-command: cd .github/aws-autograde && npm i
+        command: export $(grep -v '^#' creds.txt | xargs) && node .github/aws-autograde/apiGatewayHash.js
+        input: ''
+        expected-output: correct
+        comparison-method: exact
+        timeout: 10
+        max-score: 10
+    - name: agw-hash-web test
+      id: agw-hash-web-test
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: agw-hash-web test
+        setup-command: cd .github/aws-autograde && npm i
+        command: export $(grep -v '^#' creds.txt | xargs) && node .github/aws-autograde/apiGatewayHash-web.js
+        input: ''
+        expected-output: correct
+        comparison-method: exact
+        timeout: 10
+        max-score: 10
+
+    - name: agw-student-post test
+      id: agw-student-post-test
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: agw-student-post test
+        setup-command: cd .github/aws-autograde && npm i
+        command: export $(grep -v '^#' creds.txt | xargs) && node .github/aws-autograde/apiGatewayStudentPost.js
+        input: ''
+        expected-output: correct
+        comparison-method: exact
+        timeout: 10
+        max-score: 10
+
+    - name: agw-student-post-web test
+      id: agw-student-post-web-test
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: agw-student-post-web test
+        setup-command: cd .github/aws-autograde && npm i
+        command: export $(grep -v '^#' creds.txt | xargs) && node .github/aws-autograde/apiGatewayStudentPost-web.js
+        input: ''
+        expected-output: correct
+        comparison-method: exact
+        timeout: 10
+        max-score: 10
+
+    - name: agw-student-get test
+      id: agw-student-get-test
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: agw-student-get test
+        setup-command: cd .github/aws-autograde && npm i
+        command: export $(grep -v '^#' creds.txt | xargs) && node .github/aws-autograde/apiGatewayStudentGet.js
+        input: ''
+        expected-output: correct
+        comparison-method: exact
+        timeout: 10
+        max-score: 10
+
+    - name: agw-student-get-web test
+      id: agw-student-get-web-test
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: agw-student-get-web test
+        setup-command: cd .github/aws-autograde && npm i
+        command: export $(grep -v '^#' creds.txt | xargs) && node .github/aws-autograde/apiGatewayStudentGet-web.js
+        input: ''
+        expected-output: correct
+        comparison-method: exact
+        timeout: 10
+        max-score: 10
+        
+    - name: agw-deployment test
+      id: agw-deployment-test
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: agw-deployment test
+        setup-command: cd .github/aws-autograde && npm i
+        command: export $(grep -v '^#' creds.txt | xargs) && node .github/aws-autograde/apiGatewayDeployment.js
+        input: ''
+        expected-output: correct
+        comparison-method: exact
+        timeout: 10
+        max-score: 10
+
+
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        POSTGRES-BASIC-SETTINGS-TEST_RESULTS: "${{steps.postgres-basic-settings-test.outputs.result}}"
+        POSTGRES-WEB-TEST_RESULTS: "${{steps.postgres-web-test.outputs.result}}"
+        LOADBALANCER-GENERAL-TEST_RESULTS: "${{steps.loadbalancer-general-test.outputs.result}}"
+        LOADBALANCER-LISTENER-TEST_RESULTS: "${{steps.loadbalancer-listener-test.outputs.result}}"
+        LOADBALANCER-WEB-TEST_RESULTS: "${{steps.loadbalancer-web-test.outputs.result}}"
+        GET-STUDENTS-TEST_RESULTS: "${{steps.get-students-test.outputs.result}}"
+        POST-STUDENTS-TEST_RESULTS: "${{steps.post-students-test.outputs.result}}"
+        AGW-HASH-TEST_RESULTS: "${{steps.agw-hash-test.outputs.result}}"
+        AGW-HASH-WEB-TEST_RESULTS: "${{steps.agw-hash-web-test.outputs.result}}"
+        AGW-STUDENT-POST-TEST_RESULTS: "${{steps.agw-student-post-test.outputs.result}}"
+        AGW-STUDENT-POST-WEB-TEST_RESULTS: "${{steps.agw-student-post-web-test.outputs.result}}"
+        AGW-STUDENT-GET-TEST_RESULTS: "${{steps.agw-student-get-test.outputs.result}}"
+        AGW-STUDENT-GET-WEB-TEST_RESULTS: "${{steps.agw-student-get-web-test.outputs.result}}"
+        AGW-DEPLOYMENT-TEST_RESULTS: "${{steps.agw-deployment-test.outputs.result}}"
+      with:
+        runners: postgres-basic-settings-test, postgres-web-test, loadbalancer-general-test, loadbalancer-listener-test, loadbalancer-web-test, get-students-test, post-students-test, agw-hash-test, agw-hash-web-test, agw-student-post-test, agw-student-post-web-test, agw-student-get-test, agw-student-get-web-test, agw-deployment-test

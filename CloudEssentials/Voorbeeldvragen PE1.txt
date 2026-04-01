@@ -1,0 +1,81 @@
+Bouw een nieuwe VPC met 2 private en 2 public subnets in verschillende AZs. De 2 private subnets mogen geen internettoegang hebben, de 2 public subnets wel.
+
+Maak een EC2 instance aan in het public subnet genaamd “webserver” met het volgende userdata script:
+
+#!/bin/bash sudo apt update
+
+sudo apt install nginx
+
+Zorg ervoor dat deze een publiek IP adres krijgt en dat er enkel SSH toegang is van de EC2 “bastion-host”. HTTP verkeer moet toegestaan zijn op deze machine
+
+Maak een nieuwe AMI met de naam “webserver-ami” van bovenstaande EC2 instance. Maak daarna een nieuwe instance “webserver-2” aan gebaseerd op deze ami in het 2de publieke subnet.
+
+Zorg in bovenstaande voor de juiste security groups rekening houdend met het principle of least privilege.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Hieronder vind je een volledig en correct AWS-ontwerp volgens best practices (least privilege, gescheiden public/private subnets, internet-only via public subnets, security-group chaining).
+Ik geef zowel een architectuuroverzicht als Terraform-voorbeeldcode (optioneel te gebruiken), zodat je de omgeving 1-op-1 kunt opzetten.
+
+-> Architectuurontwerp
+1. VPC
+
+CIDR: 10.0.0.0/16
+
+-> 4 subnets:
+
+Public-1 (AZ-A) 10.0.1.0/24
+
+Public-2 (AZ-B) 10.0.2.0/24
+
+Private-1 (AZ-A) 10.0.3.0/24
+
+Private-2 (AZ-B) 10.0.4.0/24
+
+-> Routing
+
+Public subnets → route naar Internet Gateway
+
+Private subnets → géén internettoegang
+(dus geen NAT Gateway, geen IGW)
+
+->  Instances
+Bastion host (in Public Subnet 1)
+Heeft publiek IP
+SG: laat alleen SSH toe vanaf jouw IP
+SG naam: sg-bastion
+
+-Webserver (webserver) – Public Subnet 1
+User-data:
+#!/bin/bash
+sudo apt update -y
+sudo apt install -y nginx
+Krijgt publiek IP
+
+SG:
+HTTP (80) van 0.0.0.0/0
+SSH alleen van bastion (via security group reference)
+SG naam: sg-webserver
+
+-> AMI
+
+Maak AMI “webserver-ami” van instance webserver
+
+-> Webserver-2 (tweede public subnet)
+
+Wordt aangemaakt vanuit webserver-ami
+In Public Subnet 2
+Zelfde SG als webserver (of kopie)
+
+-> Security Groups (least privilege)
+
+sg-bastion
+Type:		Source:
+SSH (22)	jouw IP-adres (bijv. x.x.x.x/32)
+
+sg-webserver
+Type:		Source:
+HTTP (80)	0.0.0.0/0
+SSH (22)	sg-bastion
+
+Private subnets krijgen geen SG’s voor internet en geen routes naar IGW/NAT.

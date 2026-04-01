@@ -1,0 +1,16 @@
+{
+  "name": "aws-autograde",
+  "version": "1.0.0",
+  "description": "",
+  "main": "autograde.js",
+  "type": "module",
+  "scripts": {
+    "start": "node vpc.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "puppeteer": "^23.5.1"
+  }
+}

@@ -1,0 +1,13 @@
+#!/bin/bash
+sudo yum update -y
+sudo yum install -y docker
+
+sudo service docker start
+
+sudo usermod -a -G docker ec2-user
+
+sudo docker pull driessw/cloud-pe:latest
+
+sudo docker run -d --restart always -p 80:80 driessw/cloud-pe:latest
+
+sudo systemctl enable docker

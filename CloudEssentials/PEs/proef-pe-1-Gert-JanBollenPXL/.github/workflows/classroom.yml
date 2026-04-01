@@ -1,0 +1,33 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: test VPC
+      id: test-vpc
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: test VPC
+        setup-command: cd  .github/aws-autograde && npm install
+        command: export $(grep -v '^#' creds.txt | xargs) && node .github/aws-autograde/vpc.js
+        input: ''
+        expected-output: correct
+        comparison-method: exact
+        timeout: 10
+        max-score: 10
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        TEST-VPC_RESULTS: "${{steps.test-vpc.outputs.result}}"
+      with:
+        runners: test-vpc
