@@ -1,0 +1,106 @@
+--- Projectmanagement PE4 User stories + Epics ---
+
+-> registraties_en_login
+
+Als een gebruiker wil ik kunnen inloggen door gebruik te maken van mijn schoolaccount zodat ik gebruik kan maken van de shuttleapp
+
+Als een (ingelogde) gebruiker wil ik de mogelijkheid hebben om mijn wachtwoord aan te passen zodat de toegang tot mijn account kan beveiligen
+
+Als een (ingelogde) gebruiker wil ik de mogelijkheid hebben om mijn wachtwoord te resetten zodat ik terug toegang kan krijgen tot de app als ik mijn wachtwoord vergeten ben
+
+
+-> profielbeheer
+
+Als een (ingelogde) gebruiker wil ik de taal kunnen aanpassen (Engels, Frans of Duits) zodat ik de app ook kan gebruiken als Nederlands niet mijn moedertaal is
+
+Als een (ingelogde) gebruiker wil ik kunnen kiezen tussen verschillende thema's voor het uitzicht van de app, zodat ik de app kan personaliseren (bv. darkmode)
+
+Als een (ingelogde) gebruiker wil ik voorkeursroutes en tijden kunnen opslaan zodat ik sneller kan reserveren
+
+Als een (ingelogde) gebruiker wil ik kunnen kiezen via welke weg ik een melding (pushmelding of email) krijg zodat ik meldingen krijg op de manier die ik verkies
+
+
+-> usability
+
+Als een (ingelogde) gebruiker wil ik op het dashboard de routes tussen de verschillende campussen kunnen zien zodat het duidelijk is welke shuttlebussen beschikbaar zijn
+
+Als een (ingelogde) gebruiker wil ik vooraf kunnen zien hoeveel plaatsen nog beschikbaar zijn zodat ik mijn planning hierop kan afstemmen
+
+Als een (ingelogde) gebruiker wil ik als ik een route selecteer het uurrooster kunnen zien zodat ik weet wanneer de shuttle zal rijden
+
+Als een (ingelogde) gebruiker wil ik shuttles voorgesteld krijgen op basis van mijn lesrooster zodat ik mijn verplaatsingen kan plannen zonder manueel routes te moeten opzoeken
+
+Als een (ingelogde) gebruiker wil ik dat mijn lessenrooster automatisch gesynchroniseerd zal worden met de shuttleapp zodat ik direct kan zien welke routes ik het beste kan gebruiken en wanneer
+
+
+-> beheer_reservaties
+
+Als een (ingelogde) gebruiker wil ik in de mogelijkheid zijn om een plaats te reserveren op de shuttle bus zodat ik zeker ben dat ik op tijd op mijn eindbestemming kan geraken
+
+Als een (ingelogde) gebruiker wil ik mijn shuttle-reservatie kunnen annuleren zodat mijn plaats vrijkomt voor anderen als mijn planning wijzigt
+
+Als een (ingelogde) gebruiker wil ik mijn toekomstige en vorige reservaties kunnen bekijken zodat ik overzicht heb over mijn shuttlegebruik
+
+Als een (ingelogde) gebruiker wil ik zien wanneer een shuttle volzet is zodat ik een alternatief kan plannen
+
+Als een (ingelogde) gebruiker wil ik op een wachtlijst kunnen staan zodat ik alsnog mee kan als er plaatsen vrijkomen
+
+Als een (ingelogde) gebruiker wil ik een herinnering krijgen 10 minuten vóór vertrek zodat ik mijn reservatie niet vergeet
+
+
+-> realtime_informatie_en_notificaties
+
+Als een (ingelogde) gebruiker wil ik realtime info over vertragingen of uitval krijgen zodat ik tijdig een alternatief kan zoeken
+
+Als een (ingelogde) gebruiker wil ik een bevestigingsmelding krijgen via email (indien gekozen) als ik succesvol een reservatie/annulatie gemaakt heb zodat ik zeker ben van mijn reservatie/annulatie
+
+Als een (ingelogde) gebruiker wil ik een bevestigingsmelding krijgen via pushmelding (indien gekozen) als ik succesvol een reservatie/annulatie gemaakt heb zodat ik zeker ben van mijn reservatie/annulatie
+
+Als een (ingelogde) gebruiker wil ik in realtime kunnen zien waar mijn gereserveerde shuttlebus is zodat ik weet wanneer ik aan de halte moet zijn
+
+Als een (ingelogde) gebruiker wil ik automatisch een melding ontvangen wanneer er een versterkingsshuttle wordt ingezet op een door mij gekozen route, zodat ik alsnog een plaats kan reserveren
+
+
+-> duurzaamheid_en_inzichten
+
+Als een (ingelogde) gebruiker wil ik zien hoeveel CO₂ ik bespaar door de shuttle te gebruiken zodat ik gemotiveerd ben duurzaam te reizen
+
+Als een (ingelogde) gebruiker wil ik feedback kunnen geven over een rit zodat de service kan verbeteren
+
+
+-> planning_en_beheer
+
+Als een admin wil ik de routes kunnen aanpassen zodat de informatie in de app actueel blijft
+
+Als een admin wil ik de roosters kunnen aanpassen zodat de informatie in de app actueel blijft
+
+Als een admin wil ik de shuttlecapaciteit kunnen aanpassen zodat de informatie in de app actueel blijft
+
+Als een admin wil ik inzicht krijgen in reservatiegegevens per campus en tijdstip zodat ik shuttles kan bijsturen waar nodig
+
+Als admin wil ik piekmomenten automatisch kunnen detecteren zodat ik versterkingsshuttles kan inzetten
+
+Als admin wil ik waarschuwingen krijgen bij over- of onderbezetting zodat ik binnen 10 minuten kan ingrijpen
+
+
+-> rapportering_en_beleid
+
+Als een admin wil ik iedere week geautomatiseerde rapporten over gebruik en bezettingsgraad zodat ik beleidsdoelstellingen kan opvolgen
+
+Als admin wil ik historische bezettingsdata kunnen analyseren zodat toekomstige roosters geoptimaliseerd kunnen worden
+
+Als admin wil ik rapporten kunnen exporteren zodat ze gebruikt kunnen worden in beleidsrapporten
+
+Als PXL wil ik statistieken over parkeerdruk vs. shuttlegebruik zodat de impact van de app aantoonbaar is
+
+Als PXL wil ik trends per academiejaar kunnen vergelijken zodat vooruitgang meetbaar is
+
+Als PXL wil ik het aandeel shuttleverplaatsingen kunnen meten zodat we onze duurzaamheidsdoelstellingen kunnen opvolgen
+
+Als PXL wil ik no-shows kunnen detecteren zodat capaciteit niet verspild wordt
+
+Als PXL wil ik tevredenheidsscores per route kunnen verzamelen zodat knelpunten zichtbaar worden
+
+Als PXL wil ik kunnen communiceren over duurzame mobiliteit via de app zodat het groene imago versterkt wordt
+
+Als communicatieverantwoordelijke wil ik via de app inzicht krijgen in statistieken over duurzaam shuttlegebruik (zoals aantal ritten en CO₂-besparing) zodat ik kan aantonen dat PXL actief inzet op groene mobiliteit

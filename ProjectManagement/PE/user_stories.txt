@@ -1,0 +1,15 @@
+Als bezoeker wil ik me aanmelden via Facebook zodat ik op mijn persoonlijke pagina van 10.000 stappen terecht kom
+Als bezoeker wil ik me aanmelden via email zodat ik op mijn persoonlijke pagina van 10.000 stappen terecht kom
+Als bezoeker wil ik me kunnen registreren zodat ik een account heb
+Als lid wil ik een groep kunnen zoeken van medewandelaars dicht in de buurt zodat ik in groep kan wandelen
+Als lid wil ik personen kunnen opzoeken die in de buurt zijn zodat ik met anderen kan samen wandelen
+Als lid wil ik naar de help-pagina kunnen surfen als ik met vragen zit in verband met het platform zodat ik antwoord kan krijgen op mijn vragen
+Als lid wil ik de online stappenregistratietool kunnen gebruiken om iedere dag mijn stappen te registreren zodat ik mijn voortgang kan volgen
+Als bezoeker wil ik de mogelijkheid hebben om de taal van de website aan te passen zodat indien ik anderstalig ben ik de website ook kan gebruiken
+Als bezoeker wil ik de mogelijkheid hebben om een nieuw wachtwoord aan te vragen dmv een "wachtwoord vergeten" knop op de inlogpagina zodat ik mijn account terug kan gebruiken als ik mijn wachtwoord kwijt zou raken
+Als bezoeker wil ik tips/raad kunnen lezen in verband met een actievere levensstijl door op de "beweegtips" knop te klikken zodat ik gemotiveerd kan worden om te gaan bewegen
+Als lid wil ik een scorebord per gemeente kunnen zien die dagelijks reset zodat ik mijn aantal stappen kan vergelijken met die van de rest
+Als lid wil ik een globaal scorebord kunnen zien die dagelijks reset zodat ik mijn aantal stappen kan vergelijken met die van de rest
+Als lid wil ik een wekelijkse samenvatting van mijn aantal stappen zodat ik mijn progressie kan zien
+Als bezoeker wil ik naar de login pagina kunnen gaan zodat ik kan inloggen
+Als bezoeker wil ik naar de app store/google play kunnen gaan  zodat ik de app kan downloaden op mijn iPhone/samsung gsm

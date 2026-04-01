@@ -1,0 +1,19 @@
+Project management: PERT
+------------------------
+
+-> cheat sheet reminder voor diagrammen:
+
+Te Links >> Rechts : hoogste waarde
+Tl Rechts >> Links : laagste waarde
+
+Te = (to + 4 * tl + tp) / 6
+
+Te : Earliest expected time - in cirkel bovenaan
+Tl : Latest allowable time - in cirkel onderaan
+to : most optimistic time
+tl : most likely time
+tp : pessimistic time
+
+Slack = Tl - Te (kan +, - of 0 zijn)
+
+Kritieke pad : pad dat het langste duurt (meestal zijn Te en Tl gelijk over de hele lijn)

@@ -1,0 +1,31 @@
+Oefening methodologiën
+----------------------
+
+Is deze methodologie eerder predictive – iterative – adaptive?
+
+-> Waterval & ‘V’-model
+Predictive, het zijn beide methodologiën waarbij fasen elkaar opvolgen, zonder overlap. Maar bij het V-model word elke ontwikkelfase gekoppelt aan een parallelle testfase.
+
+-> Spiral model
+Iterative, 4 fasen die achtereenvolgens worden uitgevoerd, na uitvoering van deze 4 kan worden besloten om deze te herhalen of om het project te beëindigen. Dit kan op het moment dat het project klaar is of als een onderdeel onuitvoerbaar blijkt.
+
+-> Rational Unified Process (RUP)
+Iterative, 4 fasen waarin de volgende activiteiten plaatsvinden: modellering, analyse, implementatie, testen en inzetten. Iterative omdat alle kernactiviteiten gedurende het hele project terugkeren. De fasen van het project kunnen herhaald worden totdat het project aan alle eisen voldoet en doelstellingen behaalt zijn.
+
+-> Rapid Application Development
+Predictive, fasen van prototyping, user-input vergaren en snel aanpassen van software. Vergelijkbaar met klei (molding and refining).
+
+-> OpenUp
+Adaptive, flexibele versie van RUP, maakt gebruik van micro-steps (zoals Scrum), kleine stukjes die afgewerkt worden. Dit zorgt voor een zeer snelle feedback loop. 4 fasen: initial phase, refinement, construction en transmission.
+
+-> Scrum & Agile
+Adaptive, Agile is een flexibele mindset voor projectmanagement. Scrum is een specifiek en populair framework die de Agile filosofie toepast door middel van korte cycli, sprints genoemd, duidelijke rollen en regelmatige feedback.
+
+-> XP (extreme programming)
+Adaptive, gebaseerd op Agile. Ook wel eXtreme Programming genoemd, focust op hoge kwaliteit van software, continue klanteninteractie en korte ontwikkelingscycli voor veranderende eisen.
+
+-> Lean, Kanban
+Adaptive, Lean is een managementfilosofie gericht op het maximaliseren van klantenwaarde en het minimaliseren van verspillingen binnen processen. Kanban (origineel ontwikkeld door Toyota) maakt hier gebruik van alsook van het 'Kanban bord'. Is een visueel systeem voor workflow management, gebruik makend van het pull-systeem (nieuwe taken worden pas opgepakt als deze effectief gedaan kunnen worden (verlaagd de kans op overbelasting).
+
+-> Feature Driven Development
+Adaptive, gebaseerd op Agile. organiseerd het werk rond features. Meestal opgebouwd uit 5 fasen: het maken van een high-level model van het software systeem, een feature lijst maken, plan by feature, design by feature en build by feature.

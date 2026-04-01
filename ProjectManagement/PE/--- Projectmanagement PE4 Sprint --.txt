@@ -1,0 +1,63 @@
+--- Projectmanagement PE4: Sprint ---
+
+-> Sprintdoel:
+
+Tegen het einde van sprint 1 kan een gebruiker zich aanmelden met zijn schoolaccount, basisinformatie over shuttle routes bekijken en een eenvoudige shuttle-reservatie maken en beheren, zodat een eerste werkende en testbare versie van de shuttleapp beschikbaar is.
+
+-> User stories voor sprint 1:
+
+registraties_en_login:
+
+	- Inloggen via schoolaccount
+
+usability:
+
+	- Routes tussen campussen bekijken op dashboard
+
+	- Uurrooster per route bekijken
+
+	- Aantal beschikbare plaatsen bekijken
+
+beheer_reservaties:
+
+	- Plaats reserveren op shuttle
+
+	- Reservatie annuleren
+
+	- Overzicht van reservaties bekijken
+
+realtime_informatie (basis):
+
+	- Bevestigingsmelding bij reservatie/annulatie (1 kanaal, bv. push of in-app)
+
+-> Door dit in sprint 1 te doen eindigen we met een werkend minimum viable product:
+
+	Inloggen > Routes bekijken > Beschikbaarheid zien > Reservatie maken > Reservatie beheren
+
+-> Definition of Done:
+
+Voor elke user story geldt dat deze als Done wordt beschouwd wanneer aan alle onderstaande criteria is voldaan:
+
+Algemeen
+	- De user story voldoet aan alle bijhorende acceptatiecriteria (fit criteria).
+	- De functionaliteit is volledig uitgewerkt en consistent met andere onderdelen van de applicatie.
+	- De app start en sluit correct af en de volledige gebruikersflow kan zonder fouten of crashes doorlopen worden.
+
+Gebruik/Validatie
+	- De volledige gebruikersflow kan zonder fouten doorlopen worden.
+	- Zowel positieve als negatieve scenario’s zijn getest.
+	- Correcte validatie en foutafhandeling zijn voorzien.
+	- Succes-, waarschuwing- en foutmeldingen zijn duidelijk en begrijpelijk voor de eindgebruiker.
+
+Testing/Verificatie
+	- De user story is getest door minstens één ander teamlid.
+	- De werking is gecontroleerd vanuit het perspectief van de eindgebruiker.
+	- De functionaliteit werkt op de voorziene platformen (web en/of mobiel).
+
+Consistentie/Documentatie
+	- De schermen zijn gebruiksvriendelijk en consistent qua navigatie en terminologie.
+	- Eventuele belangrijke keuzes of aannames zijn kort gedocumenteerd (Jira/Confluence).
+
+Oplevering
+	- De status van de user story staat op Done in Jira.
+	- De functionaliteit is klaar om gedemonstreerd te worden tijdens een review.
