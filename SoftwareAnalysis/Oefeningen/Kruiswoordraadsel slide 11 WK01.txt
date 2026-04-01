@@ -1,0 +1,43 @@
+Kruiswoordraadsel slide 11 WK01 - 03
+------------------------------------
+
+1. Nonfunctional requirement
+	> A description of a property or characteristic that a system must
+	exhibit or a constraint that it must respect
+
+2. Business rule
+	> A policy, guideline, standard, or regulation that defines or constrains
+	some aspect of the business. Not a software requirement in itself, but
+	the origin of several types of software requirements
+
+3. Functional requirement
+	> A description of a behavior that a system will exhibit under specific
+	conditions
+
+4. User requirement
+	> A goal or task that specific classes of users must be able to perform
+	with a system, or a desired product attribute
+
+5. Feature
+	> One or more logically related system capabilities that provide value to
+	a user and are described by a set of functional requirements
+
+6. Constraint
+	> A restriction that is imposed on the choices available to the developer
+	for the design and construction of a product
+
+7. Business requirement
+	> A high-level business objective of the organization that builds a
+	product or of a customer who procures it
+
+8. System requirement
+	> A top-level requirement for a product that contains multiple
+	subsystems, which could be all software or software and hardware
+
+9. Quality attribute
+	> A kind of nonfunctional requirement that describes a service or
+	performance characteristic of a product
+
+10. External interface requirement
+	> A description of a connection between a software system and a
+	user, another software system, or a hardware device

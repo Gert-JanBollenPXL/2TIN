@@ -1,0 +1,46 @@
+-------------------------------------------
+- System and System Context - Domainmodel -
+-------------------------------------------
+
+-> Problemen en context van requirements gathering
+
+	- Unknown knowledge field	
+	- Unknown jargon
+	- unknown problem (domain)
+	- Ambiguous communication
+	- A lot of communication
+		=> Client, developers and other developers "live on different planets"
+
+-> Domain model
+	- A domain model is like a map of the real world that your app will live in. It shows which things exist, how they connect and what rules apply.
+
+	- Captures most important types of objects in a system
+	- Describes "things" in a system and how they are related to each other
+	- A "thing" can be an object, class, interface, package or subsystem, which is part of the system being developed
+
+	=> Has a glossary of terms, domain objects - domain classes and relations between terms
+
+-> The process of domain modeling
+
+	- Look for nouns
+	- Look for verbs (nouns execute these)
+	- Look for adjectives (tell something about nouns = characteristics, properties)
+
+	=> Nouns : domain concepts (NOT the user = actor)
+
+	- Identify concepts/classes/objects (underlining nouns etc)
+	- Make domain classes and create a glossary of terms
+	- Create a first domain class diagram
+	- Check associations
+		=> Dependency: A uses B
+			- "Uses temporarily"
+		=> Aggregation: A has B
+			- "Has a part, but can live without it"
+		=> Composition: A owns B
+			- "Part of, cannot live without"
+		=> Inheritance: B is A or A is extended by B
+			- "Is a type of"
+		=> Realization: B realizes A or A is realized by B
+			- Like an interface in coding
+	- Assign attributes
+	- Check for multiplicities

@@ -1,0 +1,77 @@
+------------------------------------
+- Requirements in Natural Language -
+------------------------------------
+
+-> Natural language
+
+	- Every stakeholder can easily understand it
+	- Is universal
+
+-> Language effects
+
+	- Language is subjective (what is said <-> what is meant)
+
+	-> Most relevant transformations
+
+		=> Nominalization (using nouns for complex processes, i.e. "system breakdown", "a restart", does every stakeholder know what this means?)
+		=> Nouns without reference index (not precise, i.e. "The data will be shown on the terminal to the user", what data? on which terminal? to who?)
+		=> Universal quantifiers ("never", "always", "none", "all", "everybody", …)
+		=> Incomplete specified conditions ("In case", "when", "dependent on", …)
+		=> Incomplete specified process words (passive phrasing, i.e. "to transfer", from where? where to?)
+
+-> Reasons for Documentation
+
+	- Requirements may have a long lifespan
+	- Accessibility
+	- Legal relevance/compliance
+	- Having a good overview
+	- Stakeholder needs (user whishes/needs, Project manager consequences for budget/schedule, Testers for testability, …)
+	
+	-> Two aspects
+		=> Readable : structure of the document, how it is organized
+		=> Manageable : Quality, clarity and preciseness of individual requirements, how they are divided into single traceable items
+
+-> Perspectives on system to be developed
+
+	- Data perspective (structure of data)
+	- Functional perspective (what data from the system context is manipulated by the system, what data flows from the system to the system context)
+	- Behavioral perspective (Documenting the system, embedded in the system context in a state-oriented way
+
+-> Why do we need a glossary of terms?
+
+	- Homonyms
+	- Synonyms
+	- Common terms with a specific meaning in the context of the project
+	- Specific domain terms
+	- Technical terms
+	- Acronyms and abbreviations
+	- Company specific and project specific
+	- …
+
+-> Writing requirements
+
+	- Functional requirements
+		=> Describe a capability that the stakeholder needs or an action the product must take
+		=> A single sentence with a single indicative verb
+		=> Don't write a solution
+
+	- Guidelines
+		=> Short and concise sentences
+		=> One requirement per sentence
+		=> Consistent terminology
+		=> Avoid generalizations
+		=> Use "must", "can" and similar verbs carefully  ("shall" is better)
+
+	- Quality gateway
+		=> Each individual requirement muss pass through the quality gateway to be added to the specification
+
+-> Fit criteria
+
+	- A solution completely satisfies the defined requirement
+	- Needs an attached quantification (makes it measurable, is the post-condition for use cases)
+	- May quantify the behavior, performance or some other quality of the requirement
+	- Apply to functional and non-functional requirements
+	- Enables possibility to determine if a requirement has been satisfied or not
+	- Usually necessary to negotiate fit criteria with the stakeholder
+
+-> Volère card

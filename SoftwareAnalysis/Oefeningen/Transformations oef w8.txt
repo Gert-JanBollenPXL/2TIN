@@ -1,0 +1,25 @@
+1: The development of the product (opgenomen in glossary of terms) shall raise the profit of the company by 10% (specifieer t.o.v welk jaar) within 3 monts after delivery to the Wholesale dealer (specifieer welke groothandel)
+
+2: The ticking of the clock will produce sounds between 0 and 10 db.
+
+3: Our alarm clock will wake people up by playing the sound of the alarm from 10 db to 120 db over a period of 2 minutes.
+
+4: The digits on the clock will be able to light up and will be changeable whenever the costumer wants by using a radial button on the side of the clock.
+
+5: The alarm clock will be small (20cm wide, 5cm deep and 5cm high) - The alarm clock will be lightweight (between 350gr and 500gr).
+
+6: The alarm clock will be useable with different power voltages (type A, B and C).
+
+7: The metal parts of the alarm clock will be made from aluminum.
+
+8: The alarm clock will use music (user can specify radio frequency) or a standard tune (samsung alarm 1).
+
+9: Opperating the alarm clock will be intuitive.
+
+10: The snooze key will be positioned at the top of the clock, will be 3cm wide and 2cm high.
+
+11: The clock will be able to withstand heavy blows (force of 1000 newtons) and falls from 0-50cm.
+
+12: The clock will use 2 watts when powered 24/7.
+
+13: The clock will use type 3434 batteries.

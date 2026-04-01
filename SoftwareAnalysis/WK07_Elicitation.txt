@@ -1,0 +1,93 @@
+------------------------------------------
+- Elicitation - IntroductionAndExercises -
+------------------------------------------
+
+-> Requirements Elicitation
+
+	- An active effort to extract information from stakeholders and subject matter experts
+
+	Requirements Gathering 		<-> 	Requirements Elicitation
+	----------------------			------------------------
+	Collecting seashells		<->	Archeology
+	Take what you see		<->	Planned, deliberate search
+	More reactive			<->	More proactive
+
+-> Elicitation problems
+
+	- Requirements elicitation is mainly social, nature of the problems are psychological and social
+	
+	- Articulation problems
+		=> Difficulty to express needs clearly
+		=> Not being aware of their own needs
+		=> Not understanding how technology can help
+		=> …
+	- Communication problems
+		=> Different culture/vocabulary
+		=> Different interests on the system being developed
+		=> Inappropriate communication media (diagrams that customers/users do not understand)
+		=> Personal or political conflicts
+	- Cognitive limitations
+		=> Not understanding the problem domain
+		=> Making assumptions about the problem domain/technical aspects
+		=> Excessive simplifications
+	- Human behaviour
+		=> Conflicts and ambiguities about stakeholders' roles
+		=> Indifference of customers, users or requirement engineers
+		=> Being afraid of becoming unemployed because of a new system
+	- Technical problems
+		=> Problem domain complexity
+		=> Requirements complexity
+		=> Changing requirements
+		=> Changes in hardware, software
+		=> …
+
+-> Eliciting requirements
+
+	- Driven by:
+		=> The system context
+			- The context diagram, BUC model and descriptions and the domain model
+		=> Various sources for requirements
+			- Stakeholders, existing documents and legacy systems
+
+-> Requirements elicitation - Kano model
+
+	- Noriaki Kano (1980s)
+	- To help proactively uncover, classify and integrate 3 types of requirements
+		=> Basic needs, Performance needs and Delighters
+	- 2 types of question: functional and dysfunctional form of the question ("if you have to wait for less than …" OR "if you have to wait for more than …")
+	- By combining the 2 types of answers, the product features fall into six categories
+		=> Attractive
+		=> Must-be
+		=> Reverse
+		=> One dimensional
+		=> Questionable
+		=> Indifferent
+
+-> Elicitation Process
+
+	Study domain - Identify sources - Consult stakeholders - Select techniques - Elicit requirements
+
+	- Requirements Elicitation Techniques
+		
+		=> Survey techniques
+			- Interviews
+			- Questionnaires
+		=> Creativity techniques
+			- Brainstorming
+			- Change of perspective
+			- Analogies
+			- Role playing
+		=> Observation techniques
+			- Apprenticing
+			- Field observation
+		=> Document-centric techniques
+			- System archeology
+			- Perspective-based reading
+			- reuse of requirements
+		=> Supporting techniques
+			- Mind mapping
+			- Workshops
+			- Prototyping
+			- Use case modeling
+			- Audio/video
+			- CRC cards

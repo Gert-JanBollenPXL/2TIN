@@ -1,0 +1,49 @@
+--------------------------------------------
+- System and System Context - Introduction -
+--------------------------------------------
+
+-> Requirements Engineering
+
+	- Discipline die zich richt op het identificeren, vaststellen, documenteren, valideren en beheren van de vereisten voor een systeem
+
+	- Requirements development
+		=> Elicitation - analysis - specification - validation
+	
+	- Requirements management
+		=> Tracking - managing - controlling - tracing
+
+-> System and system context
+
+	- Requirements elicitation "kick-off"
+	
+	- Stakeholders - goals (define succes criteria of the project) - scope (boundaries of the investigation and the project)
+
+	- IEEE 830 - SRS Template
+		=> Purpose: The business problem (short description)
+		=> Goals: What is the Purpose? What is the business Advantage? How will you measure the advantage? (PAM)
+		=> Scope - Stakeholders: "Forgotten stakeholders means forgotten requirements!"
+	
+	- System context
+		=> Source of requirements (people, systems, processes, events, documents)
+	- System boundary
+		=> Which aspects should be covered by the system?
+
+	=> How to document?
+		=> Context diagrams
+		=> Business use case diagrams
+		=> Domain models
+
+-----------------------------------------------
+- System and System Context - Context Diagram -
+-----------------------------------------------
+
+-> Types of data flow diagrams (DFDs)
+
+	- Physical DFD : represent model of the current system
+	- Logical DFD : represent model of the proposed system
+
+	- External entity : any entity that supplies data or receives information from the system
+	- Data flow : movement of data from input to process or vice-versa. Labeled!
+	- Process : actions performed on input data to produce output data
+
+	=> See Context_Diagram_Oefeningen.drawio

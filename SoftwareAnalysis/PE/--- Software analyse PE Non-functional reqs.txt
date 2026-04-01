@@ -1,0 +1,43 @@
+--- Software analyse PE Non-functional system requirements ---
+
+-> Gebruiksvriendelijkheid & UX-kwaliteit
+
+Het systeem moet zo ontworpen zijn dat minstens 90% van testgebruikers zonder uitleg een shuttle-reservatie kan uitvoeren binnen 2 minuten.
+
+Het systeem moet een consistente navigatiestructuur gebruiken over alle schermen, waarbij primaire acties steeds op dezelfde plaats worden weergegeven.
+
+Bij een fout (bv. mislukte reservatie) moet het systeem een duidelijke foutmelding tonen met een voorstel tot vervolgstap.
+
+-> Performantie & Realtime Respons
+
+Het systeem moet gebruikersacties (zoals route laden of reservatie bevestigen) verwerken binnen maximaal 2 seconden in 95% van de gevallen.
+
+Realtime informatie over vertragingen of versterkingsshuttles moet binnen 60 seconden na wijziging zichtbaar zijn voor de gebruiker.
+
+-> Beschikbaarheid & Betrouwbaarheid
+
+Het systeem moet tijdens het academiejaar een beschikbaarheid van minstens 99% behalen, exclusief gepland onderhoud.
+
+Reservatie-, bezettings- en rapporteringsgegevens moeten consistent en actueel zijn over alle onderdelen van het systeem.
+
+-> Beveiliging, Privacy & Compliance
+
+Het systeem moet enkel toegang verlenen aan gebruikers die succesvol geauthenticeerd zijn via een erkend schoolaccount.
+
+Persoonsgegevens van gebruikers mogen enkel gebruikt worden voor shuttlefunctionaliteit en niet langer dan noodzakelijk worden bewaard.
+
+Het systeem moet wijzigingen aan routes, roosters en capaciteit loggen met datum en verantwoordelijke rol.
+
+-> Schaalbaarheid & Compatibiliteit
+
+Het systeem moet minimaal 1.000 gelijktijdige gebruikers ondersteunen zonder merkbare prestatievermindering.
+
+Het systeem moet bruikbaar zijn op zowel desktop als mobiele toestellen via een moderne webbrowser.
+
+Het systeem moet ondersteuning bieden voor Nederlands, Engels, Frans en Duits, waarbij alle kernfunctionaliteiten beschikbaar zijn in elke taal.
+
+-> Rapportering & Duurzaamheid
+
+De CO₂-besparing moet berekend worden op basis van vastgelegde en gedocumenteerde aannames, zodat resultaten reproduceerbaar zijn.
+
+Beleids- en duurzaamheidsrapporten moeten minstens wekelijks automatisch beschikbaar zijn voor bevoegde rollen.

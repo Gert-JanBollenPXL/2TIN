@@ -1,0 +1,131 @@
+-------------------------------------------------
+- Best practices: international standards – ISO -
+-------------------------------------------------
+
+-> PESMURF of PERFUMeS
+
+	- Portability
+	- Efficiency / performance Efficiency
+	- Security
+	- Maintainability
+	- Usability
+	- Reliability
+	- Functional suitability
+
+-> SMART requirements
+	
+	- Specific: a requirement shall clearly state what is required
+	- Measurable: a requirement shall be able to confirm when it has been met
+	- Attainable: a requirement shall be achievable/technically feasible
+	- Realistic: a requirement shall be reasonable/realistic
+	- Timely: a requirement shall be achievable within an acceptable timeframe
+
+-> Epics, features, user stories, …
+
+	- Theme: years
+	- Epic: months
+	- Feature: weeks
+	- User story: days
+	- Task: hours
+
+-----------------------------------------
+- Requirements development & management - 
+-----------------------------------------
+
+-> Requirement engineering
+
+	- A systematic and disciplined approach to the specification (development) and management of requirements with the following goals
+		=> Knowing the relevant requirements, achieving a consensus among the stakeholders about these requirements, documenting them according to the given standards, and managing them systematically
+		=> Understanding and documenting the stakeholders’ desires and needs
+		=> Specifying and managing requirements to minimize the risk of delivering a system that does not meet the stakeholders’ desires and needs
+
+-> Requirement management
+
+	- The process of managing existing requirements and requirements related artifacts
+	- Includes particularly storing, changing and tracing of requirements
+
+-> Common requirement problems
+	
+	- Typical symptoms of inadequate requirement engineering
+		=> Missing requirements
+		=> Unclear requirements
+
+	- Typical reasons for inadequate requirement engineering
+		=> Wrong assumptions from stakeholders
+		=> Communication problems (experience and knowledge)
+		=> Project pressure from the client
+
+	- Influencing factors can be related to:
+		=> Business: type of system, applicable standards, importance of quality requirements
+		=> Project: Outsourcing, size, number and availabilty stakeholders, customer involvement, development process
+		=> Human factors: Personal profiles, politics, cultural differences, …
+
+-> Informal vs. formal communication
+
+	- Informal descriptions: subjective, no universal language
+	- Formal descriptions: no misunderstandings, reusable, the description is appropriate to the matter at hand
+
+-> history of requirements
+
+	- Predictive processes: waterfall, V-model
+	- Iterative processes: RAD, RUP, spiral
+	- Adaptive processes: OpenUP, FDD, Scrum, Lean, Kanban, XP, DSDM
+	- Enterprise-scale Adaptive: Lean/Agile
+
+------------------------------------------
+- Role of analyst, requirements engineer -
+------------------------------------------
+
+-> The business analyst: any person who performs analysis activities, no matter what their job title or organized role may be
+
+	- Analytical Thinking and Problem Solving (problem solving, creative thinking, systems thinking, learning and decision making)
+	- Behavioral characteristics (ethics, personal organization, thrustworthiness)
+	- Business knowledge (business principles & practice, industry knowledge, organization knowledge and solution knowledge)
+	- Communication skills (oral/written communication, teaching)
+	- Interaction skills (fascilitation & negotiation, leadership & influencing , teamwork)
+	- Software applications (general purpose applications and specialized applications)
+
+-> The Business Analyst – Requirements Engineer
+
+	- Analytical Thinking & Problem Solving
+		=> Creative Thinking: Business analysts must be effective in generating new ideas for approaches to problem solving and in generating alternative solutions
+		=> Decision making: Business analysts must be effective in understanding the criteria involved in making a decision, in making decisions, and in assisting others to make better decisions
+		=> Learning: Business analysts must be effective at learning about business domains and how they function, and then translate that learning into an understanding of how to benefit an organization
+		=> Problem solving: Business analysts must be effective at defining and solving problems in order to ensure that the real, underlying problem is understood and that solutions actually address that problem
+		=> Systems thinking: Business analysts must be effective at understanding how the people, processes, and technology within an organization interact in relationships and patterns to create a system as a whole
+
+	- Behavioral Characteristics
+		=> Ethics: A business analyst must be able to behave ethically in order to earn the trust and respect of stakeholders, and be able to recognize when a proposed solution or requirement may present ethical difficulties
+		=> Personal organization: Personal organization skills assist the business analyst in effectively managing tasks and information
+		=> Trustworthiness: Earning the trust of key stakeholders is necessary to ensure that the business analyst is able to elicit requirements around sensitive issues and to ensure that recommendations are evaluated properly
+
+	- Business Knowledge
+		=> Business Principles and Practices: Business analysts require an understanding of fundamental business principles and best practices, in order to ensure that they are incorporated into and supported by solutions
+		=> Industry Knowledge: Business analysts should have an understanding of the industry that their organization is in so that they may understand new challenges that may be posed by competitive moves, and which solutions have proven effective elsewhere
+		=> Organization Knowledge: Business analysis is significantly assisted by an understanding of the organization for which it is being performed
+		=> Solution Knowledge: Business analysts can use their understanding of existing solutions in order to identify the most effective means of implementing a change
+
+	- Communication Skills
+		=> Oral communication: Oral communication skills enable business analysts to effectively express ideas in ways that are appropriate to the target audience
+		=> Teaching: Teaching skills are required to ensure that business analysts can effectively communicate issues and requirements and to ensure that the information communicated is understood and retained
+		=> Written communication: Written communication skills are necessary for business analysts to document elicitation results, requirements, and other information for which medium to long term records are required
+		=> Listening: Listening skills are critical to business analysts in eliciting, understanding, and documenting information
+
+	- Interaction Skills
+		=> Facilitation and Negotiation: Business analysts facilitate interaction between stakeholders in order to help them resolve disagreements regarding the priority and nature of requirements
+		=> Leadership and Influencing: Business analyst need to be able to be effective in formal and informal leadership roles, in order to guide others investigating requirements and to help encourage stakeholder support for a necessary change
+		=> Teamwork: Business analysts must be able to work closely with other team members to effectively support their work so that solutions can be effectively implemented
+	- Software Applications
+		=> General Purpose Applications: Business analysts use office productivity applications to document and track requirements
+		=> Specialized Applications: Business analysts use modeling tools to support development of formal models, and in some cases, their validation and implementation as well
+	
+
+-> recap
+	
+	- Communication
+	- Analytical thinking
+	- Conflict handling
+	- Ability to convince
+	- Self-confident
+	- Empathy
+	- Moderator

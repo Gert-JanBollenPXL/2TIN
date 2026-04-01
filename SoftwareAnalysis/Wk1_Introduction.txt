@@ -1,0 +1,110 @@
+--- The essential SW requirement ---
+
+-> Why do we need software requirements?
+
+	- No clear definition of project's business objectives, vision or scope
+	- Customers too busy to work on requirements
+	- Team couldn't interact with representative users to understand their needs
+	- Customers claimed that all requirements were critical (no priorities)
+	- Developers found ambiguities/missing information, they had to guess when coding
+	- Communication developers and stakeholders focused on user interface displays/features not on what users needed to accomplish with the software
+	- Customers never approved the requirements
+	- Continuous changing of requirements 
+	- Project scope increases as requirement changes are accepted, but deadline was not met because no additional resources were allocated/no functionality was removed
+	- Requirement changes get lost, status of change requests are forgotten
+	- Functionality built by developers that customers asked for but is never used
+	- At the end of a project, the specification was satisfied but the customer/business objectives were not
+
+	=> communication is very important!
+
+-> Top five factors in succesful IT projects
+	
+	- User involvement
+	- Executive manager support
+	- Clear statement of requirements
+	- Proper planning
+	- Realistic excpectations
+
+-> Top five factors in challenged IT projects
+
+	- Lack of user input
+	- Incomplete requirements/specifications
+	- Changing requirements/specifications
+	- Lack of executive support
+	- Technical incompetence
+
+-> Top factors in failed IT projects
+
+	- Incomplete requirements
+	- Lack of user involvement
+	- Lack of resources
+	- Unrealistic expectations
+	- Lack of executive support
+	- Changing requirements/specifications (MOST frequently named cause of total project failure)
+	- Lack of planning
+	- Didn't need it any longer
+	- Lack of IT management
+	- Technical illiteracy
+
+-> Who needs requirements and why?
+
+	- Stakeholders = the collective term
+		=> A person, group or organization that has interest or concern in an organization/project
+
+
+-------------------
+- Duivelsvierkant -
+-------------------
+
+-> The four most important things to balance during a project's life:
+
+	- Scope/functionality
+	- Budget/resources
+	- Time
+	- Quality
+
+--------------------------------------
+- Requirements, what, levels & types -
+--------------------------------------
+
+-> Requirements are a specification of what should be implemented. They are descriptions of how the system should behave, or of a system property or attribute. They may be a constraint on the development process of the system (a little bit like a contract between the stakeholder and the project manager)
+
+	- Scope: the sum of products, services and results to be provided as a project
+	- Project scope: the work that must be performed to deliver a product, service or result with the specified features and functions
+	- Product scope: the features and functions that characterize the product, service or result
+
+-> Requirements according to IEEE (Institute of Electrical and Electronics Engineers)
+
+	- A condition or capability needed by a user to solve a problem or achieve an objective
+	- a condition or capability that must be met or possessed by a system or system component to satisfy a contract, standard, specification, or other formally imposed documents
+	- a documented representation of a condition or capability as in (A) or (B)
+
+-> levels & types of requirements
+
+	- Functional requirement: defines a function that has to be offered by the system or one of its components
+	- Quality requirement (non-functional): defines a qualitative property that the system or one of its functions has to offer
+	- Constraint(non-functional): a requirement that limits the solution space beyond what is necessary for meeting the given functional requirements and quality requirements
+
+  => Types:
+	- Nonfunctional requirement → A description of a property or characteristic that a system must exhibit or a constraint that it must respect
+	- Business rule → A policy, guideline, standard, or regulation that defines or constrains some aspect of the business
+	- Functional requirement → A description of a behavior that a system will exhibit under specific conditions
+	- User requirement → A goal or task that specific classes of users must be able to perform with a system, or a desired product attribute
+	- Feature → One or more logically related system capabilities that provide value to a user and are described by a set of functional requirements
+	- Constraint → A restriction that is imposed on the choices available to the developer for the design and construction of a product
+	- Business requirement → A high-level business objective of the organization that builds a product or of a customer who procures it
+	- System requirement → A top-level requirement for a product that contains multiple subsystems, which could be all software or software and hardware
+	- Quality attribute → A kind of nonfunctional requirement that describes a service or performance characteristic of a product
+	- External interface requirement → A description of a connection between a software system and a user, another software system, or a hardware device
+
+  => levels (many different diagrams/moddeling techniques):
+	- Business requirements (high level): sponsor pov, project scope, business objectives
+	- User requirements (mid level): user pov, user goals, user inputs & outputs
+	- System requirements (low level/detailed): functional (what the system does), non-functional (how well the system does it)
+
+
+-----------------------
+- Phases in a project -
+-----------------------
+
+	Concept => Requirements => Design => Build & Test => Release

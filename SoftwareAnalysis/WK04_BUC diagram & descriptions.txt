@@ -1,0 +1,19 @@
+-----------------------------------
+- System and System Context - BUC -
+-----------------------------------
+
+-> UML - Unified Modeling Language
+	- Graphical representations (= diagrams) of certain aspects of the information system
+		=> Goal : support for business modeling 
+		=> Introduced in RUP
+		=> Business actor : external person or system interacting with business
+		=> Business use case : should produce result of observable value to business actor
+			- BOTH are not defined in UML standard
+
+-> Business use case models 
+
+	- For simple business situations
+	- BUC : a way in which a customer or some other party can make use of the business to get the result they want (encompasses all the necessary activities)
+	- SUC : a way in which a customer or some other party can make use of the system to get the result they want
+
+	=> See BUC diagrams.drawio

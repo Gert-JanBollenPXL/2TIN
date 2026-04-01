@@ -1,0 +1,118 @@
+Antwoorden oud examen
+
+---
+
+##  Vraag 1 – Activity Diagram: “Luchtvaartmaatschappij reserveringssysteem”
+
+### Belangrijke stappen:
+1. **Zoek vlucht**  
+   → Gebruiker stuurt zoekopdracht → Website → Database → Resultaten terug  
+   → Keuze: *Opnieuw zoeken* of *Boeken*
+
+2. **Boek vlucht**  
+   → Log transactie  
+   → Reserveer vlucht → Voeg toe aan reservatietabel  
+   → Toon bevestigingspagina
+
+3. **Na bevestiging**  
+   → Keuze: *Opnieuw zoeken* of *Uitloggen*  
+   → Bij uitloggen: Stuur afscheidsbericht
+
+### Activiteiten:
+- Start
+- Zoek vlucht
+- Toon resultaten
+- [Beslissing: opnieuw zoeken of boeken]
+- Boek vlucht
+- Log transactie
+- Reserveer vlucht
+- Toon bevestiging
+- [Beslissing: opnieuw zoeken of uitloggen]
+- Uitloggen
+- Stuur afscheidsbericht
+- Einde
+
+---
+
+## Vraag 2 – UC Diagram & Description: “Multiplex bioscoop”
+
+### Use Cases:
+- Kaartje kopen (balie/kiosk)
+- Stoel kiezen
+- Barcode scannen voor toegang
+- Terugbetaling ticket
+- Zaalmonitoring (aantal personen, vrije stoelen)
+
+### Actoren:
+- Bezoeker  
+- Medewerker  
+- Barcodelezer  
+- Systeembeheerder
+
+### SUC Description voorbeeld: *“Kaartje kopen”*
+- **Doel**: Bezoeker koopt een ticket voor een specifieke filmvertoning  
+- **Preconditie**: Stoel beschikbaar  
+- **Postconditie**: Ticket met barcode gegenereerd  
+- **Stappen**:
+  1. Bezoeker kiest film, zaal, tijdstip
+  2. Systeem toont beschikbare stoelen
+  3. Bezoeker kiest stoel
+  4. Systeem genereert ticket
+  5. Ticket wordt geprint
+
+---
+
+## Vraag 3 – Toestandsdiagram + Transition Table: “Certificatiesysteem scheidsrechters”
+
+### Toestanden:
+- Aanvraag ingediend  
+- Ingeschreven voor test  
+- Test voltooid  
+- Wacht op resultaat  
+- Geslaagd → Gecertificeerd  
+- Afgewezen → Terug naar aanvraag
+
+### Transition Table:
+
+| Huidige toestand     | Gebeurtenis         | Nieuwe toestand        |
+|----------------------|---------------------|------------------------|
+| Start                | Aanvraag indienen   | Ingeschreven voor test |
+| Ingeschreven         | Test afleggen       | Wacht op resultaat     |
+| Wacht op resultaat   | Geslaagd            | Gecertificeerd         |
+| Wacht op resultaat   | Afgewezen           | Aanvraag ingediend     |
+
+---
+
+## Vraag 4 – Volère Cards
+
+---
+
+### Functionele requirement – Volère card
+
+**Requirements type:** Functional
+
+**Description:**  
+Het systeem moet toelaten dat een medewerker de beleidsverklaring digitaal kan ondertekenen via ItsMe, een geldige EID of een token, op voorwaarde dat de medewerker vooraf is aangemeld op de website.
+
+**Rationale:**  
+De ondertekening is wettelijk verplicht en moet traceerbaar zijn. Meerdere digitale kanalen verhogen de toegankelijkheid voor alle medewerkers.
+
+**Fit criterium:**  
+100% van de medewerkers moet binnen 10 dagen kunnen ondertekenen via minstens één van de drie methodes, mits voorafgaande aanmelding.
+
+---
+
+### Niet-functionele requirement – Volère card
+
+**Requirements type:** Quality
+
+**Description:**  
+De ondertekenprocedure moet gebruiksvriendelijk en efficiënt zijn, zodat medewerkers de verklaring snel kunnen ondertekenen zonder technische obstakels.
+
+**Rationale:**  
+Een vlotte en intuïtieve gebruikerservaring verhoogt de kans dat medewerkers tijdig ondertekenen en vermindert de nood aan ondersteuning.
+
+**Fit criterium:**  
+Minstens 90% van de medewerkers moet de volledige ondertekenprocedure kunnen voltooien binnen 2 minuten, gemeten via gebruikersfeedback en systeemtimers.
+
+---
