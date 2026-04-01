@@ -1,0 +1,22 @@
+-- CommSkills PE5: DEMO --
+
+Good afternoon everyone, My name is Gert-Jan, this is Conner and today we will be doing a small demo of Visual Studio Code.
+First of I would like to ask you all a question: do you like using a different IDE depending on what programming language you are using?
+Here is another question: Do you like spending money?
+
+We have found a solution for this: Visual Studio Code, a lightweight, fast and free IDE!
+
+Now then, in the IDE you can see that you have all your basic functionality: the editor in the middle, the primary side bar (which atm shows the explorer but more on this later), a secondary sidebar (which houses the ai integrated chat). You have a status bar on the bottom (which shows information about your currently opened file) and then there is the panel which van be used at the bottom to for example open the terminal (we will talk about this in a bit).
+It is possible to customize where you want to see all these elements. For example I can move the primary sidebar to the right, but there are lots of options here for you to play around with!
+
+On to maybe the the most exciting thing about VSCode: the extensions!
+In the primary side bar you can find a button which takes you to the extension menu, here you can find whatever you need: from programming language support to cosmetics. Let's take a look at some of these!
+Here you can see we have installed a couple of extensions already: some language extensions for python, html/css, C#. We also have some support for docker containers. But let us first take a look at a cosmetic extension: I am using Peacock which is one of the most popular themes for VSCode. But there are loads more! (laat er een paar zien: type "theme" in de zoekbalk), there are themes for everyone. Another extension I like using is GitLens: it shows on each line who pushed the code, when and it even shows the commit message. One last one we will talk about today is live server, a very handy tool when you are working with html files: just can just press the "go live" button and it opens it for you. Now for a fun one: I think we can all visualize this situation: you are working on a big project and have not been outside for days: what if I told you that you can have your own pet inside of your IDE
+
+Let's talk about some integrated tools: do you like using Git? Me for example, I like using the terminal for all things Git, but I know some of you really don't: VSCode has Git integration built in, so you can commit and push your changes using the gui, no need for the terminal. But I hear you say "I want to use the terminal!", not a problem, that is possible too
+
+These are just some of the features of VSCode, there are tons more that you all can go explore!
+
+To summarize, this IDE is beginner friendly, free and have I mentioned it also runs on Apple/Linux machines too?
+
+That will be all for the demo, does anyone have any questions?
