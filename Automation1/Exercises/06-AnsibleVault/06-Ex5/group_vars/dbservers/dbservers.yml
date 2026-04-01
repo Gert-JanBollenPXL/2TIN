@@ -1,0 +1,5 @@
+---
+mysql_host: 10.10.0.20
+mysql_port: 3306
+mysql_user: angie
+mysql_password: "{{ vault_mysql_password }}"

@@ -1,0 +1,4 @@
+site_title: PXL-site
+site_message: PXL-2526-PE1
+site_port: 8080
+web_marker_directory: /opt/pe1/web-markers

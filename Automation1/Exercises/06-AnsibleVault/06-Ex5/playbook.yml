@@ -1,0 +1,14 @@
+---
+- name: Refactor Plain group_vars exercise
+  hosts: dbservers
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: show dbservers vars
+      ansible.builtin.debug:
+        var: mysql_host, mysql_port, mysql_user
+
+    - name: show dbservers secret var
+      ansible.builtin.debug:
+        var: mysql_password

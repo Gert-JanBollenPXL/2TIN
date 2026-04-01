@@ -1,0 +1,142 @@
+---
+- name: Automation Basisdeployment
+  hosts: webservers
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Install nginx
+      ansible.builtin.dnf:
+        name: nginx
+        state: present
+
+    - name: Start nginx
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+
+    - name: Stop service firewalld, if started
+      ansible.builtin.service:
+       name: firewalld
+       state: stopped
+       enabled: false
+    
+    - name: Create directory
+      ansible.builtin.file:
+        path: "{{ web_marker_directory }}"
+        state: directory
+        mode: '755'
+    
+    - name: Create web-marker.txt
+      ansible.builtin.file:
+        path: "{{ web_marker_directory }}/web-marker.txt"
+        state: touch
+        mode: '755'
+
+    - name: Template for pxl-site.conf
+      ansible.builtin.template:
+        src: pxl-site.conf.j2
+        dest: /etc/nginx/conf.d/pxl-site.conf
+        mode: '0644'
+
+    - name: Template for index.html
+      ansible.builtin.template:
+        src: index.html.j2
+        dest: /usr/share/nginx/html/index.html
+        mode: '0644'
+
+    - name: Restart nginx
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
+        enabled: true
+    
+    - name: Get stats for webmarkerfile
+      ansible.builtin.stat:
+        path: "{{ web_marker_directory }}/web-marker.txt"
+      register: p
+
+    - name: Print stats for webmarkerfile
+      ansible.builtin.debug:
+        msg: |
+          "Exists: {{ p.stat.exists }}
+          Path: {{ p.stat.path }}"
+
+- name: EXTRA 1
+  hosts: production
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Create /opt/pe1/ directory
+      ansible.builtin.file:
+        path: "/opt/pe1"
+        state: directory
+        mode: '755'
+
+    - name: Temlate for production-info.txt
+      ansible.builtin.template:
+        src: production-info.txt.j2
+        dest: /opt/pe1/production-info.txt
+        mode: '0644'
+
+    - name: Print production-info.txt
+      ansible.builtin.command: cat /opt/pe1/production-info.txt
+      register: output
+
+    - name: Display production-info.txt
+      ansible.builtin.debug:
+        msg: "{{ output.stdout }}"
+
+- name: EXTRA 2
+  hosts: webservers
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Lineinfile /etc/motd
+      ansible.builtin.lineinfile:
+        path: /etc/motd
+        line: 'PE1 web node managed by Ansible'
+
+    - name: Print environment variables
+      ansible.builtin.command: cat /etc/motd
+      register: output
+
+    - name: Display environment variables
+      ansible.builtin.debug:
+        msg: "{{ output.stdout }}"
+
+- name: EXTRA 3
+  hosts: dbservers
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Create /opt/pe1/markers directory
+      ansible.builtin.file:
+        path: "/opt/pe1/markers"
+        state: directory
+        mode: '755'
+    
+    - name: Template for create-marker.sh
+      ansible.builtin.template:
+        src: create-marker.sh.j2
+        dest: /opt/pe1/markers/create-marker.sh
+        mode: '0755'
+
+    - name: Run create-marker.sh
+      ansible.builtin.command: /opt/pe1/markers/create-marker.sh
+      register: marker_output
+
+    - name: Get stats for webmarkerfile
+      ansible.builtin.stat:
+        path: "/opt/pe1/markers/create-marker.sh"
+      register: p
+
+    - name: Print stats for webmarkerfile
+      ansible.builtin.debug:
+        msg: |
+          "Exists: {{ p.stat.exists }}
+          Path: {{ p.stat.path }}"

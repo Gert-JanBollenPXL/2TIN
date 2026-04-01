@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  gather_facts: false
+  vars_files:
+    - secret_vars.yml
+  tasks:
+    - ansible.builtin.debug:
+        var: api_key
+
+# run with ansible-playbook vault_test.yml --ask-vault-pass
