@@ -1,0 +1,24 @@
+admin.microsoft.com ==> Microsoft 365 admin center
+	Initiële opzet Microsoft 365 tenant
+	licenties
+	apps M365 uitzetten of aanzetten
+	custom domain settings ==> xxxx.onmicrosoft.com
+	overzicht van andere admin centers
+
+Entra
+- Users - Group
+- Applications
+- Rollen: global administrator - user administrator - helpdesk administrator
+- PIM (Privileged Identity Management) ==> automatisch rollen toekennen (tijdelijk) via workflow ==> zero trust
+
+Intune
+- Device management ==> end devices (laptops, workstations, desktops, tablets, smartphones)
+- Windows clients - MacOs - IOS - ChromeOS
+
+1. Enrollen (onboarding)
+	- Personal devices
+	- Company owned devices
+		> Hardware hash
+		> OOBE (out of box experience) = aanmelden entra credentials
+
+MDM = mobile device management ==> onderdeel dat instaat voor het effectief toepassen van configuratie
