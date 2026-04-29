@@ -1,19 +1,18 @@
 CREATE OR REPLACE TRIGGER buir_emp
     BEFORE UPDATE OR INSERT ON employees
     FOR EACH ROW
-    WHEN (OLD.job_id != 'AD_PRES' OR OLD.job_id != 'AD_VP')
 
 BEGIN
-    job_id := UPPER(job_id);
-    first_name := INITCAP(first_name);
-    last_name := INITCAP(last_name);
+    :NEW.job_id := UPPER(:NEW.job_id);
+    :NEW.first_name := INITCAP(:NEW.first_name);
+    :NEW.last_name := INITCAP(:NEW.last_name);
 
     IF (:NEW.hire_date < SYSDATE) THEN
         RAISE_APPLICATION_ERROR(-20001, 'De aanstellingsdatum mag niet in het verleden liggen.');
     END IF;
 
-    IF (:NEW.job_id CONTAINS 'MAN' OR :NEW.job_id CONTAINS 'MGR') THEN
-        employee.salary := salary * 1.05;
+    IF (:NEW.job_id LIKE '%MAN' OR :NEW.job_id LIKE '%MGR') AND :OLD.job_id NOT IN ('AD_PRES', 'AD_VP') THEN
+        :NEW.salary := :NEW.salary * 1.05;
     END IF;
 END
 /
