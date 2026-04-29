@@ -38,3 +38,6 @@ How does Red Hat work?
 -> Podman: docker but containers are run rootless
 -> Ansible automation platform
 ansible -> awx -> ansible tower (deprecated) > automation controller
+
+
+Labo redhat

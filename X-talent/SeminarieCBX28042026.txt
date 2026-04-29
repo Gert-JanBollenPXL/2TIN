@@ -1,0 +1,18 @@
+--- CBX ---
+
+Chronos - CBX (integratie cluster) - verdeeld in competence clusters
+
+Enterprise integration > getting the right data to the right place at the right time in the right format
+
+Geen soep meer maar een integratie platform
+
+ESB (enterprise service bus)
+
+Different integration styles:
+	- API-led integration (voordelen en nadelen)
+		> synchronous
+		> request response
+		> ubiquitous
+	- Event-led integration
+	- Messaging & connectivity
+
