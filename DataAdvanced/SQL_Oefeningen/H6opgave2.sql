@@ -9,6 +9,13 @@ AS
     v_volgende_verjaardag DATE;
     v_leeftijd INTEGER;
 
+    e_foute_dag EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_foute_dag, -1847);
+    e_foute_maand EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_foute_maand, -1843);
+    e_fout_jaar EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fout_jaar, -1841);
+
 BEGIN
     v_geboortedatum := TO_DATE(p_dag || '/' || p_maand || '/' || p_jaar, 'DD/MM/YYYY');
     v_volgende_verjaardag := ADD_MONTHS(v_geboortedatum, 12);
@@ -20,8 +27,12 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('Je bent ' || v_leeftijd || ' jaar oud');
 
 EXCEPTION
-    WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('Ongeldige datum ingevoerd. Probeer het opnieuw.');
+    WHEN e_foute_dag THEN
+        DBMS_OUTPUT.PUT_LINE('Ongeldige dag ingevoerd. Probeer het opnieuw.');
+    WHEN e_foute_maand THEN
+        DBMS_OUTPUT.PUT_LINE('Ongeldige maand ingevoerd. Probeer het opnieuw.');
+    WHEN e_fout_jaar THEN
+        DBMS_OUTPUT.PUT_LINE('Ongeldig jaar ingevoerd. Probeer het opnieuw.');
 
 END;
 /
