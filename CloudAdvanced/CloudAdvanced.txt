@@ -12,7 +12,27 @@ Entra
 - PIM (Privileged Identity Management) ==> automatisch rollen toekennen (tijdelijk) via workflow ==> zero trust
 
 Intune
-- Device management ==> end devices (laptops, workstations, desktops, tablets, smartphones)
+- Device management ==> end devices beheren (laptops, workstations, desktops, tablets, smartphones)
+	> Enroll: hardware hash extract en import in intune (autopilot)
+		--> linken van een device aan een microsoft365 tenant
+		--> enrollen bij ingeven van user credentials tijdens OOBE (out of box experience)
+		=> Koppelen aan groepen
+			> user groepen
+			> device groepen => lock screen
+	> Configure
+		=> Configuratieprofielen (Group policies)
+		=> Applicaties: Microsoft store app, microsoft 365 (office suite), lines of business app (MSI), Win32 (exe's)
+			--> Toekennen: required (installatie op device zonder keuze van enduser) of Available (beschikbaar gesteld via company portal)
+			Manueel synchroniseren:
+			--> Sync vanuit Intune bij devices
+			--> Sync vanuit windows VM windows settings (in wachtrij om te synchroniseren)
+			--> Sync door herstarten van de service "Microsoft Intune Management Extension"
+		=> Deployment profiles
+			--> Automatiseren van settings tijdens OOBE (privacy settings, microsoft voorwaarden, taal, keyboard layout, account type: standard vs admin, …)
+				> Device group (autopilot devices)
+	> Protect
+		=> Windows LAPS: tijdelijk roterend admin ww per device
+	> Retire
 - Windows clients - MacOs - IOS - ChromeOS
 
 1. Enrollen (onboarding)
