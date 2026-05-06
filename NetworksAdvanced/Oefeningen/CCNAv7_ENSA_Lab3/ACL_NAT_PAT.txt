@@ -1,0 +1,48 @@
+- Part 1:
+on router:
+
+username admin privilege 15 secret cisco
+!
+ip access-list extended SSH-MGT
+ permit tcp host 10.199.64.137 172.16.1.128 0.0.0.15 eq 22
+ permit tcp 172.16.1.0 0.0.0.15 172.16.1.128 0.0.0.15 eq 22
+!
+line vty 0 15
+ access-class SSH-MGT in
+!
+
+ssh on middle pc: ssh admin@172.16.1.130, ww cisco werkt
+
+- Part 2
+
+ip nat pool NAT-POOL1 10.199.66.132 10.199.66.132 netmask 255.255.255.192
+!
+access-list 1 permit 172.16.1.176 0.0.0.15
+!
+ip nat inside source list 1 pool NAT-POOL1
+!
+interface g0/0/0.40
+ ip nat outside
+!
+interface GigabitEthernet0/0/1
+ ip nat inside
+!
+
+Verify: show ip nat translations (disconnect router R02 eerst als je deze config op router R01 doet)
+
+- Part 3
+
+ip nat pool NAT-POOL1 10.199.66.132 10.199.66.132 netmask 255.255.255.192
+!
+access-list 1 permit 172.16.1.176 0.0.0.15
+!
+ip nat inside source list 1 pool NAT-POOL1 OVERLOAD
+!
+interface g0/0/0.40
+ ip nat outside
+!
+interface GigabitEthernet0/0/1
+ ip nat inside
+!
+
+Verify: show ip nat translations
