@@ -7,6 +7,7 @@ DECLARE
     v_first_name   employees.first_name%TYPE;
     v_last_name    employees.last_name%TYPE;
 BEGIN
+If INSERTING THEN
     IF (:NEW.manager_id IS NULL) THEN
         SELECT manager_id
         INTO v_manager_id
@@ -27,7 +28,7 @@ BEGIN
         :NEW.hire_date := NEXT_DAY(SYSDATE, 'MONDAY');
     END IF;
 
-    IF :NEW.salary IS NULL THEN
+ELSIF :NEW.salary IS NULL THEN
         :NEW.salary := 1000;
 
         DBMS_OUTPUT.PUT_LINE('het salaris van employee '  || :NEW.first_name || ' ' || :NEW.last_name  || ' wordt 1000');

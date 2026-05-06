@@ -1,0 +1,39 @@
+- Opgave 1:
+
+use 2TINdb
+
+- Opgave 2:
+
+show dbs
+> Zit nog niks in de db
+
+- Opgave 3:
+
+db
+
+- Opgave 4:
+
+db.createCollection('studentenregatta')
+
+- Opgave 5: 
+
+db.studentenregatta.insertOne({_id: '001', team: 'PXL', aantal_likes: 820, teamleden: 9})
+
+- Opgave 6:
+
+db.studentenregatta.insertMany([{_id: '002', team: 'UCLL', teamleden: 8}, {_id: '003', team: 'UHasselt', aantal_likes: 400}])
+
+- Opgave 7:
+
+db.studentenregatta.updateOne({team: 'PXL'}, {$set: {team: 'Hogeschool PXL'}})
+
+- Opgave 8:
+
+db.studentenregatta.updateOne({team: 'Hogeschool PXL'}, {$set: {supporters: {personeel: 50, studenten: 150}}})
+
+- Opgave 9:
+
+db.studentenregatta.drop()
+
+- Opgave 10:
+
