@@ -42,3 +42,14 @@ Intune
 		> OOBE (out of box experience) = aanmelden entra credentials
 
 MDM = mobile device management ==> onderdeel dat instaat voor het effectief toepassen van configuratie
+
+SharePoint ==> samen te werken binnen een team
+	 SharePoint site ==> bestaat uit libraries
+		- Pages
+		- Documenten
+
+	Permissions op:
+		- SharePoint site niveau
+		- Library niveau
+
+Exchange ==> 
