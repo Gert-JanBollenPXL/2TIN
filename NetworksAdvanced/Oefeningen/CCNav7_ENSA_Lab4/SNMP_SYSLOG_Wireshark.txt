@@ -126,6 +126,8 @@ On both switches:
 
 ! SPAN sessie: mirror VLAN 40 verkeer naar een monitor poort
 monitor session 1 source vlan 40 both
+OF
+monitor session 1 source interface GigabitEthernet1/0/21
 monitor session 1 destination interface GigabitEthernet1/0/19
 
 Verify:
