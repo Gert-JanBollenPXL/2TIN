@@ -1,0 +1,147 @@
+- Part 1:
+
+! SNMPv2 community strings
+snmp-server community SNMP-RO ro
+snmp-server community SNMP-RW rw
+
+! SNMP engineID (optional)
+snmp-server engineID local [octet string] => bv. 1234567890ABCDEF
+
+! SNMP server (Zabbix)
+snmp-server host 10.199.64.67 version 2c SNMP-RO
+
+! Configure SNMP informs
+snmp-server host 10.199.64.67 informs version 2c SNMP-RO
+
+! SNMP notifications
+snmp-server enable traps snmp authentication
+snmp-server enable traps config
+
+! Syslog trap messages
+snmp-server enable traps syslog
+
+verify:
+show snmp
+show snmp community
+show snmp host
+show snmp engineID
+show running-config | section snmp
+
+- Part 2:
+
+Routers and switches:
+Configuration => Hosts => Create Host
+Host tab:
+	- Host name: [DEVICE NAME] (LAB-R01-C02-R01, R02, LAB-R01-A02-SW01, SW02)
+	- Groups: existing group or create group (RACK-01R)
+	- Interface: Add → SNMP
+		- IP address: [DEVICE MANAGEMENT IP] (172.16.1.130, 131, 133, 134)
+		- Port: 161
+
+Templates → link new templates
+- add: Cisco IOS SNMP
+
+Macros:
+- Macro: {$SNMP_COMMUNITY}
+- Value: SNMP-RO
+
+Verify:
+
+Monitoring → Hosts:
+- SNMP square shows green on all devices
+
+- Part 3a:
+
+Routers and switches:
+
+! ACL only allow zabbix
+ip access-list standard ACL-SNMP
+ permit host 10.199.64.67
+ deny any
+
+! Community strings with ACL
+snmp-server community SNMP-RO ro ACL-SNMP
+snmp-server community SNMP-RW rw ACL-SNMP
+
+! Community string and SNMP server
+snmp-server community SNMP-NOTIFY ro
+snmp-server host 10.199.64.67 version 2c SNMP-NOTIFY
+snmp-server host 10.199.64.67 informs version 2c SNMP-NOTIFY
+
+verify:
+
+show snmp community
+show snmp host
+
+to get rid of insecure configs:
+no snmp-server host 10.199.64.67 version 2c SNMP-RO
+no snmp-server host 10.199.64.67 informs version 2c SNMP-RO
+
+- Part 3b:
+
+! Syslog to server
+logging host 10.199.64.134
+logging trap informational
+
+! Syslog traps via SNMP
+snmp-server enable traps syslog
+
+verify:
+
+show logging
+
+should show: trap logging: level informational, ... etc etc
+
+- Part 4:
+
+! SNMPv3 view
+snmp-server view SNMP-VIEW iso included
+
+! SNMPv3 group with read access on view
+snmp-server group SNMP-GROUP v3 priv read SNMP-VIEW
+
+! SNMPv3 user
+snmp-server user SNMP-USER SNMP-GROUP v3 auth sha wachtwoord priv aes 128 wachtwoord
+
+click on each device → Interface → Add → SNMP:
+	- IP address: [DEVICE MANAGEMENT IP] (172.16.1.130, 131, 133, 134)
+	- Port: 161
+	- SNMP version: SNMPv3
+	- Context name: (leeg laten)
+	- Security name: SNMP-USER
+	- Security level: authPriv
+	- Auth protocol: SHA
+	- Auth passphrase: wachtwoord
+	- Priv protocol: AES128
+	- Priv passphrase: wachtwoord
+
+Verify:
+
+show snmp group
+show snmp user
+
+- Part 5:
+
+On both switches:
+
+! SPAN sessie: mirror VLAN 40 verkeer naar een monitor poort
+monitor session 1 source vlan 40 both
+monitor session 1 destination interface GigabitEthernet1/0/19
+
+Verify:
+
+on switches:
+
+show monitor session 1
+
+wireshark:
+
+Use 2nd laptop and connect with GigabitEthernet1/0/19 using ethernet cable, open wireshark and select "Ethernet",
+filter traffic on "bootp". 
+
+On laptop connected with vlan40: open a terminal and use:
+
+ipconfig /release
+ipconfig /renew "Ethernet" 
+
+==> In wireshark you will see "DHCP release", "DHCP discover", "DHCP offer", "DHCP Request", "DHCP ACK"

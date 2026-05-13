@@ -37,7 +37,7 @@ interface Vlan1
 interface Vlan10
  ip address 172.16.1.133 255.255.255.240
 !
-ip default-gateway 172.17.1.129
+ip default-gateway 172.16.1.129
 !
 line vty 0 15
  login local
