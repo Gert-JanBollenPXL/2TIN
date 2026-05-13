@@ -37,3 +37,60 @@ db.studentenregatta.drop()
 
 - Opgave 10:
 
+db.films.insertOne({naam: 'Iedereen beroemd', jaar:2000})
+
+- Opgave 11:
+
+db.films.updateOne({naam: 'Iedereen beroemd'}, {$set: {acteurs: ['Josse De Pauw', 'Eva Van Der Gucht', 'Werner De Smedt']}})
+
+- Opgave 12:
+
+db.films.insertOne({naam: 'Loft', jaar: 2008, acteurs: ['Koen De Bouw', 'Filip Peeters'], director: 'Erik Van Looy'})
+
+- Opgave 13:
+
+db.films.updateOne({naam: 'Loft'}, {$push:{acteurs: 'Matthias Schoenaerts'}})
+
+- Opgave 14:
+
+db.films.insertOne({naam: 'De Premier', jaar: 20015, acteurs: ['Koen De Bouw', 'Tine Reymer'], director: 'Erik Van Looy'})
+
+- Opgave 15:
+
+db.films.updateOne({naam: 'De Premier'}, {$set: {jaar:2016}})
+
+- Opgave 16:
+
+db.films.insertOne({naam: 'Dune', acteurs: ['Timothée Chalamet', 'Zendaya']})
+
+- Opgave 17:
+
+db.films.updateOne({naam: 'Dune'}, {$set: {jaar:2021}})
+
+- Opgave 18:
+
+db.films.updateOne({naam: 'Dune'}, {$push:{acteurs: {$each:['Rebecca Ferguson', 'Jason Momoa']}}})
+
+- Opgave 19:
+
+db.films.updateMany({director: 'Erik Van Looy'}, {$set:{genre: 'thriller'}})
+
+- Opgave 20:
+
+db.boeken.insertOne({_id: 'A001', auteur: 'Stieg Larsson', boek: [{titel: 'Mannen die vrouwen haten', jaar: 2005}, {titel: 'De vrouw die met vuur speelde', jaar: 2006}]})
+
+- Opgave 21:
+
+db.boeken.insertOne({_id: 'A002', auteur: ['Wiebe van der Zee', 'Bert van der Zee'], boek: {titel: 'Succes met Big Data', jaar: 2016, uitgeverij: 'Van Duuren Media B.V.'}})
+
+- Opgave 22:
+
+db.boeken.updateOne({_id: 'A001'}, {$push: {boek: {titel: 'Gerechtigheid', jaar: 2007}}})
+
+- Opgave 23:
+
+db.boeken.insertOne({_id: 'A003', auteur: 'Camilla Lackberg', boek: [{titel: 'Ijsprinces', jaar: 2003}]})
+
+- Opgave 24:
+
+db.boeken.updateOne({auteur: 'Camilla Lackberg'}, {$push: {boek: {$each: [{titel: 'Predikant', jaar: 2004}, {titel: 'Steenhouwer', jaar: 2005}]}}})
