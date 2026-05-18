@@ -36,3 +36,43 @@ https://pxl-cloud-advanced-tin.code-coaching.dev/course/99-labs/3-AzureAutomatio
 
 3.4. 3-tier app deployment
 https://pxl-cloud-advanced-tin.code-coaching.dev/course/99-labs/3-AzureAutomation/3tierappDeployment.html
+
+4.2 Microsoft 365 Admin Center
+https://pxl-cloud-advanced-tin.code-coaching.dev/course/99-labs/4-Microsoft365/M365fundamentals.html
+
+4.3 Custom Domain
+https://pxl-cloud-advanced-tin.code-coaching.dev/course/99-labs/4-Microsoft365/domainregistration.html
+
+5.3 PIM & JIT
+https://pxl-cloud-advanced-tin.code-coaching.dev/course/99-labs/5-EntraID/security.html
+
+5.4 Entra App Registration
+https://pxl-cloud-advanced-tin.code-coaching.dev/course/99-labs/5-EntraID/EntraAppRegistration.html
+
+6.1 Enroll Device
+https://pxl-cloud-advanced-tin.code-coaching.dev/course/99-labs/6-Intune/EnrollDeviceafterInstallation.html
+
+6.2 Configuration policies
+https://pxl-cloud-advanced-tin.code-coaching.dev/course/99-labs/6-Intune/ConfigurationPoliciesLabs.html
+
+6.3 Apps
+https://pxl-cloud-advanced-tin.code-coaching.dev/course/99-labs/6-Intune/ApplicationsLabs.html
+
+6.4 Deployment Profile
+https://pxl-cloud-advanced-tin.code-coaching.dev/course/99-labs/6-Intune/DeploymentProfileLab.html
+
+7.1 SharePoint
+https://pxl-cloud-advanced-tin.code-coaching.dev/course/99-labs/7-Collaboration/Sharepoint.html
+
+7.2 Exchange
+https://pxl-cloud-advanced-tin.code-coaching.dev/course/99-labs/7-Collaboration/Exchange.html
+
+
+Microsoft 365 links:
+
+admin.microsoft.com
+intune.microsoft.com
+entra.microsoft.com
+
+Inlog voor admin(indien vergeten):
+https://developer.microsoft.com/en-us/microsoft-365/profile?source=visualstudio
