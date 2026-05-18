@@ -1,0 +1,26 @@
+---
+- name: Deploy API
+  hosts: app_servers
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Fetch tags
+      ansible.builtin.command: git fetch --tags origin
+      args:
+        chdir: "{{ app_dir }}"
+
+    - name: Checkout requested tag
+      ansible.builtin.command: git checkout {{ release_tag }}
+      args:
+        chdir: "{{ app_dir }}"
+
+    - name: Install API dependencies
+      ansible.builtin.command: npm ci
+      args:
+        chdir: "{{ app_dir }}/api"
+
+    - name: Restart API service
+      ansible.builtin.systemd:
+        name: api
+        state: restarted
+        enabled: true

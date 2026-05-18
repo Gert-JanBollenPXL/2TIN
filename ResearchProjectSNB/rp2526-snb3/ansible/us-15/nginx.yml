@@ -1,0 +1,80 @@
+---
+
+- name: Deployment of pxlcensor-nginx on loadbalancers
+  hosts: loadbalancers
+  become: true
+  gather_facts: false
+  tags: nginx
+
+  tasks:
+# Install nginx
+    - name: Update and upgrade apt packages
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: install nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+
+# Deploy nginx configuration and frontend files
+
+    - name: Template for nginx default configuration file
+      ansible.builtin.template:
+        src: templates/pxlcensor-nginx.conf.j2
+        dest: /etc/nginx/sites-available/default
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Template for nginx environment file
+      ansible.builtin.template:
+        src: templates/pxlcensor-nginx.env.j2
+        dest: "{{ project_root }}/frontend/.env"
+        owner: ubuntu
+        group: ubuntu
+        mode: '0640'
+
+# Nginx setup
+
+    - name: Install dependencies
+      become_user: ubuntu
+      ansible.builtin.command: npm ci
+      args:
+        chdir: "{{ project_root }}/frontend"
+
+    - name: Build frontend
+      become_user: ubuntu
+      ansible.builtin.command: npm run build
+      args:
+        chdir: "{{ project_root }}/frontend"
+
+    - name: Remove old nginx content
+      ansible.builtin.file:
+        path: "{{ nginx_root }}"
+        state: absent
+
+    - name: Recreate nginx directory
+      ansible.builtin.file:
+        path: "{{ nginx_root }}"
+        state: directory
+        mode: "0755"
+
+    - name: Copy dist to nginx root
+      ansible.builtin.copy:
+        src: "{{ project_root }}/frontend/dist/"
+        dest: "{{ nginx_root }}/"
+        remote_src: yes
+
+# Enabling and starting service
+
+    - name: Reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: yes
+
+    - name: Enable and start nginx
+      ansible.builtin.systemd:
+        name: nginx
+        enabled: true
+        state: started

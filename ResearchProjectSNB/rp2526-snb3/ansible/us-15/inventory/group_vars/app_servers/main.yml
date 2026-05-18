@@ -1,0 +1,16 @@
+---
+# API vars and secrets used in .env file template
+media_service_url: "https://rp-snb3.me/media"
+media_signing_secret: "{{ vault_media_signing_secret }}"
+database_url: "postgres://postgres:{{ database_password }}@rp-rds.cja6wwqw2rgr.eu-west-1.rds.amazonaws.com:5432/postgres?sslmode=require"
+database_password: "{{ vault_database_password }}"
+
+# Media vars used in .env file template
+media_root: "/var/lib/pxlcensor"
+
+# Media vars used in base.yml playbook
+ebs_device: "/dev/xvdf"
+ebs_mount_point: "/var/lib/pxlcensor"
+
+# Used in deployment.yml
+project_root: "/home/ubuntu/rp2526-snb3"

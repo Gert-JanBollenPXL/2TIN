@@ -1,0 +1,109 @@
+---
+- name: base playbook US6
+  hosts: all
+  become: true
+  gather_facts: false
+
+  tasks:
+    # https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/apt_module.html
+    - name: apt-update
+      ansible.builtin.apt:
+        update_cache: yes
+        upgrade: dist
+        # anders blijft changed altijd 1
+        cache_valid_time: 3600
+    
+    # https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/package_module.html
+    - name: essentiele tools installeren
+      ansible.builtin.package:
+        name:
+          - curl
+          - git
+          - htop
+          - net-tools
+        state: present
+    
+    # https://docs.ansible.com/projects/ansible/latest/collections/community/general/timezone_module.html
+    - name: tijdzone instellen op Europe/Brussels
+      community.general.timezone:
+        name: Europe/Brussels
+
+    # ook nog git repo clonen: nodig in andere user stories
+    - name: rp repo clonen
+      ansible.builtin.git:
+        repo: "https://{{ github_token }}@github.com/PXL-RP/rp2526-snb3.git"
+        dest: /home/ubuntu/rp2526-snb3
+        version: main
+
+    # https://oneuptime.com/blog/post/2026-02-21-ansible-deploy-nodejs-application/view
+    - name: Add NodeSource GPG key
+      ansible.builtin.apt_key:
+        url: "https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key"
+        state: present
+
+    - name: Add NodeSource repository for Node.js 20
+      ansible.builtin.apt_repository:
+        repo: "deb https://deb.nodesource.com/node_20.x nodistro main"
+        state: present
+        filename: nodesource
+
+    - name: Install Node.js
+      ansible.builtin.apt:
+        name: nodejs
+        state: present
+        update_cache: true
+
+    - name: Verify Node.js version
+      ansible.builtin.command:
+        cmd: node --version
+      register: node_ver
+      changed_when: false
+
+    
+    - name: Display installed Node.js version
+      ansible.builtin.debug:
+        msg: "Node.js {{ node_ver.stdout }} installed"
+
+- name: rp-public-nginx config
+  hosts: loadbalancers
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Nginx install
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+
+    - name: Nginx running
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+
+- name: rp-private-processor config
+  hosts: workers
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Python install
+      ansible.builtin.apt_repository:
+        repo: ppa:deadsnakes/ppa
+        state: present
+
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: Install Python 3.10 and pip
+      ansible.builtin.apt:
+        name:
+          - python3.10
+          - python3-pip
+        state: present
+
+    - name: Install libgl1
+      ansible.builtin.apt:
+        name: libgl1
+        state: present

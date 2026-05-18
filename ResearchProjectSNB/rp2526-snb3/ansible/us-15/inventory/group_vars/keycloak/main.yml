@@ -1,0 +1,9 @@
+---
+keycloak_container_name: keycloak
+keycloak_image: quay.io/keycloak/keycloak:24.0.3
+keycloak_database_url: jdbc:postgresql://rp-rds.cja6wwqw2rgr.eu-west-1.rds.amazonaws.com:5432/keycloak
+keycloak_database_username: postgres
+keycloak_hostname: rp-snb3.me
+app_url: https://rp-snb3.me
+keycloak_import_dir: /opt/keycloak-data/import
+keycloak_data_dir: /opt/keycloak-data

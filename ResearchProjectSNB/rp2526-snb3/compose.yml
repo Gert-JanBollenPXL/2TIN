@@ -1,0 +1,107 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: pxlcensor
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-devpassword}
+      POSTGRES_DB: pxlcensor
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pxlcensor -d pxlcensor"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - pxlcensor
+
+  media:
+    build: ./media
+    ports:
+      - "8081:8081"
+    environment:
+      PORT: 8081
+      MEDIA_ROOT: /media
+      MEDIA_SIGNING_SECRET: ${MEDIA_SIGNING_SECRET:-dev-secret-change-in-production}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:8080}
+    volumes:
+      - media-data:/media
+    networks:
+      - pxlcensor
+    # healthcheck:
+    #   test: ["CMD", "nc", "-z", "localhost", "8081"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+
+  api:
+    build: ./api
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: 8080
+      DATABASE_URL: postgresql://pxlcensor:${POSTGRES_PASSWORD:-devpassword}@postgres:5432/pxlcensor
+      MEDIA_SERVICE_URL: http://media:8081
+      MEDIA_EXTERNAL_URL: http://localhost:8081
+      MEDIA_SIGNING_SECRET: ${MEDIA_SIGNING_SECRET:-dev-secret-change-in-production}
+      MAX_UPLOAD_MB: ${MAX_UPLOAD_MB:-25}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:8080}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      media:
+        condition: service_started
+    networks:
+      - pxlcensor
+    # healthcheck:
+    #   test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/health"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+
+  processor:
+    build: ./processor
+    environment:
+      DATABASE_URL: postgresql://pxlcensor:${POSTGRES_PASSWORD:-devpassword}@postgres:5432/pxlcensor
+      MEDIA_SERVICE_URL: http://media:8081
+      MEDIA_SIGNING_SECRET: ${MEDIA_SIGNING_SECRET:-dev-secret-change-in-production}
+      PROCESSOR_CONCURRENCY: ${PROCESSOR_CONCURRENCY:-1}
+      TEMP_DIR: /tmp/pxlcensor
+    depends_on:
+      postgres:
+        condition: service_healthy
+      media:
+        condition: service_started
+      api:
+        condition: service_started
+    networks:
+      - pxlcensor
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1.0'
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+      - media
+    networks:
+      - pxlcensor
+
+
+volumes:
+  postgres_data:
+  media-data:
+
+networks:
+  pxlcensor:
+    driver: bridge

@@ -1,0 +1,115 @@
+{
+  "realm": "PXLCensor",
+  "enabled": true,
+  "sslRequired": "external",
+  "registrationAllowed": true,
+  "loginWithEmailAllowed": true,
+
+  "clients": [
+    {
+      "clientId": "PXLfrontend",
+      "name": "PXLfrontend",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "{{ vault_pxlfrontend_client_secret }}",
+      "redirectUris": [
+        "{{ app_url }}/oauth2/callback"
+      ],
+      "webOrigins": [
+        "{{ app_url }}"
+      ],
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "frontchannelLogout": true,
+      "attributes": {
+        "post.logout.redirect.uris": "{{ app_url }}/"
+      },
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "profile",
+        "roles",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "offline_access"
+      ],
+      "protocolMappers": [
+        {
+          "name": "email",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "email",
+            "claim.name": "email",
+            "jsonType.label": "String",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "oauth-client-pxlfrontend",
+      "name": "oauth-client-pxlfrontend",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "{{ vault_oauth_client_secret }}",
+      "redirectUris": [
+        "{{ app_url }}/oauth2/callback"
+      ],
+      "webOrigins": [
+        "{{ app_url }}"
+      ],
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "frontchannelLogout": true,
+      "attributes": {
+        "post.logout.redirect.uris": "{{ app_url }}/",
+        "oauth2.device.authorization.grant.enabled": "false",
+        "oidc.ciba.grant.enabled": "false",
+        "backchannel.logout.session.required": "true",
+        "backchannel.logout.revoke.offline.tokens": "false",
+        "display.on.consent.screen": "false"
+    },
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "profile",
+        "roles",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "microprofile-jwt"
+      ]
+    }
+  ],
+
+  "identityProviders": [
+    {
+      "alias": "microsoft",
+      "providerId": "microsoft",
+      "enabled": true,
+      "trustEmail": true,
+      "storeToken": false,
+      "firstBrokerLoginFlowAlias": "first broker login",
+      "config": {
+        "clientId": "{{ vault_microsoft_client_id }}",
+        "clientSecret": "{{ vault_microsoft_client_secret }}",
+        "defaultScope": "openid profile email User.Read",
+        "syncMode": "IMPORT"
+      }
+    }
+  ]
+}

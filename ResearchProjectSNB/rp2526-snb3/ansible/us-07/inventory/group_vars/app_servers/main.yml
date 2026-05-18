@@ -1,0 +1,11 @@
+---
+# API vars:
+media_service_url: "https://rp-snb3.me/media"
+
+# API secrets:
+media_signing_secret: "{{ vault_media_signing_secret }}"
+database_url: "postgres://postgres:{{ database_password }}@rp-rds.cja6wwqw2rgr.eu-west-1.rds.amazonaws.com:5432/postgres?sslmode=require"
+database_password: "{{ vault_database_password }}"
+
+# media vars:
+media_root: "/var/lib/pxlcensor"

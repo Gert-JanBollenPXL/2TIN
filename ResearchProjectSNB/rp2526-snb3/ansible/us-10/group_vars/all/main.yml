@@ -1,0 +1,27 @@
+region: eu-west-1
+alb_name: rp-alb
+vpc: vpc-015fcadbe3e176e58
+
+nginx_id: i-021ce80507557585b
+
+subnets:
+  # eu-west-1b (euw1-az3)
+  - subnet-0c3a5827901e0071d
+  # eu-west-1a (euw1-az2)
+  - subnet-05fee0ea8133c2916
+
+# moet een lijst zijn
+sg: 
+  - sg-0d1b50c227dbc92a6
+
+target_group: arn:aws:elasticloadbalancing:eu-west-1:401257549792:targetgroup/rp-group/545b8940d8383790
+
+target_group_name: rp-group
+# target group 2 
+# target_group: arn:aws:elasticloadbalancing:eu-west-1:401257549792:targetgroup/rp-group-2/21ea058851a28155
+
+ssl_policy: ELBSecurityPolicy-TLS13-1-2-Res-PQ-2025-09
+
+# te vinden in de AWS Certificate Manager
+https_certificaat: "{{ vault_https_certificaat }}"
+https_certificaat_www: "{{ vault_https_certificaat_www }}"

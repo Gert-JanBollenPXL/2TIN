@@ -1,0 +1,121 @@
+---
+- name: Deployment of pxlcensor-api and pxlcensor-media on app_servers
+  hosts: app_servers
+  become: true
+  gather_facts: false
+  tags: media_api
+
+  tasks:
+    - name: Template for api.service systemd file
+      ansible.builtin.template:
+        src: templates/pxlcensor-api.service.j2
+        dest: /etc/systemd/system/pxlcensor-api.service
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Template for media.service systemd file
+      ansible.builtin.template:
+        src: templates/pxlcensor-media.service.j2
+        dest: /etc/systemd/system/pxlcensor-media.service
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Template for API environment file
+      ansible.builtin.template:
+        src: templates/pxlcensor-api.env.j2
+        dest: /home/ubuntu/rp2526-snb3/api/.env
+        owner: root
+        group: root
+        mode: '0640'
+
+    - name: Template for Media environment file
+      ansible.builtin.template:
+        src: templates/pxlcensor-media.env.j2
+        dest: /home/ubuntu/rp2526-snb3/media/.env
+        owner: root
+        group: root
+        mode: '0640'
+
+    - name: Reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: yes
+
+    - name: Enable and start pxlcensor-api
+      ansible.builtin.systemd:
+        name: pxlcensor-api
+        enabled: true
+        state: started
+
+    - name: Enable and start pxlcensor-media
+      ansible.builtin.systemd:
+        name: pxlcensor-media
+        enabled: true
+        state: started
+
+- name: Deployment of pxlcensor-processor on workers
+  hosts: workers
+  become: true
+  gather_facts: false
+  tags: processor
+
+  tasks:
+    - name: Template for processor.service systemd file
+      ansible.builtin.template:
+        src: templates/pxlcensor-processor.service.j2
+        dest: /etc/systemd/system/pxlcensor-processor.service
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Template for Processor environment file
+      ansible.builtin.template:
+        src: templates/pxlcensor-processor.env.j2
+        dest: /home/ubuntu/rp2526-snb3/processor/.env
+        owner: root
+        group: root
+        mode: '0640'
+
+    - name: Reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: yes
+
+    - name: Enable and start pxlcensor-processor
+      ansible.builtin.systemd:
+        name: pxlcensor-processor
+        enabled: true
+        state: started
+
+- name: Deployment of pxlcensor-nginx on loadbalancers
+  hosts: loadbalancers
+  become: true
+  gather_facts: false
+  tags: nginx
+
+  tasks:
+    - name: Template for nginx default configuration file
+      ansible.builtin.template:
+        src: templates/pxlcensor-nginx.conf.j2
+        dest: /etc/nginx/sites-available/default
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Template for nginx environment file
+      ansible.builtin.template:
+        src: templates/pxlcensor-nginx.env.j2
+        dest: /home/ubuntu/rp2526-snb3/frontend/.env
+        owner: root
+        group: root
+        mode: '0640'
+
+    - name: Reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: yes
+
+    - name: Enable and start nginx
+      ansible.builtin.systemd:
+        name: nginx
+        enabled: true
+        state: started

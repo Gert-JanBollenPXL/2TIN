@@ -1,0 +1,158 @@
+---
+# Deployment of API and MEDIA services on app_servers
+
+- name: Deployment of pxlcensor-api and pxlcensor-media on app_servers
+  hosts: app_servers
+  become: true
+  gather_facts: false
+  tags: deploy_media_api
+
+  tasks:
+# Media setup
+
+    - name: Template for media.service systemd file
+      ansible.builtin.template:
+        src: templates/pxlcensor-media.service.j2
+        dest: /etc/systemd/system/pxlcensor-media.service
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Template for Media environment file
+      ansible.builtin.template:
+        src: templates/pxlcensor-media.env.j2
+        dest: "{{ project_root }}/media/.env"
+        owner: ubuntu
+        group: ubuntu
+        mode: '0640'
+
+    - name: install media dependencies
+      become_user: ubuntu
+      ansible.builtin.command: npm ci
+      args:
+        chdir: "{{ project_root }}/media"
+        creates: "{{ project_root }}/media/node_modules"
+# API setup
+
+    - name: Template for api.service systemd file
+      ansible.builtin.template:
+        src: templates/pxlcensor-api.service.j2
+        dest: /etc/systemd/system/pxlcensor-api.service
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Template for API environment file
+      ansible.builtin.template:
+        src: templates/pxlcensor-api.env.j2
+        dest: "{{ project_root }}/api/.env"
+        owner: ubuntu
+        group: ubuntu
+        mode: '0640'
+
+    - name: install api dependencies
+      become_user: ubuntu
+      ansible.builtin.command: npm ci
+      args:
+        chdir: "{{ project_root }}/api"
+        creates: "{{ project_root }}/api/node_modules"
+
+# Enabling and starting services
+
+    - name: Reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: yes
+
+    - name: Enable and start pxlcensor-api
+      ansible.builtin.systemd:
+        name: pxlcensor-api
+        enabled: true
+        state: started
+
+    - name: Enable and start pxlcensor-media
+      ansible.builtin.systemd:
+        name: pxlcensor-media
+        enabled: true
+        state: started
+
+# Deployment of Processor service on worker nodes
+
+- name: Deployment of pxlcensor-processor on workers
+  hosts: workers
+  become: true
+  gather_facts: false
+  tags: deploy_processor
+
+  tasks:
+# Processor setup
+
+    - name: Template for processor.service systemd file
+      ansible.builtin.template:
+        src: templates/pxlcensor-processor.service.j2
+        dest: /etc/systemd/system/pxlcensor-processor.service
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Template for Processor environment file
+      ansible.builtin.template:
+        src: templates/pxlcensor-processor.env.j2
+        dest: "{{ project_root }}/processor/.env"
+        owner: ubuntu
+        group: ubuntu
+        mode: '0640'
+
+    - name: install processor dependencies
+      become_user: ubuntu
+      ansible.builtin.command: npm ci
+      args:
+        chdir: "{{ project_root }}/processor"
+        creates: "{{ project_root }}/processor/node_modules"
+
+# Enabling and starting service
+
+    - name: Reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: yes
+
+    - name: Enable and start pxlcensor-processor
+      ansible.builtin.systemd:
+        name: pxlcensor-processor
+        enabled: true
+        state: started
+
+# Run integration tests and trigger rollback if they fail
+
+- name: Run integration tests with rollback
+  hosts: app_servers
+  become: true
+  gather_facts: false
+
+  tasks:
+    - block:
+        - name: Run integration tests
+          become_user: ubuntu
+          ansible.builtin.command: node --test test/integration
+          args:
+            chdir: "{{ project_root }}/api"
+          register: integration_test_result
+          changed_when: false
+          failed_when: integration_test_result.rc != 0
+
+        - name: Show test output
+          ansible.builtin.debug:
+            msg: "{{ (integration_test_result.stdout_lines)[-8:] }}"
+
+      rescue:
+        - name: Trigger rollback from control node
+          ansible.builtin.command: >
+            ansible-playbook rollback.yml
+            --ask-vault-pass
+            -e "previous_release_tag={{ previous_release_tag }}"
+          delegate_to: localhost
+          run_once: true
+          become: false
+
+        - name: Fail deployment after rollback
+          ansible.builtin.fail:
+            msg: "Deployment failed, rollback executed"

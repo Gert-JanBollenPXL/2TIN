@@ -1,0 +1,26 @@
+---
+- name: Deploy Processor
+  hosts: workers
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Fetch tags
+      ansible.builtin.command: git fetch --tags origin
+      args:
+        chdir: "{{ app_dir }}"
+
+    - name: Checkout requested tag
+      ansible.builtin.command: git checkout {{ release_tag }}
+      args:
+        chdir: "{{ app_dir }}"
+
+    - name: Install Processor dependencies
+      ansible.builtin.command: npm ci
+      args:
+        chdir: "{{ app_dir }}/processor"
+
+    - name: Restart Processor service
+      ansible.builtin.systemd:
+        name: processor
+        state: restarted
+        enabled: true

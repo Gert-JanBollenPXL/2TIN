@@ -1,0 +1,8 @@
+---
+# Nginx vars used in nginx config template
+api_external_url: "http://rp-snb3.me/api"
+proxy_pass_api: "http://rp-snb3.me:8080/"
+proxy_pass_media: "http://rp-snb3.me:8081/"
+
+# Nginx.yml setup vars
+nginx_root: "/var/www/html"

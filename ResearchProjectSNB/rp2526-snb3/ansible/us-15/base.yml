@@ -1,0 +1,150 @@
+---
+# Base configuration for all servers, package installation, timezone setting, and Node.js setup
+
+- name: Base configuration for all servers
+  hosts: app_servers:workers # for testing, change to "all"
+  become: true
+  gather_facts: false
+  tags: base_all
+
+  tasks:
+    - name: Set hostname
+      ansible.builtin.hostname:
+        name: "{{ inventory_hostname }}"
+
+    - name: Update and upgrade apt packages
+      ansible.builtin.apt:
+        update_cache: yes
+        upgrade: dist
+        cache_valid_time: 3600
+
+    - name: Install base packages
+      ansible.builtin.package:
+        name:
+          - curl
+          - git
+          - htop
+          - net-tools
+        state: present
+    
+    - name: Set timezone to Europe/Brussels
+      community.general.timezone:
+        name: Europe/Brussels
+
+    - name: Add NodeSource GPG key
+      ansible.builtin.apt_key:
+        url: "https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key"
+        state: present
+
+    - name: Add NodeSource repository for Node.js 20
+      ansible.builtin.apt_repository:
+        repo: "deb https://deb.nodesource.com/node_20.x nodistro main"
+        state: present
+        filename: nodesource
+
+    - name: Install Node.js
+      ansible.builtin.apt:
+        name: nodejs
+        state: present
+        update_cache: true
+
+    - name: Verify Node.js version
+      ansible.builtin.command:
+        cmd: node --version
+      register: node_ver
+      changed_when: false
+
+    - name: Display installed Node.js version
+      ansible.builtin.debug:
+        msg: "Node.js {{ node_ver.stdout }} installed"
+
+# Clone repository as ubuntu user on all servers
+
+- name: Clone repository
+  hosts: app_servers:workers # for testing, change to "all"
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Clone project repo as ubuntu user
+      become_user: ubuntu
+      ansible.builtin.git:
+        repo: "https://{{ github_token }}@github.com/PXL-RP/rp2526-snb3.git"
+        dest: "{{ project_root }}"
+        version: "{{ release_tag }}"
+        update: yes
+        force: yes
+
+# Base configuration for app_server nodes and EBS setup
+
+- name: Base configuration app_servers
+  hosts: app_servers
+  become: true
+  gather_facts: false
+  tags: base_workers
+
+  tasks:
+
+    - name: create filesystem
+      ansible.builtin.filesystem:
+        fstype: ext4
+        dev: "{{ ebs_device }}"
+
+    - name: create mount dir
+      ansible.builtin.file:
+        path: "{{ ebs_mount_point }}"
+        state: directory
+
+    - name: mount EBS
+      ansible.builtin.mount:
+        path: "{{ ebs_mount_point }}"
+        src: "{{ ebs_device }}"
+        fstype: ext4
+        state: mounted
+
+    - name: create originals directory
+      ansible.builtin.file:
+        path: "{{ ebs_mount_point }}/originals"
+        state: directory
+
+    - name: create processed directory
+      ansible.builtin.file:
+        path: "{{ ebs_mount_point }}/processed"
+        state: directory
+      
+    - name: set ownership recursively on media root
+      ansible.builtin.file:
+        path: "{{ ebs_mount_point }}"
+        owner: ubuntu
+        group: ubuntu
+        recurse: yes
+
+- name: Base configuration workers
+  hosts: workers
+  become: true
+  gather_facts: false
+  tags: base_workers
+
+  tasks:
+    - name: Install base packages
+      ansible.builtin.package:
+        name:
+          - python3
+          - python3-pip
+          - python3-venv
+          - libgl1
+        state: present
+
+    - name: install deface in virtualenv
+      ansible.builtin.pip:
+        name: deface
+        virtualenv: "{{ venv_path }}"
+        virtualenv_command: python3 -m venv
+        state: present
+    
+    - name: set ownership recursively on virtualenv
+      ansible.builtin.file:
+        path: "{{ venv_path }}"
+        owner: ubuntu
+        group: ubuntu
+        recurse: yes

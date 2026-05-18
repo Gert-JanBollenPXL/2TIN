@@ -1,0 +1,223 @@
+- name: us-14 - install datadog on nginx, api/media and processor nodes
+  hosts: loadbalancers:app_servers:workers
+  roles:
+    - datadog.datadog
+  become: true
+
+  vars:
+    datadog_api_key: "{{ vault_datadog_api_key }}"
+    datadog_site: "us5.datadoghq.com"
+    
+    apm_config:
+      enabled: true
+
+    datadog_config:
+      logs_enabled: true
+
+    process_config:
+      process_collection:
+        enabled: true
+  
+  tasks:
+  - name: Add datadog-agent to adm group
+    ansible.builtin.user:
+      name: dd-agent
+      groups: adm
+      append: true
+    become: true
+  
+  - name: Add datadog-agent to systemd-journal group
+    ansible.builtin.user:
+      name: dd-agent
+      groups: systemd-journal
+      append: true
+    become: true
+  
+  - name: Create process config directory
+    ansible.builtin.file:
+      path: /etc/datadog-agent/conf.d/process.d
+      state: directory
+      owner: dd-agent
+      group: dd-agent
+      mode: '0755'
+
+  - name: Create process check config
+    ansible.builtin.copy:
+      dest: /etc/datadog-agent/conf.d/process.d/conf.yaml
+      content: |
+        init_config:
+        instances:
+          - name: node
+            search_string:
+              - "node"
+      owner: dd-agent
+      group: dd-agent
+      mode: '0644'
+
+  - name: Restart datadog agent
+    ansible.builtin.service:
+      name: datadog-agent
+      state: restarted
+    become: true
+
+# api-media
+- name: config enkel api
+  hosts: app_servers
+  become: true
+  roles:
+    - datadog.datadog
+
+  vars:
+    datadog_api_key: "{{ vault_datadog_api_key }}"
+    datadog_site: "us5.datadoghq.com"
+
+    datadog_config:
+      logs_enabled: true
+      logs_config:
+        auto_multi_line_detection: true
+
+    datadog_checks:
+      openmetrics:
+        init_config: {}
+        instances:
+          - openmetrics_endpoint: "http://localhost:8080/metrics"
+            namespace: "rp_snb3"
+            metrics:
+              - http_request_duration_seconds
+              - http_request_summary_seconds
+
+  tasks:
+    - name: Create journald config directory
+      ansible.builtin.file:
+        path: /etc/datadog-agent/conf.d/journald.d
+        state: directory
+        owner: dd-agent
+        group: dd-agent
+        mode: '0755'
+
+    - name: Create journald config
+      ansible.builtin.copy:
+        dest: /etc/datadog-agent/conf.d/journald.d/conf.yaml
+        content: |
+          logs:
+            - type: journald
+              source: nodejs
+              service: api-media
+              include_units:
+                - pxlcensor-api.service
+                - pxlcensor-media.service
+        owner: dd-agent
+        group: dd-agent
+        mode: '0644'
+
+    - name: Create custom queue dir
+      ansible.builtin.file:
+        path: /etc/datadog-agent/conf.d/queue_depth.d
+        state: directory
+        owner: dd-agent
+        group: dd-agent
+        mode: '0755'
+    
+    - name: Create queue check config
+      ansible.builtin.copy:
+        dest: /etc/datadog-agent/conf.d/queue_depth.d/conf.yaml
+        content: |
+          init_config:
+          instances:
+            - {}
+        owner: dd-agent
+        group: dd-agent
+        mode: '0644'
+    
+    - name: Create queue check script
+      ansible.builtin.copy:
+        dest: /etc/datadog-agent/checks.d/queue_depth.py
+        content: |
+          import urllib.request
+          import json
+          from datadog_checks.base import AgentCheck
+
+          # https://docs.datadoghq.com/extend/custom_checks/write_agent_check/ (BRON)
+          class QueueDepthCheck(AgentCheck):
+              def check(self, instance):
+                  response = urllib.request.urlopen('http://localhost:8080/queue/metrics')
+                  data = json.loads(response.read())
+                  self.gauge('queue.depth', data['queued_jobs'])
+        owner: dd-agent
+        group: dd-agent
+        mode: '0644'
+
+    - name: Restart datadog agent
+      ansible.builtin.service:
+        name: datadog-agent
+        state: restarted
+
+# nginx      
+- name: config enkel nginx
+  hosts: loadbalancers
+  roles:
+    - datadog.datadog
+  become: true
+
+  vars:
+    datadog_api_key: "{{ vault_datadog_api_key }}"
+    datadog_site: "us5.datadoghq.com"
+
+    datadog_config:
+      logs_enabled: true
+      logs_config:
+        auto_multi_line_detection: true
+
+    datadog_logs:
+        - type: file
+          path: /var/log/nginx/access.log
+          source: nginx
+          service: nginx
+        - type: file
+          path: /var/log/nginx/error.log
+          source: nginx
+          service: nginx
+
+# processor
+- name: config enkel processor
+  hosts: workers
+  roles:
+    - datadog.datadog
+  become: true
+
+  vars:
+    datadog_api_key: "{{ vault_datadog_api_key }}"
+    datadog_site: "us5.datadoghq.com"
+
+    datadog_config:
+      logs_enabled: true
+      logs_config:
+        auto_multi_line_detection: true
+
+  tasks:
+    - name: Create journald config directory
+      ansible.builtin.file:
+        path: /etc/datadog-agent/conf.d/journald.d
+        state: directory
+        owner: dd-agent
+        group: dd-agent
+        mode: '0755'
+
+    - name: Create processor journald config
+      ansible.builtin.copy:
+        dest: /etc/datadog-agent/conf.d/journald.d/conf.yaml
+        content: |
+          logs:
+            - type: journald
+              source: nodejs
+              service: processor
+              include_units:
+                - pxlcensor-processor.service
+        owner: dd-agent
+        group: dd-agent
+        mode: '0644'
+
+    - name: Restart datadog agent
+      ansible.builtin.service:
+        name: datadog-agent
+        state: restarted

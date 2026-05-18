@@ -1,0 +1,106 @@
+---
+- name: Deployment of Keycloak (Docker + Realm Import)
+  hosts: keycloak
+  become: true
+  gather_facts: false
+  tags: keycloak
+
+  tasks:
+    - name: Update and upgrade apt packages
+      ansible.builtin.apt:
+          update_cache: yes
+          upgrade: dist
+          cache_valid_time: 3600
+          
+    - name: Install Docker
+      ansible.builtin.apt:
+        name: docker.io
+        state: present
+        update_cache: yes
+      
+
+    - name: Ensure Docker is running 
+      ansible.builtin.systemd:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Install Docker Python library
+      ansible.builtin.apt:
+        name:
+          - python3-docker
+          - python3-requests
+          - python3-urllib3
+        state: present
+        update_cache: yes
+
+
+    - name: Create Keycloak base directory 
+      ansible.builtin.file:
+        path: "{{ keycloak_data_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Create Keycloak tmp directory
+      ansible.builtin.file:
+        path: "{{ keycloak_data_dir }}/tmp"
+        state: directory
+        owner: "1000"
+        group: "1000"
+        mode: "0755"
+
+
+    - name: Create Keycloak import directory
+      ansible.builtin.file:
+        path: "{{ keycloak_import_dir }}"
+        state: directory
+        mode: '0755'
+
+
+    - name: Render Keycloak realm configuration
+      ansible.builtin.template:
+        src: templates/pxlcensor-keycloak.json.j2
+        dest: "{{ keycloak_import_dir }}/realm.json"
+        mode: '0644'
+
+    - name: Remove existing Keycloak container
+      ansible.builtin.command: docker rm -f {{ keycloak_container_name }}
+    
+
+    # Run Keycloak container
+    - name: Pull Keycloak image
+      ansible.builtin.command: docker pull {{ keycloak_image }}
+
+    - name: Run Keycloak container with realm import
+      ansible.builtin.command: >
+        docker run -d
+        --name {{ keycloak_container_name }}
+          --restart always
+          -p 8080:8080
+          -v {{ keycloak_data_dir }}:/opt/keycloak/data
+          -e KEYCLOAK_ADMIN={{ vault_keycloak_admin_username }}
+          -e KEYCLOAK_ADMIN_PASSWORD={{ vault_keycloak_admin_password }}
+          -e KC_DB=postgres
+          -e KC_DB_URL={{ keycloak_database_url }}
+          -e KC_DB_USERNAME={{ keycloak_database_username }}
+          -e KC_DB_PASSWORD={{ vault_database_password }}
+          -e KC_HOSTNAME={{ keycloak_hostname }}
+          -e KC_HOSTNAME_STRICT=false
+          -e KC_HTTP_ENABLED=true
+          -e KC_HTTP_PORT=8080
+          -e KC_PROXY_HEADERS=xforwarded
+          -e KC_HTTP_RELATIVE_PATH=/auth
+          -e KC_HEALTH_ENABLED=true
+          {{ keycloak_image }}
+          start --import-realm
+
+    # Health check
+    - name: Wait for Keycloak to become ready
+      ansible.builtin.uri:
+        url: http://localhost:8080/auth/health/ready
+        method: GET
+        status_code: 200
+      register: result
+      retries: 15
+      delay: 5
+      until: result.status == 200

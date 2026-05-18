@@ -1,0 +1,16 @@
+[Unit]
+Description=Media Service
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/rp2526-snb3/media
+ExecStart=/usr/bin/node /home/ubuntu/rp2526-snb3/media/server.js
+EnvironmentFile=/home/ubuntu/rp2526-snb3/media/.env
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

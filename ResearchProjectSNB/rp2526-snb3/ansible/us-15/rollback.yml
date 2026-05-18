@@ -1,0 +1,66 @@
+---
+- name: Rollback application to previous version
+  hosts: app_servers:workers
+  become: true
+  gather_facts: false
+
+  tasks:
+
+    - name: Checkout previous release
+      become_user: ubuntu
+      ansible.builtin.git:
+        repo: "https://{{ github_token }}@github.com/PXL-RP/rp2526-snb3.git"
+        dest: "{{ project_root }}"
+        version: "{{ previous_release_tag }}"
+        force: yes
+
+    # Install dependencies
+
+    - name: Install API dependencies
+      when: "'app_servers' in group_names"
+      become_user: ubuntu
+      ansible.builtin.command: npm ci
+      args:
+        chdir: "{{ project_root }}/api"
+
+    - name: Install media dependencies
+      when: "'app_servers' in group_names"
+      become_user: ubuntu
+      ansible.builtin.command: npm ci
+      args:
+        chdir: "{{ project_root }}/media"
+
+    - name: Install processor dependencies
+      when: "'workers' in group_names"
+      become_user: ubuntu
+      ansible.builtin.command: npm ci
+      args:
+        chdir: "{{ project_root }}/processor"
+
+    # Reload systemd and restart services
+
+    - name: Reload systemd
+      when: "'app_servers' in group_names or 'workers' in group_names"
+      ansible.builtin.systemd:
+        daemon_reload: yes
+
+    - name: Restart API service
+      when: "'app_servers' in group_names"
+      ansible.builtin.systemd:
+        name: pxlcensor-api
+        enabled: true
+        state: restarted
+
+    - name: Restart media service
+      when: "'app_servers' in group_names"
+      ansible.builtin.systemd:
+        name: pxlcensor-media
+        enabled: true
+        state: restarted
+
+    - name: Restart processor service
+      when: "'workers' in group_names"
+      ansible.builtin.systemd:
+        name: pxlcensor-processor
+        enabled: true
+        state: restarted

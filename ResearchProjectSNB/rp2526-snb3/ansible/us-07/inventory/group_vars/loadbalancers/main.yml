@@ -1,0 +1,4 @@
+---
+api_external_url: "http://rp-snb3.me/api"
+proxy_pass_api: "http://10.0.4.32:8080/"
+proxy_pass_media: "http://10.0.4.32:8081/"

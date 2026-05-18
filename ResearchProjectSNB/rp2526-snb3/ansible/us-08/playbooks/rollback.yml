@@ -1,0 +1,4 @@
+---
+- import_playbook: deploy_media.yml
+- import_playbook: deploy_processor.yml
+- import_playbook: deploy_api.yml

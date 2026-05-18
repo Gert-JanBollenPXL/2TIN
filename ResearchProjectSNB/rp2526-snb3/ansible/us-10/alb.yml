@@ -1,0 +1,70 @@
+#
+# TE DOEN VOOR HET RUNNEN VAN DIT SCRIPT:
+#
+# ssh-add keypem pad
+# aws configure (gegevens in aws access portal / nimbus)
+# pip3 install boto3 botocore --break-system-packages
+
+- name: Setup Application Load Balancer
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: Modify the target group with a custom health check
+      community.aws.elb_target_group:
+        name: "{{ target_group_name }}"
+        region: "{{ region }}"
+        protocol: http
+        port: 80
+        vpc_id: "{{ vpc }}"
+        health_check_protocol: http
+        health_check_path: /health_check
+        health_check_port: 80
+        successful_response_codes: 200
+        health_check_interval: 15
+        health_check_timeout: 3
+        healthy_threshold_count: 4
+        unhealthy_threshold_count: 3
+        targets:
+          - Id: "{{ nginx_id }}"
+            Port: 80
+        state: present
+
+
+    - name: Create Application Load Balancer
+      amazon.aws.elb_application_lb:
+        name: "{{ alb_name }}"
+        region: "{{ region }}"
+        subnets: "{{ subnets}}"
+        security_groups: "{{ sg }}"
+        scheme: internet-facing
+        state: present     
+        listeners:
+          - Protocol: HTTP
+            Port: 80
+            DefaultActions:
+              - Type: redirect
+                RedirectConfig:
+                  Protocol: HTTPS
+                  Port: "443"
+                  # aws kan deze gegevens zelf ophalen
+                  Host: "#{host}" 
+                  Path: "/#{path}"   
+                  Query: "#{query}"
+                  # code voor omgezette url
+                  StatusCode: HTTP_301
+          - Protocol: HTTPS
+            Port: 443
+            SslPolicy: "{{ ssl_policy }}"
+            Certificates:
+              - CertificateArn: "{{ https_certificaat }}"
+              - CertificateArn: "{{ https_certificaat_www }}"
+            DefaultActions:
+              - Type: forward
+                TargetGroupArn: "{{ target_group }}"
+      register: alb_result
+    
+    - name: Debug ALB result
+      ansible.builtin.debug:
+        var: alb_result

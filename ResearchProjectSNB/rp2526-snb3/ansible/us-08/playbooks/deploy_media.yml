@@ -1,0 +1,26 @@
+---
+- name: Deploy Media
+  hosts: app_servers
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Fetch tags
+      ansible.builtin.command: git fetch --tags origin
+      args:
+        chdir: "{{ app_dir }}"
+
+    - name: Checkout requested tag
+      ansible.builtin.command: git checkout {{ release_tag }}
+      args:
+        chdir: "{{ app_dir }}"
+
+    - name: Install Media dependencies
+      ansible.builtin.command: npm ci
+      args:
+        chdir: "{{ app_dir }}/media"
+
+    - name: Restart Media service
+      ansible.builtin.systemd:
+        name: media
+        state: restarted
+        enabled: true

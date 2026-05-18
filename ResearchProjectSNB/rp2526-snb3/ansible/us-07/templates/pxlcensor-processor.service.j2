@@ -1,0 +1,16 @@
+[Unit]
+Description=Python Processor Service
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/rp2526-snb3/processor
+ExecStart=/usr/bin/node /home/ubuntu/rp2526-snb3/processor/worker.js
+EnvironmentFile=/home/ubuntu/rp2526-snb3/processor/.env
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
