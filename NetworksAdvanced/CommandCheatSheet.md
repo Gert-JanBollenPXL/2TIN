@@ -393,10 +393,10 @@ Router(config-if)# ip helper-address 10.199.64.66
 | Enable OSPF using ip ospf command on each interface   | ```Router(config)# interface [interface-id] ``` <br> ```Router(config-if)# ip ospf [process-id] area 0```     |
 | Prevent transmission of routing messages     | ```Router(config)# router ospf [process-id]``` <br> ```Router(config-router)# passive-interface [interface-id]```     |
 | Verify OSPF neighbours     | ```Router# show ip ospf neighbour ```     |
-| Specify ospf priority     | ```Router(config)# interface [interface-id] ``` <br> ```Router(config-if)# ip ospf priority [priority(0-255)]     |
-| Manually set OSPF cost value     | ```Router(config)# interface [interface-id] ``` <br> ```Router(config-if)# ip ospf cost [cost]     |
+| Specify ospf priority     | ```Router(config)# interface [interface-id] ``` <br> ```Router(config-if)# ip ospf priority [priority(0-255)]```     |
+| Manually set OSPF cost value     | ```Router(config)# interface [interface-id] ``` <br> ```Router(config-if)# ip ospf cost [cost]```     |
 | Modify OSPFv2 intervals     | ```Router(config-if)# ip ospf hello-interval [seconds] ``` <br> ```Router(config-if)# ip ospf dead-interval [seconds]```    |
-| Propagate a default static route in OSPF     | edge router already has: default static route:  ```Router(config-if)# ip route 0.0.0.0 0.0.0.0 [interface-id of internet facing interface] ``` <br> ```Router(config)# router ospf 10``` <br> ```Router(config-router)# default-information originate ```    |
+| Propagate a default static route in OSPF     | edge router already has a default static route: <br> ```Router(config-if)# ip route 0.0.0.0 0.0.0.0 [interface-id of internet facing interface] ``` <br> ```Router(config)# router ospf 10``` <br> ```Router(config-router)# default-information originate ```    |
 
 ### 2.2 ACLs for IPv4 configuration
 #### 2.2.1 Numbered standard IPv4 ACL
@@ -643,7 +643,7 @@ To verify NAT translations, use:
 
 **Step 1:** Define the pool of addresses (using the starting and ending IPv4 address of the pool) and netmask or prefix-length to indicate which address bits belong to the network and which bits belong to the host in that range.
 **Step 2:** Configure a standard ACL to identify (permit) only those addresses that are to be translated (remember the implicit deny)
-**Step 3:** Bind the ACL to the pool, using the following command syntax: ```Router(config)# ip nat inside source list {access-list-number | access-list-name} pool pool-name```
+**Step 3:** Bind the ACL to the pool, using the following command syntax: <br> ```Router(config)# ip nat inside source list {access-list-number | access-list-name} pool pool-name```
 **Step 4:** Identify which interfaces are inside, in relation to NAT; this will be any interface that connects to the inside network.
 **Step 5:** Identify which interfaces are outside, in relation to NAT; this will be any interface that connects to the outside network.
 
