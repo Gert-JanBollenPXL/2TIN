@@ -8,22 +8,37 @@ Networks Advanced
     - [1.1.1 Initial Switch Settings](#111-initial-switch-settings)
     - [1.1.2 Configure Switch Ports](#112-configure-switch-ports)
     - [1.1.3 Switch Verification Commands](#113-switch-verification-commands)
-  - [1.2 Secure Remote Access](#12-secure-remote-access)
-    - [1.2.1 Configure SSH](#121-configure-ssh)
-  - [1.3 Basic Router Configuration](#13-basic-router-configuration)
-    - [1.3.1 Configure Router Interfaces](#131-configure-router-interfaces)
-  - [1.4 Verify Directly Connected Networks](#14-verify-directly-connected-networks)
-  - [1.5 VLANs](#15-vlans)
-    - [1.5.1 VLAN Configuration](#151-vlan-configuration)
-    - [1.5.2 VLAN Port Assignment](#152-vlan-port-assignment)
-  - [1.6 VLAN Trunks](#16-vlan-trunks)
-  - [1.7 Inter-VLAN Routing](#17-inter-vlan-routing)
-    - [1.7.1 Router-on-a-Stick Inter-VLAN Routing](#171-router-on-a-stick-inter-vlan-routing)
-  - [1.8 EtherChannel](#18-etherchannel)
+    - [1.1.4 Secure Remote Access](#114-secure-remote-access)
+    - [1.1.5 Configure SSH](#115-configure-ssh)
+    - [1.1.6 Basic Router Configuration](#116-basic-router-configuration)
+    - [1.1.7 Configure Router Interfaces](#117-configure-router-interfaces)
+    - [1.1.8 Verify Directly Connected Networks](#118-verify-directly-connected-networks)
+
+  - [1.2 VLANs](#12-vlans)
+    - [1.2.1 VLAN Configuration](#121-vlan-configuration)
+    - [1.2.2 VLAN Port Assignment](#122-vlan-port-assignment)
+    - [1.2.3 VLAN Trunks](#123-vlan-trunks)
+
+  - [1.3 Inter-VLAN Routing](#13-inter-vlan-routing)
+    - [1.3.1 Router on a Stick Inter-VLAN Routing](#131-router-on-a-stick-inter-vlan-routing)
+
+  - [1.4 Spanning Tree (STP)](#14-spanning-tree-stp)
+
+  - [1.5 First Hop Redundancy Protocol (VRRP/FHRP)](#15-first-hop-redundancy-protocol-vrrpfhrp)
+    - [1.5.1 Interface Tracking](#151-interface-tracking)
+
+  - [1.6 Etherchannel](#16-etherchannel)
+
+  - [1.7 DHCP](#17-dhcp)
+
+  - [1.8 Network Time Protocol (NTP)](#18-network-time-protocol-ntp)
+
   - [1.9 IP Static Routing](#19-ip-static-routing)
 
 - [2. Enterprise Networking, Security and Automation](#2-enterprise-networking-security-and-automation)
+
   - [2.1 Single-Area OSPFv2 Configuration](#21-single-area-ospfv2-configuration)
+
   - [2.2 ACLs for IPv4 Configuration](#22-acls-for-ipv4-configuration)
     - [2.2.1 Numbered Standard IPv4 ACL](#221-numbered-standard-ipv4-acl)
     - [2.2.2 Named Standard IPv4 ACL](#222-named-standard-ipv4-acl)
@@ -31,25 +46,29 @@ Networks Advanced
     - [2.2.4 Numbered Standard IPv4 ACL Example](#224-numbered-standard-ipv4-acl-example)
     - [2.2.5 Named Standard IPv4 ACL Example](#225-named-standard-ipv4-acl-example)
     - [2.2.6 Secure VTY Ports with a Standard IPv4 ACL](#226-secure-vty-ports-with-a-standard-ipv4-acl)
+
   - [2.3 Extended IPv4 ACL Configuration](#23-extended-ipv4-acl-configuration)
     - [2.3.1 Numbered Extended IPv4 ACLs](#231-numbered-extended-ipv4-acls)
     - [2.3.2 Examples](#232-examples)
     - [2.3.3 Named Extended IPv4 ACLs](#233-named-extended-ipv4-acls)
+
   - [2.4 NAT for IPv4](#24-nat-for-ipv4)
     - [2.4.1 Static NAT](#241-static-nat)
-    - [2.4.2 Dynamic NAT](#242-dynamic-nat)
+    - [2.4.2 Dynamic NAT](#242-dyanmic-nat)
     - [2.4.3 PAT](#243-pat)
+
   - [2.5 Network Management](#25-network-management)
     - [2.5.1 SNMPv2 Configuration](#251-snmpv2-configuration)
     - [2.5.2 Secure SNMP with ACLs](#252-secure-snmp-with-acls)
     - [2.5.3 SYSLOG Configuration](#253-syslog-configuration)
     - [2.5.4 SNMPv3 Configuration](#254-snmpv3-configuration)
     - [2.5.5 SPAN and Wireshark Verification](#255-span-and-wireshark-verification)
+
 ---
 
-## Switching, routing and wireless essentials (SRWE)
-### 1. Basic device configuration
-#### 1.1 Initial switch settings
+## 1. Switching, routing and wireless essentials (SRWE)
+### 1.1 Basic device configuration
+#### 1.1.1 Initial switch settings
 
 |       |  |
 | :----------- | :----------- |
@@ -65,7 +84,7 @@ Networks Advanced
 | Verify ipv4   | ```S1# show ip interface brief```    |
 | Verify ipv6   | ```S1# show ipv6 interface brief```    |
 
-#### 1.2 Configure switch ports
+#### 1.1.2 Configure switch ports
 
 |       |  |
 | :----------- | :----------- |
@@ -75,7 +94,7 @@ Networks Advanced
 | Configure interface duplex (default: auto)    | ```S1(config-if)# duplex full```   |
 | Configure interface speed (default: auto)    | ```S1(config-if)# speed 100```   |
 
-##### 1.2.1 Switch verification commands
+#### 1.1.3 Switch verification commands
 
 |       |  |
 | :----------- | :----------- |
@@ -90,8 +109,8 @@ Networks Advanced
 | Display ipv6 information of interface     | ```S1# show ipv6 interface [interface-id] ```     |
 | Display the MAC address table      | ```S1# show mac-address-table ``` OR ```S1# show mac address-table ```    |
 
-#### 1.3 Secure remote access
-##### 1.3.1 Configure ssh
+#### 1.1.4 Secure remote access
+#### 1.1.5 Configure ssh
 
 |       |  |
 | :----------- | :----------- |
@@ -103,7 +122,7 @@ Networks Advanced
 | Configure vty lines      | ```S1(config-line)# line vty 0 15 ``` <br> ```S1(config-line)# transport input ssh ``` <br> ```S1(config-line)# login local ``` <br> ```S1(config-line)# exit ```    |
 | Enable SSH version 2      | ```S1(config)# ip ssh version 2 ```     |
 
-#### 1.4 Basic router configuration
+#### 1.1.6 Basic router configuration
 
 |       |  |
 | :----------- | :----------- |
@@ -115,7 +134,7 @@ Networks Advanced
 | Enable password encryption      | ```R1(config)# service password-encryption ```     |
 | Configure motd      | ```R1(config)# banner motd [message] ```     |
 
-##### 1.4.1 Configure router interfaces
+#### 1.1.7 Configure router interfaces
 
 |       |  |
 | :----------- | :----------- |
@@ -127,7 +146,7 @@ Networks Advanced
 | Activate the interface     | ```R1(config-if)# no shutdown ```     |
 | Configure loopback address     | ```R1(config)# interface loopback [number] ``` <br> ```R1(config-if)# ip address [ipv4 address] [subnet-mask] ```     |
 
-#### 1.5 Verify Directly connected networks
+#### 1.1.8 Verify Directly connected networks
 
 |       |  |
 | :----------- | :----------- |
@@ -140,8 +159,8 @@ Networks Advanced
 
 > It is also possible to filter "show" commands, do this by piping ("|") the output of the "show" command you used, you can use "section", "include", "exclude" and "begin" to filter the output.
 
-### 2. VLANs
-#### 2.1 VLAN configuration
+### 1.2 VLANs
+#### 1.2.1 VLAN configuration
 
 |       |  |
 | :----------- | :----------- |
@@ -149,7 +168,7 @@ Networks Advanced
 | Create a VLAN with a valid id number     | ```Switch(config)# vlan [vlan-id] ```     |
 | Specify name for the created VLAN     | ```Switch(config-vlan)# name [vlan-name] ```     |
 
-##### 2.1.1 VLAN port assignment
+#### 1.2.2 VLAN port assignment
 
 |       |  |
 | :----------- | :----------- |
@@ -159,13 +178,13 @@ Networks Advanced
 | Set the port to access mode     | ```Switch(config-if)# switchport mode access ```     |
 | Assign the port to a vlan   | ```Switch(config-if)# switchport access vlan [vlan-id] ```     |
 
-#### 2.2 VLAN trunks
+#### 1.2.3 VLAN trunks
 
 |       |  |
 | :----------- | :----------- |
 | Task     | Command |
 | Enter interface configuration mode    | ```Switch(config)# interface [interface id] ```     |
-| Set the port to trunking mode   | ```Switch(config-if)# switchport mode trunk] ```     |
+| Set the port to trunking mode   | ```Switch(config-if)# switchport mode trunk ```     |
 | Set the native vlan    | ```Switch(config-if)# switchport trunk native vlan [vlan-id] ```     |
 | Specify the list of allowed VLANs    | ```Switch(config-if)# switchport trunk allowed vlan [vlan-id-list] ```     |
 | Verify    | ```Switch# show interface trunk ```     |
@@ -173,8 +192,8 @@ Networks Advanced
 | Disable generation of DTP frames    | ```Switch(config-if)# switchport nonegotiate ```     |
 | re-enable generation of DTP frames    | ```Switch(config-if)# switchport mode dynamic auto ```     |
 
-### 3. Inter-VLAN routing
-#### 3.1 Router on a stick inter-VLAN routing
+### 1.3 Inter-VLAN routing
+#### 1.3.1 Router on a stick inter-VLAN routing
 
 ![Vlan_trunks_config](images/image.png)
 S1 configuration:
@@ -248,7 +267,72 @@ R1(config-if)# no shut
 R1(config-if)# end
 ```
 
-### 4. Etherchannel
+### 1.4 Spanning tree (STP)
+
+| Task                               | Command                                                         |
+| :--------------------------------- | :-------------------------------------------------------------- |
+| Enable Rapid-PVST                  | `Switch(config)# spanning-tree mode rapid-pvst`                 |
+| Extend system-id                   | `Switch(config)# spanning-tree extend system-id`                |
+| Configure root primary             | `Switch(config)# spanning-tree vlan [vlan-list] root primary`   |
+| Configure root secondary           | `Switch(config)# spanning-tree vlan [vlan-list] root secondary` |
+| Configure PortFast                 | `Switch(config-if)# spanning-tree portfast`                     |
+| Configure point-to-point link type | `Switch(config-if)# spanning-tree link-type point-to-point`     |
+| Verify spanning-tree               | `Switch# show spanning-tree`                                    |
+
+Example:
+```lua
+Switch(config)# spanning-tree mode rapid-pvst
+Switch(config)# spanning-tree extend system-id
+Switch(config)# spanning-tree vlan 10,20,30,40,99 root primary
+# Portfast example
+Switch(config)# interface GigabitEthernet1/0/21
+Switch(config-if)# switchport mode access
+Switch(config-if)# spanning-tree portfast
+# Point-to-point example
+Switch(config)# interface Port-channel1
+Switch(config-if)# spanning-tree link-type point-to-point
+```
+
+> PortFast should only be enabled on end-device access ports.
+
+### 1.5 First hop redundancy protocol (VRRP/FHRP)
+
+| Task                         | Command                                                                 |
+| :--------------------------- | :---------------------------------------------------------------------- |
+| Configure virtual gateway IP | `Router(config-if)# vrrp [group-id] ip [virtual-ip]`                    |
+| Configure VRRP priority      | `Router(config-if)# vrrp [group-id] priority [priority]`                |
+| Enable preemption            | `Router(config-if)# vrrp [group-id] preempt`                            |
+| Configure delayed preemption | `Router(config-if)# vrrp [group-id] preempt delay minimum [seconds]`    |
+| Track interface state        | `Router(config-if)# vrrp [group-id] track [track-id] decrement [value]` |
+| Verify VRRP                  | `Router# show vrrp brief`                                               |
+
+#### 1.5.1 Interface tracking
+
+| Task                   | Command                                                                   |
+| :--------------------- | :------------------------------------------------------------------------ |
+| Create tracking object | `Router(config)# track [track-id] interface [interface-id] line-protocol` |
+| Configure delay timer  | `Router(config-track)# delay down [seconds]`                              |
+| Verify tracking        | `Router# show track`                                                      |
+
+> Interface tracking monitors the status of an interface and can automatically trigger actions (such as lowering VRRP priority) when the interface goes down.
+
+Example:
+```lua
+Router(config)# track 1 interface GigabitEthernet0/0/1 line-protocol
+Router(config-track)# delay down 2
+Router(config-track)# end
+Router(config)# interface g0/0/0.10
+Router(config-if)# encapsulation dot1Q 10
+Router(config-if)# ip address 172.16.1.130 255.255.255.240
+Router(config-if)# vrrp 10 ip 172.16.1.129
+Router(config-if)# vrrp 10 priority 110
+Router(config-if)# vrrp 10 track 1 decrement 50
+Router(config-if)# vrrp 10 preempt delay minimum 30
+```
+
+> VRRP preempt allows a higher-priority router to automatically take back the active gateway role after it comes back online.
+
+### 1.6 Etherchannel
 
 |       |  |
 | :----------- | :----------- |
@@ -262,7 +346,29 @@ R1(config-if)# end
 | Verify all etherchannels    | ```Switch# show etherchannel summary ```     |
 | Verify all port channels    | ```Switch# show etherchannel port-channel ```     |
 
-### 5. IP static routing
+### 1.7 DHCP
+
+| Task                    | Command                                                 |
+| :---------------------- | :------------------------------------------------------ |
+| Configure DHCP relay    | `Router(config-if)# ip helper-address [dhcp-server-ip]` |
+| Verify interface config | `Router# show running-config interface [interface-id]`  |
+
+Example:
+```lua
+Router(config)# interface g0/0/0.40
+Router(config-if)# ip helper-address 10.199.64.66
+```
+> ```ip helper-address``` forwards DHCP broadcasts to a remote DHCP server.
+
+### 1.8 Network time protocol (NTP)
+
+| Task                    | Command                                  |
+| :---------------------- | :--------------------------------------- |
+| Configure NTP server    | `Router(config)# ntp server [server-ip]` |
+| Verify NTP associations | `Router# show ntp associations`          |
+| Verify NTP status       | `Router# show ntp status`                |
+
+### 1.9 IP static routing
 
 |       |  |
 | :----------- | :----------- |
@@ -274,8 +380,8 @@ R1(config-if)# end
 
 ---
 
-## Enterprise networking, security and automation
-### 1. Single-area OSPFv2 configuration
+## 2. Enterprise networking, security and automation
+### 2.1 Single-area OSPFv2 configuration
 
 |       |  |
 | :----------- | :----------- |
@@ -292,8 +398,8 @@ R1(config-if)# end
 | Modify OSPFv2 intervals     | ```Router(config-if)# ip ospf hello-interval [seconds] ``` <br> ```Router(config-if)# ip ospf dead-interval [seconds]```    |
 | Propagate a default static route in OSPF     | edge router already has: default static route:  ```Router(config-if)# ip route 0.0.0.0 0.0.0.0 [interface-id of internet facing interface] ``` <br> ```Router(config)# router ospf 10``` <br> ```Router(config-router)# default-information originate ```    |
 
-### 2. ACLs for IPv4 configuration
-#### 2.1 Numbered standard IPv4 ACL
+### 2.2 ACLs for IPv4 configuration
+#### 2.2.1 Numbered standard IPv4 ACL
 
 ```Router(config)# access-list access-list-number {deny | permit | remark text} source [source-wildcard] [log]```
 
@@ -307,7 +413,7 @@ R1(config-if)# end
 | ```source-wildcard```     | (optional) if omitted, defaults to 0.0.0.0    |
 | ```log```     | (optional) sends informational message whenever ACE is matched    |
 
-#### 2.2 Named standard IPv4 ACL
+#### 2.2.2 Named standard IPv4 ACL
 
 |       |  |
 | :----------- | :----------- |
@@ -315,11 +421,11 @@ R1(config-if)# end
 | Enter named standard configuration mode | ```Router(config)# ip access-list standard [access-list-name]```    |
 | Remove a named standard IPv4 ACL | ```Router(config)# no ip access-list standard [access-list-name]```    |
 
-#### 2.3 Apply a standard IPv4 ACL
+#### 2.2.3 Apply a standard IPv4 ACL
 
 ```Router(config-if) # ip access-group {access-list-number | access-list-name} {in | out}```
 
-#### 2.4 Numbered standard IPv4 ACL example
+#### 2.2.4 Numbered standard IPv4 ACL example
 
 ![Numbered_ACL_example](images/image1.png)
 
@@ -340,7 +446,7 @@ R1(config-if)# end
 R1#
 ```
 
-#### 2.5 Named standard IPv4 ACL example
+#### 2.2.5 Named standard IPv4 ACL example
 
 ![Named_ACL_example](images/image1.png)
 
@@ -361,7 +467,7 @@ R1(config-if)# end
 R1#
 ```
 
-#### 2.6 Secure VTY ports with a standard IPv4 ACL
+#### 2.2.6 Secure VTY ports with a standard IPv4 ACL
 
 ```R1(config-line)# access-class {access-list-number | access-list-name} { in | out } ```
 
@@ -388,8 +494,8 @@ R1(config-line)# end
 R1#
 ```
 
-### 3. Extended IPv4 ACL configuration
-#### 3.1 Numbered extended IPv4 ACLs 
+### 2.3 Extended IPv4 ACL configuration
+#### 2.3.1 Numbered extended IPv4 ACLs 
 
 ```Router(config)# access-list access-list-number {deny | permit | remark text} protocol source source-wildcard [operator {port}] destination destination-wildcard [operator {port}] [established] [log]```
 
@@ -414,7 +520,7 @@ The command to apply an extended IPv4 ACL to an interface is the same as the com
 
 ```Router(config-if)# ip access-group {access-list-number | access-list-name} {in | out}```
 
-#### 3.2 Examples
+#### 2.3.2 Examples
 
 Extended ACLs can filter on different port number and port name options. This example configures an extended ACL 100 to filter HTTP traffic. The first ACE uses the www port name. The second ACE uses the port number 80. Both ACEs achieve exactly the same result.
 
@@ -447,7 +553,7 @@ R1(config-if)# exit
 R1(config)#
 ```
 
-#### 3.3 Named extended IPv4 ACLs
+#### 2.3.3 Named extended IPv4 ACLs
 
 To create a named extended ACL, use the following global configuration command. This command enters the named extended configuration mode. Recall that ACL names are alphanumeric, case sensitive, and must be unique.
 
@@ -498,8 +604,8 @@ R1(config-ext-nacl)# 10 permit tcp 192.168.10.0 0.0.0.255 any eq www
 R1(config-ext-nacl)# end
 ```
 
-### 4. NAT for IPv4
-#### 4.1 Static NAT
+### 2.4 NAT for IPv4
+#### 2.4.1 Static NAT
 
 There are two basic tasks when configuring static NAT translations:
 
@@ -531,7 +637,7 @@ To verify NAT translations, use:
 | Show active NAT translations | ```R2# show ip nat translations```    |
 | Show information about the total number of active NAT translations | ```R2# show ip nat statistics```    |
 
-#### 4.2 Dyanmic NAT
+#### 2.4.2 Dyanmic NAT
 
 ![Dynamic_NAT](images/image3.png)
 
@@ -552,7 +658,7 @@ R2(config)# interface serial 0/1/1
 R2(config-if)# ip nat outside
 ```
 
-#### 4.3 PAT
+#### 2.4.3 PAT
 
 To configure PAT to use a single IPv4 address, simply add the keyword overload to the ip nat inside source command. The rest of the configuration is the similar to static and dynamic NAT configuration except that with PAT, multiple hosts can use the same public IPv4 address to access the internet.
 
@@ -566,8 +672,9 @@ R2(config-if)# exit
 R2(config)# interface Serial0/1/1
 R2(config-if)# ip nat outside
 ```
-### 5. Network management
-#### 5.1 SNMPv2 Configuration
+## 2.5 Network Management
+
+### 2.5.1 SNMPv2 Configuration
 
 | Task                                  | Command                                                                    |
 | :------------------------------------ | :------------------------------------------------------------------------- |
@@ -580,17 +687,29 @@ R2(config-if)# ip nat outside
 | Enable configuration traps            | `Router(config)# snmp-server enable traps config`                          |
 | Enable syslog traps                   | `Router(config)# snmp-server enable traps syslog`                          |
 
+Verify SNMPv2 configuration:
 
-| Task                       | Command                        |
-| :------------------------- | :----------------------------- |
-| Verify SNMP status         | `Router# show snmp`            |
-| Verify community strings   | `Router# show snmp community`  |
-| Verify configured hosts    | `Router# show snmp host`       |
-| Verify engineID            | `Router# show snmp engineID`   |
-| Verify SNMP running config | ```Router# show running-config section snmp``` |
+| Task                       | Command                                    |
+| :------------------------- | :----------------------------------------- |
+| Verify SNMP status         | `Router# show snmp`                        |
+| Verify community strings   | `Router# show snmp community`              |
+| Verify configured hosts    | `Router# show snmp host`                   |
+| Verify engineID            | `Router# show snmp engineID`               |
+| Verify SNMP running config | `Router# show running-config section snmp` |
 
+Example:
 
-#### 5.3 Secure SNMP with ACLs
+```lua
+Router(config)# snmp-server community SNMP-RO ro
+Router(config)# snmp-server community SNMP-RW rw
+Router(config)# snmp-server host 10.199.64.67 version 2c SNMP-RO
+Router(config)# snmp-server enable traps config
+Router(config)# snmp-server enable traps syslog
+```
+
+> SNMPv2 allows network devices to be monitored and managed remotely.
+
+### 2.5.2 Secure SNMP with ACLs
 
 Configure ACL for SNMP access:
 
@@ -600,28 +719,29 @@ Router(config-std-nacl)# permit host 10.199.64.67
 Router(config-std-nacl)# deny any
 ```
 
-Apply ACL to community strings
+Apply ACL to SNMP community strings:
 
 ```lua
 Router(config)# snmp-server community SNMP-RO ro ACL-SNMP
 Router(config)# snmp-server community SNMP-RW rw ACL-SNMP
 ```
-Configure SNMP notify community
+
+Configure SNMP notify community:
 
 ```lua
 Router(config)# snmp-server community SNMP-NOTIFY ro
 Router(config)# snmp-server host 10.199.64.67 version 2c SNMP-NOTIFY
 Router(config)# snmp-server host 10.199.64.67 informs version 2c SNMP-NOTIFY
 ```
-To verify the secure SNMP configuration
+
+Verify secure SNMP configuration:
 
 | Task                     | Command                       |
 | :----------------------- | :---------------------------- |
 | Verify community strings | `Router# show snmp community` |
 | Verify SNMP hosts        | `Router# show snmp host`      |
 
-
-#### 5.4 SYSLOG Configuration
+### 2.5.3 SYSLOG Configuration
 
 Configure SYSLOG server:
 
@@ -629,13 +749,14 @@ Configure SYSLOG server:
 Router(config)# logging host 10.199.64.134
 Router(config)# logging trap informational
 ```
-Configure SYSLOG traps via SNMP
+
+Configure SYSLOG traps via SNMP:
 
 ```lua
 Router(config)# snmp-server enable traps syslog
 ```
 
-To verify SYSLOG configuration
+Verify SYSLOG configuration:
 
 | Task                        | Command                |
 | :-------------------------- | :--------------------- |
@@ -647,34 +768,46 @@ Expected output should include:
 trap logging: level informational
 ```
 
-#### 5.5 SNMPv3 Configuration
+> SYSLOG allows network devices to send log messages to a centralized logging server.
 
-Create the SNMP view, group and user:
+### 2.5.4 SNMPv3 Configuration
+
+Create the SNMP view, group, and user:
+
 ```lua
 Router(config)# snmp-server view SNMP-VIEW iso included
 Router(config)# snmp-server group SNMP-GROUP v3 priv read SNMP-VIEW
 Router(config)# snmp-server user SNMP-USER SNMP-GROUP v3 auth sha wachtwoord priv aes 128 wachtwoord
 ```
-Verify SNMPv3 configuration
+
+Verify SNMPv3 configuration:
 
 | Task               | Command                   |
 | :----------------- | :------------------------ |
 | Verify SNMP groups | `Router# show snmp group` |
 | Verify SNMP users  | `Router# show snmp user`  |
 
-#### 5.6 SPAN and Wireshark Verification
+> SNMPv3 adds authentication and encryption for secure network management.
+
+### 2.5.5 SPAN and Wireshark Verification
+
+Configure SPAN for VLAN traffic:
 
 ```lua
 Switch(config)# monitor session 1 source vlan 40 both
 ```
-Mirror interface traffic
+
+Mirror interface traffic:
 
 ```lua
 Switch(config)# monitor session 1 source interface GigabitEthernet1/0/21
 Switch(config)# monitor session 1 destination interface GigabitEthernet1/0/19
 ```
-Verify SPAN session
+
+Verify SPAN session:
 
 | Task                   | Command                          |
 | :--------------------- | :------------------------------- |
 | Verify monitor session | `Switch# show monitor session 1` |
+
+> SPAN mirrors network traffic to another interface so it can be analyzed using tools such as Wireshark.
