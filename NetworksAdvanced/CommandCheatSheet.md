@@ -387,7 +387,7 @@ Router(config-if)# ip helper-address 10.199.64.66
 | :----------- | :----------- |
 | Task     | Command |
 | Enter router configuration mode     | ```Router(config)# router ospf [process-id] ```     |
-| Specify name for the created VLAN     | ```Router(config-router)# router-id [router-id] ```     |
+| Specify router id for ospf (must be IPv4)    | ```Router(config-router)# router-id [router-id] ```     |
 | Enable OSPF using network statements (network)     | ```Router(config-router)# network [network-ip-address] [network-wildcard-mask] area 0 ```     |
 | Enable OSPF using network statements (interface)     | ```Router(config-router)# network [interface-ip-address] 0.0.0.0 area 0 ```     |
 | Enable OSPF using ip ospf command on each interface   | ```Router(config)# interface [interface-id] ``` <br> ```Router(config-if)# ip ospf [process-id] area 0```     |
@@ -424,6 +424,8 @@ Router(config-if)# ip helper-address 10.199.64.66
 #### 2.2.3 Apply a standard IPv4 ACL
 
 ```Router(config-if) # ip access-group {access-list-number | access-list-name} {in | out}```
+
+> Place standard ACLs as close to the destination as possible. Standard ACLs only filter by source IP, so placing them at the source can accidentally block traffic destined for other networks.
 
 #### 2.2.4 Numbered standard IPv4 ACL example
 
@@ -498,6 +500,8 @@ R1#
 #### 2.3.1 Numbered extended IPv4 ACLs 
 
 ```Router(config)# access-list access-list-number {deny | permit | remark text} protocol source source-wildcard [operator {port}] destination destination-wildcard [operator {port}] [established] [log]```
+
+> Place extended ACLs as close to the source as possible. This prevents unwanted traffic from traversing the entire network.
 
 |       |  |
 | :----------- | :----------- |
