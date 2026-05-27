@@ -1,0 +1,83 @@
+Vraag 7:
+Op R01:
+
+!
+ip nat pool NAT-POOL1 10.199.66.132 10.199.66.132 netmask 255.255.255.192
+!
+access-list 1 permit 172.16.1.176 0.0.0.15
+!
+ip nat inside source list 1 pool NAT-POOL1 OVERLOAD
+!
+interface g0/0/0.40
+ ip nat outside
+!
+interface GigabitEthernet0/0/1
+ ip nat inside
+!
+
+Vraag 8:
+Op R01:
+
+!
+ip access-list extended SSH-VTY
+ permit tcp host 10.199.64.134 any eq 22 log
+ deny tcp host 10.199.64.137 any eq 22 log
+ permit tcp 172.16.1.128 0.0.0.15 any eq 22 log
+!
+line vty 0 15
+ access-class SSH-VTY in
+!
+
+Vraag 9:
+Op R01:
+
+! SNMPv2 community strings
+snmp-server community SNMP-RO ro
+snmp-server community SNMP-RW rw
+! SNMP server (Zabbix)
+snmp-server host 10.199.64.67 version 2c SNMP-RO
+! Configure SNMP informs
+snmp-server host 10.199.64.67 informs version 2c SNMP-RO
+! SNMP notifications
+snmp-server enable traps snmp authentication
+snmp-server enable traps config
+! Syslog trap messages
+snmp-server enable traps syslog
+!
+
+On Zabbix:
+Configuration => Hosts => Create Host
+Host tab:
+	- Host name: [DEVICE NAME] (LAB-R01-C02-R01-PE)
+	- Groups: existing group or create group (RACK-01R-PE)
+	- Interface: Add → SNMP
+		- IP address: [DEVICE MANAGEMENT IP] (172.16.1.130)
+		- Port: 161
+
+Templates → link new templates
+- add: Cisco IOS SNMP
+
+Macros:
+- Macro: {$SNMP_COMMUNITY}
+- Value: SNMP-RO
+
+Verify:
+
+Monitoring → Hosts:
+- SNMP square shows green on all devices
+
+Vraag 10:
+On both switches:
+
+!
+monitor session 1 source vlan 40 both
+!
+
+In wireshark:
+select "Ethernet", filter traffic on "bootp"
+
+Open a terminal and do:
+ipconfig /release
+ipconfig /renew "Ethernet"
+
+==> In wireshark you will see "DHCP release", "DHCP discover", "DHCP offer", "DHCP Request", "DHCP ACK"
