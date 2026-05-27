@@ -1,0 +1,95 @@
+EXTAR MET SERIAL KABEL
+
+! =========================
+! HOSTNAME
+! =========================
+hostname LAB-RA04-C01-R01
+
+interface serial 0/1/0
+ip address 192.168.10.1 255.255.255.252
+no shutdown
+
+
+ip route 172.16.4.128 255.255.255.240 192.168.10.2
+ip route 172.16.4.176 255.255.255.240 192.168.10.2
+
+configure terminal
+
+router ospf 10
+ network 192.168.10.0 0.0.0.3 area 0
+
+configure terminal
+
+no ip route 172.16.4.128 255.255.255.240 192.168.10.2
+no ip route 172.16.4.176 255.255.255.240 192.168.10.2
+
+! =========================
+! HOSTNAME
+! =========================
+hostname LAB-RA04-C02-R01
+
+interface serial 0/1/0
+ip address 192.168.10.2 255.255.255.252
+no shutdown
+
+
+interface serial 0/1/0
+clock rate 64000
+
+
+interface loopback0
+ ip address 172.16.4.130 255.255.255.240
+exit
+
+interface loopback1
+ ip address 172.16.4.178 255.255.255.240
+exit
+
+
+
+ip route 192.168.10.0 255.255.255.252 192.168.10.1
+
+configure terminal
+
+router ospf 10
+ network 192.168.10.0 0.0.0.3 area 0
+ network 172.16.4.128 0.0.0.15 area 0
+ network 172.16.4.176 0.0.0.15 area 0
+
+
+TESTEN:
+LAB-RA04-C01-R01#ping 192.168.10.2
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 192.168.10.2, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 28/28/29 ms
+LAB-RA04-C01-R01#
+*Apr  1 08:53:56.487: %SYS-5-CONFIG_I: Configured from console by console
+
+LAB-RA04-C01-R01#ping 172.16.4.130
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 172.16.4.130, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 29/29/29 ms
+LAB-RA04-C01-R01#ping 172.16.4.178
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 172.16.4.178, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 28/28/29 ms
+LAB-RA04-C01-R01#
+
+nu naar laptop van voor gaan en daarvanuit proberen pingen 
+
+LET OP!!
+OVERAL SSH OP ZETTEN, OOK DE ROUTERS !!!!!!
+GEEN 2 VERSCHILLENDE OSPF route doen (hou 10 op allebei)
+EN VOOR ROUTER 2:
+! =========================
+! OSPF
+! =========================
+router ospf 10
+ router-id 2.2.2.2
+
+ network 192.168.10.0 0.0.0.3 area 0
+ network 172.16.4.128 0.0.0.15 area 0
+ network 172.16.4.176 0.0.0.15 area 0

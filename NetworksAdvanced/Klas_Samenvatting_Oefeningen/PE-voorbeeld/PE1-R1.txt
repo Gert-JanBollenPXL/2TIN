@@ -1,0 +1,116 @@
+conf t
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname LAB-RA06-A02-R01
+!
+enable secret 9 $9$U/o5/rdpzBo3dU$ezKkrcpnnK.Bs2JAg4P.TYaVwZN4iCnm.jQI/5zV50w
+!
+no ip domain lookup
+ip domain name data.labnet.local
+!
+login on-success log
+!
+track 1 interface g0/0/1 line-protocol
+!
+interface g0/0/0
+ no ip address
+ no shutdown
+
+interface g0/0/0.10
+ encapsulation dot1Q 10
+ ip address 172.16.6.130 255.255.255.240
+ standby 10 ip 172.16.6.129
+ standby 10 priority 110
+ standby 10 preempt
+ ip helper-address 10.199.64.66
+ standby 10 track 1 decrement 50
+
+interface g0/0/0.20
+ encapsulation dot1Q 20
+ ip address 172.16.6.146 255.255.255.240
+ standby 20 ip 172.16.6.145
+ standby 20 priority 110
+ standby 20 preempt
+ ip helper-address 10.199.64.66
+ standby 20 track 1 decrement 50
+
+interface g0/0/0.30
+ encapsulation dot1Q 30
+ ip address 172.16.6.162 255.255.255.240
+ standby 30 ip 172.16.6.161
+ standby 30 priority 110
+ standby 30 preempt
+ ip helper-address 10.199.64.66
+ standby 30 track 1 decrement 50
+
+interface g0/0/0.40
+ encapsulation dot1Q 40
+ ip address 172.16.6.178 255.255.255.240
+ standby 40 ip 172.16.6.177
+ standby 40 priority 110
+ standby 40 preempt
+ ip helper-address 10.199.64.66
+ standby 40 track 1 decrement 50
+
+interface gigabitEthernet 0/0/0.99
+
+interface g0/0/1
+ ip address 10.199.66.142 255.255.255.192
+ no shutdown
+!
+!
+username admin privilege 15 secret 9 $9$Q1t0hJk90gY2kk$zLvy5EOsyArwVffveVoVQoj/CTo8oOZ4XVuHvgEXEy6
+!
+ip ssh version 2
+!
+line vty 0 4
+ login local
+ transport input ssh
+!
+router ospf 10
+ router-id 10.199.66.142
+ network 172.16.6.128 0.0.0.63 area 0
+ network 172.16.6.176 0.0.0.63 area 0
+ passive-interface g0/0/0.10
+ passive-interface g0/0/0.20
+ passive-interface g0/0/0.30
+ passive-interface g0/0/0.40
+
+ip access-list standard NAT-USERS
+ permit 172.16.6.176 0.0.0.15
+!
+ip nat inside source list NAT-USERS interface g0/0/1 overload
+!
+interface g0/0/0.40
+ ip nat inside
+interface g0/0/1
+ ip nat outside
+
+no ip access-list extended allowIN
+ip access-list extended allowIN
+ permit tcp host 10.199.64.134 any eq 22 log
+ deny tcp host 10.199.64.137 any eq 22 log
+ permit tcp 172.16.6.128 0.0.0.15 any eq 22 log
+!
+line vty 0 4
+ access-class allowIN in
+
+!
+ip access-list standard SNMP-RO-ACL
+ remark Sta alleen Zabbix server toe voor read requests
+ permit host 10.199.64.67
+ deny any log
+!
+ip access-list standard SNMP-RW-ACL
+ remark Sta alleen Zabbix server toe voor write requests
+ permit host 10.199.64.67
+ deny any log
+!
+snmp-server community SNMP-RO RO SNMP-RO-ACL
+snmp-server community SNMP-RW RW SNMP-RW-ACL
+!
+snmp-server host 10.199.64.67 version 2c SNMP-TRAP
+!
+end

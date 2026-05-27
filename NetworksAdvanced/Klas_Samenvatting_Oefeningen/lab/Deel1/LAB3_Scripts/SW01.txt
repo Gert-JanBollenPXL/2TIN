@@ -1,0 +1,85 @@
+! =======================================
+! HOSTNAME
+! =======================================
+hostname LAB-R04-A01-SW01
+
+! =======================================
+! NTP
+! =======================================
+ntp server 10.199.64.66
+
+! =======================================
+! VLANs
+! =======================================
+vlan 41
+ name Management
+vlan 42
+ name Data_Users
+vlan 43
+ name Voice_Users
+vlan 44
+ name Reserved
+vlan 99
+ name Native
+exit
+
+! show vlan brief
+
+! =======================================
+! MANAGEMENT IP (VLAN 41)
+! =======================================
+interface vlan 41
+ ip address 172.17.4.4 255.255.255.240
+ no shutdown
+exit
+
+ip default-gateway 172.17.4.1
+
+! =======================================
+! DOMAIN & CREDENTIALS
+! =======================================
+ip domain name data.labnet.local
+username student privilege 15 secret pxl
+
+! =========================
+! ETHERCHANNEL 3
+! =========================
+interface range gi1/0/23-24
+ channel-group 3 mode on
+exit
+
+interface port-channel 3
+ switchport mode trunk
+ switchport trunk allowed vlan 41-44
+ switchport trunk native vlan 99
+ spanning-tree link-type point-to-point
+exit
+
+! =========================
+! Root bridge 
+! =========================
+
+spanning-tree vlan 41-44 root primary
+
+! =========================
+! ETHERCHANNEL 4
+! =========================
+interface range gi1/0/21-22
+ channel-group 4 mode on
+exit
+
+interface port-channel 4
+ switchport mode trunk
+ switchport trunk allowed vlan 41-44
+ switchport trunk native vlan 99
+ spanning-tree link-type point-to-point
+exit
+
+! =========================
+! SINGLE TRUNK 
+! =========================
+interface gi1/0/20
+ switchport mode trunk
+ switchport trunk allowed vlan 41-44
+ switchport trunk native vlan 99
+exit

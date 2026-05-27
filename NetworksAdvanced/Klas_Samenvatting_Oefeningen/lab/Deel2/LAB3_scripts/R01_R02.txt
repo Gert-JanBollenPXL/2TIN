@@ -1,0 +1,133 @@
+username admin privilege 15 secret cisco
+ 
+! ============================================================
+! PART 1: EXTENDED ACL voor VTY SSH-toegang
+! ============================================================
+ip access-list extended ACL-SSH-MGMT
+ permit tcp host 10.199.64.137 172.16.4.0 0.0.0.15 eq 22
+ permit tcp 172.16.4.0 0.0.0.15 172.16.4.0 0.0.0.15 eq 22
+ permit tcp 172.16.4.128 0.0.0.15 172.16.4.0 0.0.0.15 eq 22
+ deny ip any any
+ 
+! Toepassen op VTY lines
+line vty 0 15
+ access-class ACL-SSH-MGMT in
+exit
+
+----------------------------------------------------------------------------------------------
+CONTROLE: show access-lists
+Via Putty op PC02 vanvoor ssh naar de router (172.16.4.2 en 172.16.4.3)
+=> werkt 
+Via putty op PC01 vanvoor ssh naar de routers (werkt niet)
+----------------------------------------------------------------------------------------------
+Alle host van het subnet moeten met een public IP address naar buiten gaan ipv hun private IP address 
+
+DIT IS VOOR ROUTER 1, ZIE NAT-POOL
+
+! ============================================================
+! PART 2: Configure NAT
+! ============================================================
+
+ip nat pool NAT-POOL 10.199.66.137 10.199.66.137 netmask 255.255.255.192
+
+ip access-list standard ACL-NAT-USERS
+ permit 172.16.4.48 0.0.0.15
+
+ip nat inside source list ACL-NAT-USERS pool NAT-POOL
+
+interface GigabitEthernet0/0/0.40
+ ip nat inside
+exit
+
+interface GigabitEthernet0/0/1
+ ip nat outside
+exit
+end
+
+
+DIT IS VOOR ROUTER 2, ZIE NAT-POOL
+
+ip nat pool NAT-POOL 10.199.66.159 10.199.66.159 netmask 255.255.255.192
+
+ip access-list standard ACL-NAT-USERS
+ permit 172.16.4.48 0.0.0.15
+
+ip nat inside source list ACL-NAT-USERS pool NAT-POOL
+
+interface GigabitEthernet0/0/0.40
+ ip nat inside
+exit
+
+interface GigabitEthernet0/0/1
+ ip nat outside
+exit
+end
+
+---------------------------------------------------------------------------------
+CONTROLE: show ip nat translations, show ip nat statistics
+---------------------------------------------------------------------------------
+EERST DIT: 
+
+#clear ip nat translation *
+
+
+ROUTER 1 CONFIGURATIE:
+
+! ============================================================
+! PART 3: Configure PAT ROUTER 1
+! ============================================================
+clear ip nat translation *
+conf t
+interface GigabitEthernet0/0/0.40
+ no ip nat inside
+exit
+end
+clear ip nat translation *
+conf t
+no ip nat inside source list ACL-NAT-USERS pool NAT-POOL
+no ip nat pool NAT-POOL 10.199.66.137 10.199.66.137 netmask 255.255.255.192
+ip nat inside source list ACL-NAT-USERS interface GigabitEthernet0/0/1 overload
+interface GigabitEthernet0/0/0.40
+ ip nat inside
+exit
+end
+
+
+
+ROUTER 2 CONFIGURATIE:
+
+! ============================================================
+! PART 3: Configure PAT ROUTER 2
+! ============================================================
+clear ip nat translation *
+conf t
+interface GigabitEthernet0/0/0.40
+ no ip nat inside
+exit
+end
+clear ip nat translation *
+conf t
+no ip nat inside source list ACL-NAT-USERS pool NAT-POOL
+no ip nat pool NAT-POOL 10.199.66.159 10.199.66.159 netmask 255.255.255.192
+ip nat inside source list ACL-NAT-USERS interface GigabitEthernet0/0/1 overload
+interface GigabitEthernet0/0/0.40
+ ip nat inside
+exit
+end
+
+-------------------------------------------------------------------------------------------
+CONTROLE: show ip nat statistics
+=> 
+[Id: 2] access-list ACL-NAT-USERS interface GigabitEthernet0/0/1 refcount 0
+-------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+

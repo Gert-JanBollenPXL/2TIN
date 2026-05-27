@@ -1,0 +1,92 @@
+-----------------
+| TESTEN LAB 3: |
+-----------------
+
+Extra om blocked ports te testen:
+
+LAB-R04-A01-SW03(config)#spanning-tree mode rapid-pvst
+LAB-R04-A01-SW03(config)#end
+LAB-R04-A01-SW03#
+
+00:12:20: %SYS-5-CONFIG_I: Configured from console by console
+LAB-R04-A01-SW03#show spanning-tree vlan 41
+
+VLAN0041
+  Spanning tree enabled protocol rstp
+  Root ID    Priority    24617
+             Address     6c4e.f6ca.e600
+             Cost        12
+             Port        56 (Port-channel1)
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32809  (priority 32768 sys-id-ext 41)
+             Address     0023.abbb.5400
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time 300
+
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- --------------------------------
+Po1              Root FWD 12        128.56   P2p
+Po2              Desg BLK 12        128.64   P2p
+
+
+
+=> dit is een beter commando om de blockedports te testen 
+---------------------------------------------------------------------
+
+WINDOWS:
+PS C:\Users\12400896> ipconfig
+
+Windows IP Configuration
+
+
+Ethernet adapter Ethernet:
+
+   Connection-specific DNS Suffix  . : data.labnet.local
+   Link-local IPv6 Address . . . . . : fe80::4e68:25d4:aaaf:68fd%15
+   IPv4 Address. . . . . . . . . . . : 172.17.4.21
+   Subnet Mask . . . . . . . . . . . : 255.255.255.240
+
+WIFI uitzetten en proberen op het internet te geraken 
+
+-------------------------------------------------------------------------
+TREK ROUTER 1 UIT AAN POORT 0/0/0 en POORT 0/0/1
+VERGEET NIET BEIDE KABBELS UIT TE TREKKEN ANDERS WERKT HET NIET
+
+TEST IN WINDOWS:
+
+PS C:\Users\12400896> tracert 8.8.8.8
+
+Tracing route to dns.google [8.8.8.8]
+over a maximum of 30 hops:
+
+  1    <1 ms    <1 ms    <1 ms  172.17.4.19
+  2     1 ms    <1 ms    <1 ms  10.199.65.200
+  3     1 ms     1 ms     1 ms  10.199.64.25
+  4     1 ms    <1 ms     1 ms  10.199.68.1
+  5     2 ms     1 ms     1 ms  10.125.100.1
+  6     1 ms     1 ms     1 ms  r1.hascen.belnet.net [193.191.5.153]
+  7     3 ms     3 ms     3 ms  10.28.52.242
+  8     5 ms     4 ms     4 ms  72.14.217.96
+  9     6 ms     6 ms     5 ms  142.251.253.189
+ 10     5 ms     4 ms     4 ms  209.85.255.17
+ 11     4 ms     4 ms     4 ms  dns.google [8.8.8.8]
+
+Trace complete.
+PS C:\Users\12400896>
+
+En ook weer testen met wifi uitzetten en internet hebben 
+
+-----------------------------------------------------------------------------------------------
+SWITCH 01 verbinding uitrekken met SW03
+
+Internet testen en ook tracert 8.8.8.8 testen 
+
+
+
+
+
+
+
+
+

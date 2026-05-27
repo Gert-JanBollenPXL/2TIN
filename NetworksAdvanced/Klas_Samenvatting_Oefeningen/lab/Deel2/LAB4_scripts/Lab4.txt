@@ -1,0 +1,233 @@
+! ============================================================
+! PART 1: Configure SNMP
+! ============================================================
+conf t 
+
+! SNMPv2 community strings
+snmp-server community SNMP-RO ro
+snmp-server community SNMP-RW rw
+
+! SNMP server (Zabbix)
+snmp-server host 10.199.64.67 version 2c SNMP-RO
+
+! SNMP notifications
+snmp-server enable traps snmp authentication
+snmp-server enable traps config
+
+! Syslog trap messages
+snmp-server enable traps syslog
+
+end
+
+----------------------------------------------------------------------------
+Controleren: 
+show snmp
+show snmp community
+show snmp host
+
+#show snmp host
+Notification host: 10.199.64.67 udp-port: 162   type: trap
+user: SNMP-RO   security model: v2c
+
+
+---------------------------------------------------------------------------
+! ============================================================
+! PART 2: Zabbix
+! ============================================================
+Voor R01:
+Configuration => Add Host
+Host tab:
+	- Host name: LAB-RA04-C01-R01
+	- Groups: selecteer een bestaande group of maak RACK04 aan
+	- Interface: klik Add → kies SNMP
+		* IP address: 172.16.4.2
+		* Port: 161
+
+
+Macro instellen → klik op de Macros tab:
+- Macro: {$SNMP_COMMUNITY}
+- Value: SNMP-RO
+
+Template toevoegen → klik op de Templates tab:
+- Zoek op: Cisco IOS SNMP
+- Voeg toe: Template Net Cisco IOS SNMP
+
+
+Voor R02:
+	- Host name: LAB-RA04-C01-R02
+	- SNMP interface IP: 172.16.4.3
+	- SNMP version: SNMPv2
+	- Template: Template Net Cisco IOS SNMP
+	- Macro: {$SNMP_COMMUNITY} = SNMP-RO
+
+
+Voor Switches hetzelfde buiten dit:
+LAB-RA04-A01-SW01 - 172.16.4.5
+LAB-RA04-A01-SW02 - 172.16.4.6
+
+----------------------------------------------------------------------------
+Controleren:
+Ga daarna naar Monitoring → Hosts en wacht even. Je moet dit zien:
+
+Groen SNMP blokje → verbinding werkt 
+Rood SNMP blokje → probleem met verbinding 
+Grijs → even wachten
+------------------------------------------------------------------------------
+! ============================================================
+! PART 3a: Secure SNMP
+! ============================================================
+R01+R02+SW01+SW02:
+
+conf t
+
+! ACL die alleen Zabbix server toelaat voor requests
+ip access-list standard ACL-SNMP
+ permit host 10.199.64.67
+ deny any
+
+! Requests community strings (met ACL)
+snmp-server community SNMP-RO ro ACL-SNMP
+snmp-server community SNMP-RW rw ACL-SNMP
+
+! Aparte community string voor notifications/traps
+! (andere naam dan SNMP-RO/SNMP-RW!)
+snmp-server community SNMP-TRAP ro
+snmp-server host 10.199.64.67 version 2c SNMP-TRAP
+
+end
+
+-----------------------------------------------------------------------------
+Controleren: 
+show snmp community
+show snmp host
+
+R01 + R02 + SW01 + SW02:
+"requests community strings are not identical to notifications community strings"
+Oude SNMP-RO trap entry verwijderen:
+
+conf t
+no snmp-server host 10.199.64.67 version 2c SNMP-RO
+end
+
+
+show snmp host => 1 entry zien
+-----------------------------------------------------------------------------
+! ============================================================
+! PART 3b: SYSLOG
+! ============================================================
+conf t
+
+! Syslog naar server
+logging host 10.199.64.134
+logging trap informational
+
+! Syslog traps via SNMP
+snmp-server enable traps syslog
+
+end
+
+------------------------------------------------------------------------------------------
+Controleren: 
+
+show logging
+
+ Trap logging: level informational, 141 message lines logged
+        Logging to 10.199.64.134  (udp port 514, audit disabled,
+              link up),
+              2 message lines logged,
+
+------------------------------------------------------------------------------------------
+! ============================================================
+! PART 4: SNMPv3
+! ============================================================
+conf t
+
+! SNMPv3 view (toegang tot alle OIDs)
+snmp-server view SNMP-VIEW iso included
+
+! SNMPv3 group met read access op de view
+snmp-server group SNMP-GROUP v3 priv read SNMP-VIEW
+
+! SNMPv3 gebruiker
+snmp-server user SNMP-USER SNMP-GROUP v3 auth sha cisco123 priv aes 128 cisco123
+
+end
+
+
+ZABBIX:
+Klik op LAB-RA04-C01-R01 → Edit → onder Interfaces klik Add → kies SNMP en vul in:
+	- IP address: 172.16.4.2
+	- Port: 161
+	- SNMP version: SNMPv3
+	- Context name: (leeg laten)
+	- Security name: SNMP-USER
+	- Security level: authPriv
+	- Auth protocol: SHA
+	- Auth passphrase: cisco123
+	- Priv protocol: AES128
+	- Priv passphrase: cisco123
+------------------------------------------------------------------------------------------
+Controleren:
+show snmp group
+show snmp user
+
+
+groupname: SNMP-GROUP                       security model:v3 priv
+contextname: <no context specified>         storage-type: nonvolatile
+readview : SNMP-VIEW                        writeview: <no writeview specified>
+notifyview: <no notifyview specified>
+row status: active
+
+
+User name: SNMP-USER
+Engine ID: 8000000903007411B2EE8790
+storage-type: nonvolatile        active
+Authentication Protocol: SHA
+Privacy Protocol: AES128
+Group-name: SNMP-GROUP
+
+Zabbix: Groen SNMP blokje
+------------------------------------------------------------------------------------------
+! ============================================================
+! PART 5: Wireshark
+! ============================================================
+SW01 + SW02
+
+conf t
+
+! SPAN sessie: mirror VLAN 40 verkeer naar een monitor poort
+monitor session 1 source vlan 40 both
+monitor session 1 destination interface GigabitEthernet1/0/3
+
+endw
+
+-----------------------------------------------------------------------------------------
+Controleren:
+
+#show monitor session 1
+Session 1
+---------
+Type                     : Local Session
+Source VLANs             :
+    Both                 : 40
+Destination Ports        : Gi1/0/3
+    Encapsulation        : Native
+          Ingress        : Disabled
+
+
+2 Laptops nodig: 
+Sluit een laptop aan op GigabitEthernet1/0/1 van SW01, de andere op Gig1/0/3
+Open Wireshark op je laptop (gig1/0/3) en selecteer de juiste netwerkadapter
+3. Filter op:
+bootp
+
+4. Genereer DHCP verkeer op een PC in VLAN 40:
+ipconfig /release
+ipconfig /renew "Ethernet" 
+
+
+DHCP Release   172.16.4.54  → 10.199.64.66   
+DHCP Discover  0.0.0.0      → 255.255.255.255 
+DHCP Offer     10.199.64.66 → 172.16.4.50     
+DHCP Request   0.0.0.0      → 255.255.255.255 
+DHCP ACK       10.199.64.66 → 172.16.4.50     

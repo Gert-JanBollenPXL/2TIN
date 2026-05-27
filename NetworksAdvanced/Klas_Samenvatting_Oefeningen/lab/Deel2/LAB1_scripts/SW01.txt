@@ -1,0 +1,77 @@
+! =======================================
+! HOSTNAME
+! =======================================
+hostname LAB-RA04-A01-SW01
+
+! =======================================
+! NTP
+! =======================================
+ntp server 10.199.64.66
+
+! =======================================
+! VLANs
+! =======================================
+vlan 10
+ name Management
+vlan 20
+ name VM-Hosts
+vlan 30
+ name Appliance-Servers
+vlan 40
+ name Data-Users
+vlan 99
+ name Native-Vlan
+exit
+
+! show vlan brief
+
+! =========================
+! Root bridge 
+! =========================
+
+spanning-tree vlan 10-40 root primary
+
+! =========================
+! ACCESS PORT 
+! =========================
+interface gigabitEthernet1/0/1
+ switchport mode access
+ switchport access vlan 40
+exit
+
+interface gigabitEthernet1/0/3
+ switchport mode access
+ switchport access vlan 30
+exit
+
+! =========================
+! TRUNK naar Router 
+! =========================
+interface gi1/0/20
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30,40
+ switchport trunk native vlan 99
+exit
+
+! =======================================
+! MANAGEMENT IP (VLAN 10)
+! =======================================
+interface vlan 10
+ip address 172.16.4.5 255.255.255.240
+no shutdown
+exit
+
+ip default-gateway 172.16.4.1
+
+
+! =======================================
+! SSH CONFIG
+! =======================================
+ip domain name data.labnet.local
+crypto key generate rsa general-keys modulus 1024
+username student privilege 15 secret pxl
+line vty 0 15
+ transport input ssh
+ login local
+exit
+

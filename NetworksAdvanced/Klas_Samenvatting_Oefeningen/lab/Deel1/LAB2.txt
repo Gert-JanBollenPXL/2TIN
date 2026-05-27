@@ -1,0 +1,255 @@
+jLACP gebruiken bij etherchannel ipv 
+=> lacp dan kan je etherchannels gebruiken tussen toestellen van verschillende vendoren
+PAgP => is alleen tussen cisco toestellen 
+bij on als mode dan maakt het niet uit dan komt te trunk gewoon op 
+
+
+interface range gigabitethernet1/0/23-24
+
+channel-group <nummer,1> mode on
+=> nu de rest van de configuratie op ethernet niveau doen
+Dus uit de interface gaan 
+en nu op de intefrace van de port channel gaan
+
+inteface port-channel 1 
+
+=> als je hierop nu de configuratie afwerkt, gaat die gepusht worden op de 2 interfaces 
+
+switchport mode trunk
+switchport trunk allowed 41-44
+switchport trunk native 99
+spanning-tree link-type point-to-point 
+end
+
+
+Normaal moet SSH hier wel nog bij 
+---------------------------------------------------------------------------------------------------------
+SW02:
+
+IN CONFIG T:
+
+! =======================================
+! HOSTNAME
+! =======================================
+hostname LAB-RA04-A01-SW02
+
+! =======================================
+! NTP
+! =======================================
+ntp server 10.199.64.66
+
+! =======================================
+! VLANs
+! =======================================
+vlan 41
+ name Management
+vlan 42
+ name Data_Users
+vlan 43
+ name Voice_Users
+vlan 44
+ name Reserved
+vlan 99
+ name Native
+exit
+
+! show vlan brief
+
+! =======================================
+! MANAGEMENT IP (VLAN 41)
+! =======================================
+interface vlan 41
+ ip address 172.18.4.4 255.255.255.240
+ no shutdown
+exit
+
+ip default-gateway 172.18.4.1
+
+! =======================================
+! DOMAIN & CREDENTIALS
+! =======================================
+ip domain name data.labnet.local
+username student privilege 15 secret pxl
+
+
+
+LAB-RA04-A01-SW02(config)#interface Gi1/0/1
+LAB-RA04-A01-SW02(config-if)#switchport mode access
+LAB-RA04-A01-SW02(config-if)#switchport access vlan 42
+LAB-RA04-A01-SW02(config-if)#end
+LAB-RA04-A01-SW02#
+
+
+LAB-RA04-A01-SW02(config)#interface range gi1/0/23-24
+LAB-RA04-A01-SW02(config-if-range)#channel-group 1 mode on
+Creating a port-channel interface Port-channel 1
+LAB-RA04-A01-SW02(config-if-range)#exit
+
+LAB-RA04-A01-SW02(config)#interface port-channel 1
+LAB-RA04-A01-SW02(config-if)#switchport mode trunk
+LAB-RA04-A01-SW02(config-if)#switchport trunk allowed vlan 41-44
+LAB-RA04-A01-SW02(config-if)#switchport trunk native vlan 99
+LAB-RA04-A01-SW02(config-if)#spanning-tree link-type point-to-point
+LAB-RA04-A01-SW02(config-if)#end
+LAB-RA04-A01-SW02#
+
+
+--------------------------------------------------------------------------------------------------------
+SW01:
+IN CONF T PASTEN: 
+
+! =======================================
+! HOSTNAME
+! =======================================
+hostname LAB-RA04-A01-SW01
+
+! =======================================
+! NTP
+! =======================================
+ntp server 10.199.64.66
+
+! =======================================
+! VLANs
+! =======================================
+vlan 41
+ name Management
+vlan 42
+ name Data_Users
+vlan 43
+ name Voice_Users
+vlan 44
+ name Reserved
+vlan 99
+ name Native
+exit
+
+! show vlan brief
+
+! =======================================
+! MANAGEMENT IP (VLAN 41)
+! =======================================
+interface vlan 41
+ ip address 172.18.4.3 255.255.255.240
+ no shutdown
+exit
+
+ip default-gateway 172.18.4.1
+
+! =======================================
+! DOMAIN & CREDENTIALS
+! =======================================
+ip domain name data.labnet.local
+username student privilege 15 secret pxl
+
+interface range gi1/0/21-22
+LAB-RA04-A01-SW01(config-if-range)#channel-group 2 mode ON
+Creating a port-channel interface Port-channel 2
+LAB-RA04-A01-SW01(config-if-range)#exit
+LAB-RA04-A01-SW01(config)#interface port-channel 2
+LAB-RA04-A01-SW01(config-if)#switchport mode trunk
+LAB-RA04-A01-SW01(config-if)#switchport trunk allowed vlan 41-44
+LAB-RA04-A01-SW01(config-if)#switchport trunk native vlan 99
+LAB-RA04-A01-SW01(config-if)#spanning-tree link-type point-to-point
+LAB-RA04-A01-SW01(config-if)#end
+
+interface range gi1/0/23-24
+LAB-RA04-A01-SW01(config-if-range)#channel-group 3 mode ON
+Creating a port-channel interface Port-channel 3
+LAB-RA04-A01-SW01(config-if-range)#exit
+LAB-RA04-A01-SW01(config)#interface port-channel 3
+LAB-RA04-A01-SW01(config-if)#switchport mode trunk
+LAB-RA04-A01-SW01(config-if)#switchport trunk allowed vlan 41-44
+LAB-RA04-A01-SW01(config-if)#switchport trunk native vlan 99
+LAB-RA04-A01-SW01(config-if)#spanning-tree link-type point-to-point
+LAB-RA04-A01-SW01(config-if)#end
+
+LAB-RA04-A01-SW01#show etherchannel summary
+
+
+LAB-RA04-A01-SW02#show etherchannel summary
+Flags:  D - down        P - bundled in port-channel
+        I - stand-alone s - suspended
+        H - Hot-standby (LACP only)
+        R - Layer3      S - Layer2
+        U - in use      f - failed to allocate aggregator
+
+        M - not in use, minimum links not met
+        u - unsuitable for bundling
+        w - waiting to be aggregated
+        d - default port
+
+        A - formed by Auto LAG
+
+
+Number of channel-groups in use: 1
+Number of aggregators:           1
+
+Group  Port-channel  Protocol    Ports
+------+-------------+-----------+-----------------------------------------------
+1      Po1(SU)          -          Gi1/0/23(P)     Gi1/0/24(P)
+
+LAB-RA04-A01-SW02#
+
+=> moet P hebben ook bij SW01
+
+
+Laptop insteken op poort 1/0/1
+PS C:\Users\12400896> ipconfig
+
+Windows IP Configuration
+
+
+Ethernet adapter Ethernet:
+
+   Connection-specific DNS Suffix  . : data.labnet.local
+   Link-local IPv6 Address . . . . . : fe80::4e68:25d4:aaaf:68fd%15
+   IPv4 Address. . . . . . . . . . . : 172.18.4.21
+   Subnet Mask . . . . . . . . . . . : 255.255.255.240
+   Default Gateway . . . . . . . . . : 172.18.4.17
+
+
+Controle: 
+
+LAB-RA04-A01-SW02#show interfaces port-channel 1
+Port-channel1 is up, line protocol is up (connected)
+  Hardware is EtherChannel, address is 4464.3c20.ba97 (bia 4464.3c20.ba97)
+  MTU 1500 bytes, BW 2000000 Kbit/sec, DLY 10 usec,
+     reliability 255/255, txload 1/255, rxload 1/255
+  Encapsulation ARPA, loopback not set
+  Keepalive set (10 sec)
+  Full-duplex, 1000Mb/s, link type is auto, media type is N/A
+  input flow-control is on, output flow-control is unsupported
+  Members in this channel: Gi1/0/23 Gi1/0/24
+  ARP type: ARPA, ARP Timeout 04:00:00
+  Last input 00:00:00, output 00:04:12, output hang never
+  Last clearing of "show interface" counters never
+  Input queue: 0/2000/0/0 (size/max/drops/flushes); Total output drops: 0
+  Queueing strategy: fifo
+  Output queue: 0/40 (size/max)
+  5 minute input rate 51000 bits/sec, 19 packets/sec
+  5 minute output rate 67000 bits/sec, 14 packets/sec
+     5989 packets input, 2535199 bytes, 0 no buffer
+     Received 1504 broadcasts (1492 multicasts)
+     0 runts, 0 giants, 0 throttles
+     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored
+     0 watchdog, 1492 multicast, 0 pause input
+     0 input packets with dribble condition detected
+     4785 packets output, 2888101 bytes, 0 underruns
+     Output 36 broadcasts (413 multicasts)
+     0 output errors, 0 collisions, 1 interface resets
+     0 unknown protocol drops
+     0 babbles, 0 late collision, 0 deferred
+     0 lost carrier, 0 no carrier, 0 pause output
+     0 output buffer failures, 0 output buffers swapped out
+LAB-RA04-A01-SW02#
+
+
+
+
+
+
+
+
+
+
+

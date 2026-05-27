@@ -1,0 +1,71 @@
+! =========================
+! HOSTNAME
+! =========================
+hostname LAB-RA04-C01-R01
+
+! =========================
+! INTERFACE UP naar switch
+! =========================
+interface GigabitEthernet0/0/0
+ no shutdown
+exit
+
+! =========================
+! VLAN 10 (Management)
+! =========================
+interface gi0/0/0.10
+ encapsulation dot1q 10
+ ip address 172.16.4.2 255.255.255.240
+ no shutdown
+exit
+
+! =========================
+! VLAN 20 (VM)
+! =========================
+interface gi0/0/0.20
+ encapsulation dot1q 20
+ ip address 172.16.4.18 255.255.255.240
+ no shutdown
+exit
+
+! =========================
+! VLAN 30 (Servers)
+! =========================
+interface gi0/0/0.30
+ encapsulation dot1q 30
+ ip address 172.16.4.34 255.255.255.240
+ no shutdown
+exit
+
+! =========================
+! VLAN 40 (Users)
+! =========================
+interface gi0/0/0.40
+ encapsulation dot1q 40
+ ip address 172.16.4.50 255.255.255.240
+ no shutdown
+exit
+
+
+! =========================
+! VLAN 99 (Native)
+! =========================
+interface gi0/0/0.99
+ encapsulation dot1q 99
+ no shutdown
+exit
+
+! =========================
+! WAN INTERFACE
+! =========================
+interface gi0/0/1
+ ip address 10.199.66.207 255.255.255.224
+ no shutdown
+exit
+
+! =========================
+! DEFAULT ROUTE
+! =========================
+ip route 0.0.0.0 0.0.0.0 10.199.66.193
+
+

@@ -1,0 +1,243 @@
+Apparaatbeheer => Poorten (COM & LPT) => USB Serial Port (COM6)
+
+console
+en => secret
+
+Switch#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#hostname LAB-R04-A01-SW01
+LAB-R04-A01-SW01(config)#exit
+
+
+LAB-R04-A01-SW01#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+LAB-R04-A01-SW01(config)#ntp server 10.199.64.66
+LAB-R04-A01-SW01(config)#
+
+
+
+LAB-R04-A01-SW01(config)#vlan 41
+LAB-R04-A01-SW01(config-vlan)#name Management
+LAB-R04-A01-SW01(config-vlan)#exit
+LAB-R04-A01-SW01(config)#vlan 42
+LAB-R04-A01-SW01(config-vlan)#name Data_Users
+LAB-R04-A01-SW01(config-vlan)#exit
+LAB-R04-A01-SW01(config)#vlan 43
+LAB-R04-A01-SW01(config-vlan)#name Voice_Users
+LAB-R04-A01-SW01(config-vlan)#exit
+LAB-R04-A01-SW01(config)#vlan 44
+LAB-R04-A01-SW01(config-vlan)#name Reserved
+LAB-R04-A01-SW01(config-vlan)#exit
+LAB-R04-A01-SW01(config)#vlan 99
+LAB-R04-A01-SW01(config-vlan)#name Native
+LAB-R04-A01-SW01(config-vlan)#exit
+LAB-R04-A01-SW01(config)#
+
+
+
+LAB-R04-A01-SW01(config)#spanning-tree vlan 41-44,99 root primary
+LAB-R04-A01-SW01(config)#
+
+
+LAB-R04-A01-SW01(config)#interface GigabitEthernet 1/0/2
+LAB-R04-A01-SW01(config-if)#switchport mode access
+LAB-R04-A01-SW01(config-if)#switchport access vlan 42
+LAB-R04-A01-SW01(config-if)#end
+LAB-R04-A01-SW01#
+
+LAB-R04-A01-SW01(config)#interface GigabitEthernet 1/0/23
+LAB-R04-A01-SW01(config-if)#switchport mode trunk
+LAB-R04-A01-SW01(config-if)#switchport trunk allowed vlan 41-44
+LAB-R04-A01-SW01(config-if)#switchport trunk native vlan 99
+LAB-R04-A01-SW01(config-if)#end
+LAB-R04-A01-SW01#
+
+
+LAB-R04-A01-SW01(config)#interface GigabitEthernet 1/0/24
+LAB-R04-A01-SW01(config-if)#switchport mode trunk
+LAB-R04-A01-SW01(config-if)#switchport trunk allowed vlan 41-44
+LAB-R04-A01-SW01(config-if)#switchport trunk native vlan 99
+LAB-R04-A01-SW01(config-if)#end
+LAB-R04-A01-SW01#
+
+Etherchannel nu overslaan in dit lab 
+
+LAB-R04-A01-SW01(config)#interface vlan 41
+LAB-R04-A01-SW01(config-if)#ip address 172.18.4.3 255.255.255.240
+LAB-R04-A01-SW01(config-if)#no shutdown
+LAB-R04-A01-SW01(config-if)#exit
+LAB-R04-A01-SW01(config)#
+
+LAB-R04-A01-SW01(config)#ip default-gateway 172.18.4.1
+
+LAB-R04-A01-SW01(config)#ip domain name data.labnet.local
+LAB-R04-A01-SW01(config)#crypto key generate rsa general-keys modulus 1024
+The name for the keys will be: LAB-R04-A01-SW01.data.labnet.local
+% The key modulus size is 1024 bits
+% Generating 1024 bit RSA keys, keys will be non-exportable...
+[OK] (elapsed time was 1 seconds)
+LAB-R04-A01-SW01(config)#username student secret secret
+LAB-R04-A01-SW01(config)#line vty 0 15
+LAB-R04-A01-SW01(config-line)#transport input ssh
+LAB-R04-A01-SW01(config-line)#login local
+LAB-R04-A01-SW01(config-line)#end
+LAB-R04-A01-SW01#
+
+-------------------------------------------------------------------------------------
+SW2
+
+User Access Verification
+
+Password:console
+Switch>enable
+Password:secret
+Switch#
+
+
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#hostname LAB-R04-A01-SW02
+LAB-R04-A01-SW02(config)#
+
+
+LAB-R04-A01-SW02(config)#ntp server 10.199.64.66
+LAB-R04-A01-SW02(config)#
+
+
+LAB-R04-A01-SW02(config)#vlan 41
+LAB-R04-A01-SW02(config-vlan)#name Management
+LAB-R04-A01-SW02(config-vlan)#exit
+LAB-R04-A01-SW02(config)#vlan 42
+LAB-R04-A01-SW02(config-vlan)#name Data_Users
+LAB-R04-A01-SW02(config-vlan)#exit
+LAB-R04-A01-SW02(config)#vlan 43
+LAB-R04-A01-SW02(config-vlan)#name Voice_Users
+LAB-R04-A01-SW02(config-vlan)#exit
+LAB-R04-A01-SW02(config)#vlan 44
+LAB-R04-A01-SW02(config-vlan)#name Reserved
+LAB-R04-A01-SW02(config-vlan)#exit
+LAB-R04-A01-SW02(config)#vlan 99
+LAB-R04-A01-SW02(config-vlan)#name Native
+LAB-R04-A01-SW02(config-vlan)#exit
+
+
+LAB-R04-A01-SW02(config)#spanning-tree vlan 41-44,99 root secondary
+
+
+
+LAB-R04-A01-SW02(config)#interface gi1/0/2
+LAB-R04-A01-SW02(config-if)#switchport mode access
+LAB-R04-A01-SW02(config-if)#switchport access vlan 42
+LAB-R04-A01-SW02(config-if)#end
+LAB-R04-A01-SW02#
+
+
+
+LAB-R04-A01-SW02(config)#interface GigabitEthernet 1/0/24
+LAB-R04-A01-SW02(config-if)#switchport mode trunk
+LAB-R04-A01-SW02(config-if)#switchport trunk allowed vlan 41-44
+LAB-R04-A01-SW02(config-if)#switchport trunk native vlan 99
+LAB-R04-A01-SW02(config-if)#end
+
+
+LAB-R04-A01-SW02(config)#interface vlan 41
+LAB-R04-A01-SW02(config-if)#ip address 172.18.4.4 255.255.255.240
+LAB-R04-A01-SW02(config-if)#no shutdown
+LAB-R04-A01-SW02(config-if)#exit
+
+
+LAB-R04-A01-SW02(config)#ip default-gateway 172.18.4.1
+
+LAB-R04-A01-SW02(config)#ip domain name data.labnet.local
+LAB-R04-A01-SW02(config)#crypto key generate rsa general-keys modulus 1024
+LAB-R04-A01-SW02(config)#username student secret secret
+LAB-R04-A01-SW02(config)#line vty 0 15
+LAB-R04-A01-SW02(config-line)#transport input ssh
+LAB-R04-A01-SW02(config-line)#login local
+LAB-R04-A01-SW02(config-line)#end
+
+LAB-R04-A01-SW02(config)#username student privilege 15 secret secret
+LAB-R04-A01-SW02(config)#
+
+
+Nu kabel steken fysiek in poort 23 naar poort 24 van switch 1 naar switch 2
+en dan van switch 1 naar poort 2 vanboven voor naar switch 3 te gaan 
+
+
+LAB-R04-A01-SW02#show interfaces trunk
+
+Port           Mode             Encapsulation  Status        Native vlan
+Gi1/0/24       on               802.1q         trunking      99
+
+Port           Vlans allowed on trunk
+Gi1/0/24       41-44
+
+Port           Vlans allowed and active in management domain
+Gi1/0/24       41-44
+
+Port           Vlans in spanning tree forwarding state and not pruned
+Gi1/0/24       41-44
+LAB-R04-A01-SW02#show inte
+
+
+#show vlan brief
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Gi1/0/1, Gi1/0/3, Gi1/0/4
+                                                Gi1/0/5, Gi1/0/6, Gi1/0/7
+                                                Gi1/0/8, Gi1/0/9, Gi1/0/10
+                                                Gi1/0/11, Gi1/0/12, Gi1/0/13
+                                                Gi1/0/14, Gi1/0/15, Gi1/0/16
+                                                Gi1/0/17, Gi1/0/18, Gi1/0/19
+                                                Gi1/0/20, Gi1/0/21, Gi1/0/22
+                                                Gi1/0/23, Gi1/1/1, Gi1/1/2
+                                                Gi1/1/3, Gi1/1/4
+41   Management                       active
+42   Data_Users                       active    Gi1/0/2
+43   Voice_Users                      active
+44   Reserved                         active
+99   Native                           active
+1002 fddi-default                     act/unsup
+1003 token-ring-default               act/unsup
+1004 fddinet-default                  act/unsup
+1005 trnet-default                    act/unsup
+LAB-R04-A01-SW02#
+
+-------------------------------------------------------------------------------------
+SW03 => moest niks op geconfigureerd worden
+
+Steek kabel in Fa0/7 van switch 3 en dan in de 2 van rak 4 
+
+dan in de laptop en in poort gig 1/0/2 voor de access mode 
+
+en dan ipconfig op windows terminal 
+
+Ethernet adapter Ethernet:
+
+   Connection-specific DNS Suffix  . : data.labnet.local
+   Link-local IPv6 Address . . . . . : fe80::4e68:25d4:aaaf:68fd%15
+   IPv4 Address. . . . . . . . . . . : 172.18.4.21
+   Subnet Mask . . . . . . . . . . . : 255.255.255.240
+   Default Gateway . . . . . . . . . : 172.18.4.17
+
+
+Ethernet adapter Ethernet:
+
+   Connection-specific DNS Suffix  . : data.labnet.local
+   Link-local IPv6 Address . . . . . : fe80::4e68:25d4:aaaf:68fd%15
+   IPv4 Address. . . . . . . . . . . : 172.18.4.21
+   Subnet Mask . . . . . . . . . . . : 255.255.255.240
+   Default Gateway . . . . . . . . . : 172.18.4.17
+
+ip klopt binnen subnet 
+
+
+
+
+
+
+
+
+
+

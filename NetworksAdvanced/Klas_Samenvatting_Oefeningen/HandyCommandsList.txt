@@ -1,0 +1,305 @@
+**console**
+enable **secret**
+configure terminal
+DeviceResetX
+end / exit
+
+
+show running-config
+show running-config | include interface
+show interface vlan 11 brief
+show interface gigabitEthernet 1/0/10 ?
+
+copy running-config startup-config
+copy running-config usb0:LAB-R01-C01-R01.txt
+copy LAB-R01-C01-R01.txt running-config
+delete startup-config
+reload
+
+banner motd #
+Enter TEXT message. End with the character '#'.
+** Authorized Personnel Only - System Maintenance Scheduled **
+#
+
+
+service password-encryption
+term leng 0 	#(default 200)
+
+interface range fa0/23 - 24
+ spanning-tree cost 200
+
+
+show spanning-tree interface gigabitEthernet 1/0/23
+
+
+show ip route - Gives all set routes
+show ip protocols - Gives everything
+show ospf neighbours - Gives all router OSPF neighbour routers
+show ip ospf database - Gives all OSPF routes from the OSPF builtin database
+show logging
+show ip nat translations
+clear ip nat translation *
+show ip interface brief
+show interfaces status
+show cdp neighbors
+show mac address-table dynamic
+show ntp status
+show ntp associations
+show etherchannel load-balance
+
+show etherchannel summary
+Example flags:
+Flag	Meaning
+SU		Layer2 + up
+SD		Down
+P		Properly bundled
+I		Standalone
+s		Suspended
+
+
+spanning-tree portfast
+The port skips the normal STP listening and learning states
+It goes immediately to the forwarding state
+This speeds up connectivity for hosts (PCs, servers, printers)
+Normally STP takes ~30 seconds before forwarding traffic. PortFast avoids this delay.
+
+spanning-tree bpduguard enable
+Block devices from interfering with STP
+If the interface receives a BPDU, the switch puts the port into err-disabled
+This protects the network from someone plugging in a switch or bridge device
+bpduguard and portfast are often used together on access ports (ports connected to end devices).
+
+
+# For standard Spanning Tree
+spanning-tree cost 100
+# OR if you are using per-vlan spanning tree (PVST+) for a specific VLAN
+spanning-tree vlan 10 cost 100
+
+Lower the priority on the interface facing your preferred switch (SW01). Default is 128.
+interface Port-channel <PORTCHANNEL_to_SW01>
+ spanning-tree port-priority 64
+
+
+
+
+
+router ospf 10
+ router-id 10.199.66.100                   # Defaults to router IP address
+ network 10.199.66.96 0.0.0.31 area 0    # Route for "WAN"/Connection network required 
+ network 172.16.1.0 0.0.0.15 area 0             # Activate vlan/subinterface
+ passive-interface GigabitEthernet 0/0/0.10     # Passive only needed for activated vlans/subinterfaces
+ passive-interface GigabitEthernet 0/0/0.40     # Does nothing but does not give error
+
+# After making changes to ospf a ospf service reboot is required on all used routers, using:
+clear ip ospf process
+OSPF point-to-point and broadcast togheter gives blue balls
+OSPF hello and dead timers must match on neighbours
+Voor dynamische routering (OSPF) ALTIJD eerst statische routes verwijderen Otherwise you become the one that gets knuppeld
+
+
+ip ospf network point-to-point
+ip ospf network broadcast
+point-to-point is wanneer er maar 2 routers zijn, broadcast is wanneer er meerdere routers zijn. 
+Bij point-to-point worden er geen hello packets gestuurd, bij broadcast wel. 
+Bij point-to-point is er geen DR/BDR, bij broadcast wel. 
+Bij point-to-point is er geen spanning-tree, bij broadcast wel.
+
+
+
+
+ip access-list extended SSH-MGMT
+	permit tcp host 10.199.64.137 172.16.1.0 0.0.0.15 eq 22
+	permit tcp 172.16.1.128 0.0.0.15 172.16.1.0 0.0.0.15 eq 22
+	DEFAULT DENY BLOCKED OSPF EN AL DE REST DUS GEEN INTERNET, OSPF, etc, EXPLECIETE REGELS NODIG OF DENY REGELS voor ssh en een allow all.
+
+interface gigabitEthernet 0/0/0.10
+	ip access-group SSH-MGMT in
+
+permit tcp host 10.199.64.137 any eq 22
+deny ip any any log
+
+
+
+Port monitoring:
+monitor session 1 source interface GigabitEthernet1/0/1 both
+monitor session 1 source vlan 10 both
+monitor session 1 destination interface GigabitEthernet1/0/24
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        Area 1
+R1 --- R2 --- R3
+
+         |
+       Area 0
+         |
+
+R4 --- R5 --- R6
+        Area 2
+OSPF Areas
+One OSPF process
+Multiple areas
+Shared LSDB hierarchy
+
+Multiple OSPF Processes
+Completely separate OSPF instances
+Separate topologies
+Separate neighbors
+
+
+router ospf 1
+ router-id 2.2.2.2
+ network 10.0.12.0 0.0.0.3 area 0
+ network 192.168.1.0 0.0.0.255 area 1
+
+
+
+DTP = Dynamic Trunking Protocol
+Cisco Systems proprietary protocol used by Cisco switches to automatically negotiate whether a link becomes a trunk or access port.
+
+Disable DTP and set port as trunk:
+switchport mode trunk
+switchport nonegotiate
+Enable DTP and set it to desirable mode:
+switchport mode dynamic desirable
+
+DTP modes
+Mode				Behavior
+access				Permanent access port
+trunk				Permanent trunk
+dynamic desirable	Actively tries to form trunk
+dynamic auto		Waits for trunk negotiation
+nonegotiate			Disables DTP
+
+
+
+
+
+1. Static EtherChannel
+channel-group 1 mode on
+No negotiation protocol.
+Both sides must be manually forced.
+
+Characteristics:
+No checking
+No negotiation
+Dangerous if misconfigured
+Can create loops if opposite side mismatches
+
+Use only when:
+connecting to devices without LACP/PAgP support
+special situations
+
+
+
+2. PAgP (Port Aggregation Protocol)
+channel-group 1 mode desirable/auto
+Cisco proprietary.
+
+Modes:
+desirable
+auto
+
+desirable:
+Actively negotiates EtherChannel.
+auto:
+Passive, waits for negotiation.
+
+PAgP compatibility
+Side A		Side B		Works?
+desirable	desirable	Yes
+desirable	auto		Yes
+auto		auto		No
+
+Why auto-auto fails:
+both wait,nobody starts negotiation
+
+
+
+3. LACP (Link Aggregation Control Protocol)
+channel-group 1 mode active/passive
+IEEE standard (802.3ad / 802.1AX).
+Preferred in modern networks.
+
+Modes:
+active
+passive
+
+active:
+Actively sends LACP packets.
+passive
+Waits for LACP negotiation.
+
+LACP compatibility
+Side A		Side B		Works?
+active		active		Yes
+active		passive		Yes
+passive		passive		No
+
+
+
+Important Rules
+1. Interfaces must match
+All ports in the EtherChannel must have identical:
+
+speed
+duplex
+VLAN mode
+allowed VLANs
+native VLAN
+trunk/access mode
+MTU
+
+
+2. Configure on Port-Channel interface
+
+Do NOT configure VLANs separately on member ports, but only on the port-channel interface.
+Member interfaces should mostly only contain:
+channel-group 1 mode active
+
+
+
+4. STP sees EtherChannel as ONE link
+
+Example:
+2 cables bundled = 1 logical interface
+
+Benefits:
+no spanning-tree blocking between bundled links
+full bandwidth utilization
+
+5. Load balancing
+
+EtherChannel does NOT split one single TCP stream over all links.
+
+Instead:
+flows are hashed
+different conversations use different links
+
+Example:
+PC1 -> ServerA = Link1
+PC2 -> ServerA = Link2
+
+Common load-balance algorithms
+src-mac
+dst-mac
+src-dst-mac
+src-ip
+dst-ip
+src-dst-ip
+
+port-channel load-balance src-dst-ip
+

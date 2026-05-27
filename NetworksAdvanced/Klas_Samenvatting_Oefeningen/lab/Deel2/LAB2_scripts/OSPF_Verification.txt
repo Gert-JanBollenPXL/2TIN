@@ -1,0 +1,83 @@
+show ip ospf neighbor
+=> state moet full zijn
+
+
+show ip route ospf
+=> routes met o ervoor
+
+
+show ip ospf interface GigabitEthernet0/0/1
+=> Hello 10, Dead 40 (ongeveer zien) 
+
+
+ipconfig 
+=> internet verbinding controleren 
+
+
+
+----------------------------------------------------------------------------------------
+LAB-RA04-C01-R01#show ip ospf neighbor
+
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+10.199.66.100   255   FULL/DR         00:00:38    10.199.66.100   GigabitEthernet0/0/1
+10.199.66.112     1   FULL/BDR        00:00:35    10.199.66.112   GigabitEthernet0/0/1
+
+
+LAB-RA04-C01-R01#show ip route ospf
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, m - OMP
+       n - NAT, Ni - NAT inside, No - NAT outside, Nd - NAT DIA
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       H - NHRP, G - NHRP registered, g - NHRP registration summary
+       o - ODR, P - periodic downloaded static route, l - LISP
+       a - application route
+       + - replicated route, % - next hop override, p - overrides from PfR
+       & - replicated local route overrides by connected
+
+Gateway of last resort is 10.199.66.100 to network 0.0.0.0
+
+O*E2  0.0.0.0/0 [110/1] via 10.199.66.100, 00:01:34, GigabitEthernet0/0/1
+
+
+LAB-RA04-C01-R01#show ip ospf interface GigabitEthernet0/0/1
+GigabitEthernet0/0/1 is up, line protocol is up
+  Internet Address 10.199.66.107/27, Interface ID 6, Area 0
+  Attached via Network Statement
+  Process ID 10, Router ID 10.199.66.107, Network Type BROADCAST, Cost: 1
+  Topology-MTID    Cost    Disabled    Shutdown      Topology Name
+        0           1         no          no            Base
+  Transmit Delay is 1 sec, State DROTHER, Priority 1
+  Designated Router (ID) 10.199.66.100, Interface address 10.199.66.100
+  Backup Designated router (ID) 10.199.66.112, Interface address 10.199.66.112
+  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5
+    oob-resync timeout 40
+    Hello due in 00:00:07
+…
+
+wifi kabel uittrekken
+Ping statistics for 8.8.8.8:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 4ms, Maximum = 5ms, Average = 4ms
+PS C:\Users\12400896> ipconfig
+Ethernet adapter Ethernet:
+
+   Connection-specific DNS Suffix  . : data.labnet.local
+   Link-local IPv6 Address . . . . . : fe80::4e68:25d4:aaaf:68fd%15
+   IPv4 Address. . . . . . . . . . . : 172.16.4.53
+   Subnet Mask . . . . . . . . . . . : 255.255.255.240
+   Default Gateway . . . . . . . . . : 172.16.4.49
+
+
+
+
+
+
+-------------------------------------------------------------------------------------------
+LET OP! ER STOND HRSP dus standby gebruiken en verwijzen naar default-gateway !!
+
+
+

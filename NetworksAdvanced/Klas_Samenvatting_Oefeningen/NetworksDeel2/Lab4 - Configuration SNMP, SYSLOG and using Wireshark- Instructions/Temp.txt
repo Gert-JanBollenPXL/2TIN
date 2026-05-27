@@ -1,0 +1,342 @@
+Opdracht 1:
+
+snmp-server community SNMP-RO RO
+snmp-server community SNMP-RW RW
+
+You can either let Cisco auto-generate it or manually set one. 
+Use a unique value per device.
+snmp-server engineID local 1234567890ABCDEF
+
+optional but useful for Zabbix
+snmp-server contact Robbe
+snmp-server location ServerRoom
+
+snmp-server host 10.199.64.67 version 2c SNMP-RO            -> enable traps
+snmp-server host 10.199.64.67 informs version 2c SNMP-RO    -> enable informs
+
+snmp-server enable traps snmp authentication
+snmp-server enable traps config
+snmp-server enable traps syslog
+
+
+# geen informs?
+
+
+Checks.
+show running-config | include snmp
+show logging
+ping 10.199.64.67
+show snmp engineID
+show snmp community
+
+
+
+
+
+
+
+SNMP Trap
+
+A trap is:
+Unsolicited
+Fire-and-forget
+UDP-based
+No acknowledgement required
+The device sends the message once and assumes it arrived.
+
+
+SNMP Inform
+
+An inform is similar to a trap, but more reliable.
+Differences:
+Requires acknowledgement (ACK)
+Device retries if no response
+More reliable than traps
+Slightly more bandwidth/CPU usage
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Opdracht 2:
+
+open http://10.199.64.67 (laptop or networking pc)
+user/pass = 2TIND
+
+Add Device in Zabbix
+
+Go to:
+Data collection → Hosts
+Click:
+Create host
+
+Configure Host
+Host tab
+Fill in:
+Field	        Value
+Host name	    Router/Switch name
+Visible name	Optional
+Interfaces      
+Templates	    Net Cisco IOS SNMP
+Host groups	    RACK01L
+
+
+Add SNMP Interface
+
+In the Interfaces section:
+Click:
+Add
+Choose:
+SNMP
+Fill in:
+Field	        Value
+IP address	    IP of router/switch
+Port	        161
+Remove the Agent interface if you only use SNMP.
+
+
+Configure SNMP Version
+
+Still in the SNMP interface:
+Setting	    Value
+Version	    SNMPv2
+Community	SNMP-RO
+
+
+Add Template
+
+Usually use one of these templates:
+Cisco IOS SNMP
+Generic SNMP
+Network Generic Device by SNMP
+
+
+
+
+
+Verify Monitoring Works
+
+Go to:
+Monitoring → Hosts
+or
+Monitoring → Latest data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Opdracht 3:
+
+
+
+no snmp-server community SNMP-TRAP ro
+no snmp-server host 10.199.64.67 version 2c SNMP-TRAP
+
+
+
+
+
+Polling (requests)	SNMP-REQ
+Notifications (traps/informs)	SNMP-NOTIFY
+
+
+ip access-list standard SNMP-ACL
+ permit 10.199.64.67
+ deny any
+
+snmp-server community SNMP-REQ RO SNMP-ACL
+snmp-server community SNMP-RW RW SNMP-ACL
+
+snmp-server host 10.199.64.67 version 2c SNMP-NOTIFY
+snmp-server host 10.199.64.67 informs version 2c SNMP-NOTIFY
+
+
+
+Full example secure config:
+
+ip access-list standard SNMP-ACL
+ permit 10.199.64.67
+ deny any
+
+snmp-server community SNMP-REQ RO SNMP-ACL
+snmp-server community SNMP-RW RW SNMP-ACL
+
+snmp-server host 10.199.64.67 version 2c SNMP-NOTIFY
+
+snmp-server enable traps snmp authentication
+snmp-server enable traps config
+snmp-server enable traps syslog
+
+logging host 10.199.64.67
+logging trap warnings
+
+
+
+In Zabbix SNMP interface:
+
+Use:
+Field	        Value
+SNMP Version	v2
+Community	    SNMP-REQ
+
+NOT SNMP-NOTIFY. Because Zabbix polls using the request community
+
+Test from another pc:
+snmpwalk -v2c -c SNMP-REQ 10.199.64.X
+
+Verify ACL hits:
+show access-lists SNMP-ACL
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Opdracht 3:
+
+
+
+logging host 10.199.64.134
+logging trap warnings       Sends severity 0–4
+logging on
+snmp-server enable traps syslog         This causes Cisco to generate SNMP notifications when syslog events occur.
+
+
+
+
+show running-config | include logging
+show running-config | include traps
+
+Generate logs to test
+
+debug snmp packets
+undebug all
+
+
+
+
+Syslog Severity Levels
+Level	Name
+0	    emergencies
+1	    alerts
+2	    critical
+3	    errors
+4	    warnings
+5	    notifications
+6	    informational
+7	    debugging
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Opdracht 4:
+
+ip access-list standard SNMP-ACL
+ permit 10.199.64.67
+ deny any
+
+snmp-server group ZABBIX v3 priv access SNMP-ACL
+
+snmp-server user zabbixuser ZABBIX v3 auth sha AuthPass123 priv aes 128 PrivPass123
+
+snmp-server host 10.199.64.67 version 3 priv zabbixuser
+
+snmp-server enable traps snmp authentication
+snmp-server enable traps config
+snmp-server enable traps syslog
+
+
+
+What is SNMP-VIEW???
+
+Add Device in Zabbix
+Go to:
+Data collection → Hosts
+Open the SNMP interface.
+
+Configure SNMPv3 in Zabbix
+Field	            Value
+Version	            SNMPv3
+Security name	    zabbixuser
+Security level	    authPriv
+Auth protocol	    SHA
+Auth passphrase	    AuthPass123
+Privacy protocol	AES128
+Privacy passphrase	PrivPass123
+
+
+
+
+show snmp user
+show snmp group
+show snmp engineID
+
+
+
+
+
+
+
+
+
+
+
+
+Opdracht 5:
+
+monitor session 1 source vlan 40
+monitor session 1 source interface gi0/1 both
+monitor session 1 destination interface gi0/24
+
+For Mirroring port for Vlan 40
+
+
+Option	Meaning
+rx	Incoming only
+tx	Outgoing only
+both	Both directions

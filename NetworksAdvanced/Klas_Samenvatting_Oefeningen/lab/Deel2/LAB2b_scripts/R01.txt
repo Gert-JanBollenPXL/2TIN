@@ -1,0 +1,108 @@
+! =========================
+! HOSTNAME
+! =========================
+hostname LAB-RA04-C01-R01
+
+! =========================
+! INTERFACE UP naar switch
+! =========================
+interface GigabitEthernet0/0/0
+ no shutdown
+exit
+
+! =========================
+! VLAN 10 (Management)
+! =========================
+interface gi0/0/0.10
+ encapsulation dot1q 10
+ ip address 172.16.4.2 255.255.255.240
+ standby 10 priority 110
+ standby 10 preempt
+ standby 10 ip 172.16.4.1
+ no shutdown
+exit
+
+! =========================
+! VLAN 20 (VM)
+! =========================
+interface gi0/0/0.20
+ encapsulation dot1q 20
+ ip address 172.16.4.18 255.255.255.240
+ standby 20 priority 110
+ standby 20 preempt
+ standby 20 ip 172.16.4.17
+ no shutdown
+exit
+
+! =========================
+! VLAN 30 (Servers)
+! =========================
+interface gi0/0/0.30
+ encapsulation dot1q 30
+ ip address 172.16.4.34 255.255.255.240
+ ip helper-address 10.199.64.66
+ standby 30 priority 110
+ standby 30 preempt
+ standby 30 ip 172.16.4.33
+ no shutdown
+exit
+
+! =========================
+! VLAN 40 (Users)
+! =========================
+interface gi0/0/0.40
+ encapsulation dot1q 40
+ ip address 172.16.4.50 255.255.255.240
+ ip helper-address 10.199.64.66
+ standby 40 priority 110
+ standby 40 preempt
+ standby 40 ip 172.16.4.49
+ no shutdown
+exit
+
+
+! =========================
+! VLAN 99 (Native)
+! =========================
+interface gi0/0/0.99
+ encapsulation dot1q 99
+ no shutdown
+exit
+
+! =========================
+! WAN INTERFACE
+! =========================
+interface GigabitEthernet0/0/1
+ ip address 10.199.66.137 255.255.255.192
+ no shutdown
+exit
+
+
+! =========================
+! OSPF CONFIGURATIE (Part 1a)
+! =========================
+router ospf 10
+ router-id 10.199.66.137
+
+
+ ! Management, Data_Users, WAN
+ network 172.16.4.0 0.0.0.15 area 0
+ network 172.16.4.48 0.0.0.15 area 0
+ network 10.199.66.128 0.0.0.63 area 0
+
+ ! disable LSA updates
+ passive-interface GigabitEthernet0/0/0.10
+ passive-interface GigabitEthernet0/0/0.20
+ passive-interface GigabitEthernet0/0/0.30
+ passive-interface GigabitEthernet0/0/0.40
+
+! =======================================
+! SSH CONFIG
+! =======================================
+ip domain name data.labnet.local
+crypto key generate rsa general-keys modulus 1024
+username student privilege 15 secret pxl
+line vty 0 15
+ transport input ssh
+ login local
+exit

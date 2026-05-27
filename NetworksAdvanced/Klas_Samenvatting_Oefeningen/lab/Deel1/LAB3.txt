@@ -1,0 +1,519 @@
+SW03:
+= oud toestel
+Geen SSH mogelijk en Fa poorten ipv Gig (alleen 2 gig poorten geel )
+
+Would you like to terminate autoinstall? [yes]: yes
+
+
+         --- System Configuration Dialog ---
+
+Would you like to enter the initial configuration dialog? [yes/no]: no
+Switch>
+
+conf t:
+
+! =======================================
+! HOSTNAME
+! =======================================
+hostname LAB-RA04-A01-SW03
+
+! =======================================
+! NTP
+! =======================================
+ntp server 10.199.64.66
+
+! =======================================
+! VLANs
+! =======================================
+vlan 41
+ name Management
+vlan 42
+ name Data_Users
+vlan 43
+ name Voice_Users
+vlan 44
+ name Reserved
+vlan 99
+ name Native
+exit
+
+! show vlan brief
+
+! =======================================
+! MANAGEMENT IP (VLAN 41)
+! =======================================
+interface vlan 41
+ ip address 172.17.4.6 255.255.255.240
+ no shutdown
+exit
+
+ip default-gateway 172.17.4.1
+
+! =======================================
+! DOMAIN & CREDENTIALS
+! =======================================
+ip domain name data.labnet.local
+username student privilege 15 secret pxl
+
+
+
+LAB-RA04-A01-SW03(config)#interface gi0/1
+LAB-RA04-A01-SW03(config-if)#switchport mode access
+LAB-RA04-A01-SW03(config-if)#switchport access vlan 42
+LAB-RA04-A01-SW03(config-if)#end
+LAB-RA04-A01-SW03#
+
+
+LAB-RA04-A01-SW03(config)#interface range Fa0/21-22
+LAB-RA04-A01-SW03(config-if-range)#channel-group 1 mode on
+Creating a port-channel interface Port-channel 1
+
+LAB-RA04-A01-SW03(config-if-range)#exit
+LAB-RA04-A01-SW03(config)#interface port-channel 1
+LAB-RA04-A01-SW03(config-if)#switchport mode trunk
+LAB-RA04-A01-SW03(config-if)#switchport trunk allowed vlan 41-44
+LAB-RA04-A01-SW03(config-if)#switchport trunk native vlan 99
+LAB-RA04-A01-SW03(config-if)#spanning-tree link-type point-to-point
+LAB-RA04-A01-SW03(config-if)#end
+LAB-RA04-A01-SW03#
+
+
+
+LAB-RA04-A01-SW03(config)#interface range Fa0/23-24
+LAB-RA04-A01-SW03(config-if-range)#channel-group 2 mode on
+Creating a port-channel interface Port-channel 2
+LAB-RA04-A01-SW03(config-if-range)#exit
+
+LAB-RA04-A01-SW03(config)#interface port-channel 2
+LAB-RA04-A01-SW03(config-if)#switchport mode trunk
+LAB-RA04-A01-SW03(config-if)#switchport trunk allowed vlan 41-44
+LAB-RA04-A01-SW03(config-if)#switchport trunk native vlan 99
+LAB-RA04-A01-SW03(config-if)#spanning-tree link-type point-to-point
+LAB-RA04-A01-SW03(config-if)#end
+LAB-RA04-A01-SW03#
+
+Blokked ports worden automatsich bepaald door het protocol (door prioriteiten van anderen )
+---------------------------------------------------------------------------------------
+SW01:
+
+conf t
+
+! =======================================
+! HOSTNAME
+! =======================================
+hostname LAB-RA04-A01-SW01
+
+! =======================================
+! NTP
+! =======================================
+ntp server 10.199.64.66
+
+! =======================================
+! VLANs
+! =======================================
+vlan 41
+ name Management
+vlan 42
+ name Data_Users
+vlan 43
+ name Voice_Users
+vlan 44
+ name Reserved
+vlan 99
+ name Native
+exit
+
+! show vlan brief
+
+! =======================================
+! MANAGEMENT IP (VLAN 41)
+! =======================================
+interface vlan 41
+ ip address 172.17.4.4 255.255.255.240
+ no shutdown
+exit
+
+ip default-gateway 172.17.4.1
+
+! =======================================
+! DOMAIN & CREDENTIALS
+! =======================================
+ip domain name data.labnet.local
+username student privilege 15 secret pxl
+
+
+LAB-RA04-A01-SW01(config)#interface range gi1/0/23-24
+LAB-RA04-A01-SW01(config-if-range)#channel-group 3 mode on
+Creating a port-channel interface Port-channel 3
+
+LAB-RA04-A01-SW01(config-if-range)#exit
+LAB-RA04-A01-SW01(config)#interface port-channel 3
+LAB-RA04-A01-SW01(config-if)#switchport mode trunk
+LAB-RA04-A01-SW01(config-if)#switchport trunk allowed vlan 41-44
+LAB-RA04-A01-SW01(config-if)#switchport trunk native vlan 99
+LAB-RA04-A01-SW01(config-if)#spanning-tree link-type point-to-point
+LAB-RA04-A01-SW01(config-if)#end
+
+LAB-RA04-A01-SW01(config)#spanning-tree vlan 41-44 root primary
+LAB-RA04-A01-SW01(config)#
+
+
+
+
+LAB-RA04-A01-SW01(config)#interface range gi1/0/21-22
+LAB-RA04-A01-SW01(config-if-range)#channel-group 4 mode on
+Creating a port-channel interface Port-channel 4
+
+LAB-RA04-A01-SW01(config-if-range)#exit
+LAB-RA04-A01-SW01(config)#interface port-channel 4
+LAB-RA04-A01-SW01(config-if)#switchport mode trunk
+LAB-RA04-A01-SW01(config-if)#switchport trunk allowed vlan 41-44
+LAB-RA04-A01-SW01(config-if)#switchport trunk native vlan 99
+LAB-RA04-A01-SW01(config-if)#spanning-tree link-type point-to-point
+LAB-RA04-A01-SW01(config-if)#end
+LAB-RA04-A01-SW01#
+
+
+LAB-RA04-A01-SW01(config)#interface gi1/0/20
+LAB-RA04-A01-SW01(config-if)#switchport mode trunk
+LAB-RA04-A01-SW01(config-if)#switchport trunk allowed vlan 41-44
+LAB-RA04-A01-SW01(config-if)#switchport trunk native vlan 99
+LAB-RA04-A01-SW01(config-if)#end
+LAB-RA04-A01-SW01#
+
+---------------------------------------------------------------------------------------
+SW02:
+
+conf t
+
+! =======================================
+! HOSTNAME
+! =======================================
+hostname LAB-RA04-A01-SW02
+
+! =======================================
+! NTP
+! =======================================
+ntp server 10.199.64.66
+
+! =======================================
+! VLANs
+! =======================================
+vlan 41
+ name Management
+vlan 42
+ name Data_Users
+vlan 43
+ name Voice_Users
+vlan 44
+ name Reserved
+vlan 99
+ name Native
+exit
+
+! show vlan brief
+
+! =======================================
+! MANAGEMENT IP (VLAN 41)
+! =======================================
+interface vlan 41
+ ip address 172.17.4.5 255.255.255.240
+ no shutdown
+exit
+
+ip default-gateway 172.17.4.1
+
+! =======================================
+! DOMAIN & CREDENTIALS
+! =======================================
+ip domain name data.labnet.local
+username student privilege 15 secret pxl
+
+LAB-RA04-A01-SW02(config)#spanning-tree vlan 41-44 root secondary
+
+
+
+LAB-RA04-A01-SW02(config)#interface range gi1/0/23-24
+LAB-RA04-A01-SW02(config-if-range)#channel-group 5 mode on
+Creating a port-channel interface Port-channel 5
+
+LAB-RA04-A01-SW02(config-if-range)#exit
+LAB-RA04-A01-SW02(config)#interface port-channel 5
+LAB-RA04-A01-SW02(config-if)#switchport mode trunk
+LAB-RA04-A01-SW02(config-if)#switchport trunk allowed vlan 41-44
+LAB-RA04-A01-SW02(config-if)#switchport trunk native vlan 99
+LAB-RA04-A01-SW02(config-if)#spanning-tree link-type point-to-point
+LAB-RA04-A01-SW02(config-if)#end
+LAB-RA04-A01-SW02#
+
+
+LAB-RA04-A01-SW02(config)#interface range gi1/0/21-22
+LAB-RA04-A01-SW02(config-if-range)#channel-group 6 mode on
+Creating a port-channel interface Port-channel 6
+
+LAB-RA04-A01-SW02(config-if-range)#exit
+LAB-RA04-A01-SW02(config)#interface port-channel 6
+LAB-RA04-A01-SW02(config-if)#switchport mode trunk
+LAB-RA04-A01-SW02(config-if)#switchport trunk allowed vlan 41-44
+LAB-RA04-A01-SW02(config-if)#switchport trunk native vlan 99
+LAB-RA04-A01-SW02(config-if)#spanning-tree link-type point-to-point
+LAB-RA04-A01-SW02(config-if)#end
+LAB-RA04-A01-SW02#
+
+
+LAB-RA04-A01-SW02(config)#interface gi1/0/20
+LAB-RA04-A01-SW02(config-if)#switchport mode trunk
+LAB-RA04-A01-SW02(config-if)#switchport trunk allowed vlan 41-44
+LAB-RA04-A01-SW02(config-if)#switchport trunk native vlan 99
+LAB-RA04-A01-SW02(config-if)#end
+LAB-RA04-A01-SW02#
+
+-----------------------------------------------------------------------------------------
+R01:
+
+Router(config)#interface GigabitEthernet0/0/0
+Router(config-if)#no shutdown
+
+Router(config)#interface gi0/0/0.41
+Router(config-subif)#encapsulation dot1q 41
+Router(config-subif)#ip add 172.17.4.2 255.255.255.240
+Router(config-subif)#standby 41 priority 110
+Router(config-subif)#standby 41 preempt
+Router(config-subif)#standby 47 ip 172.17.4.1 (ip van de default gateway)
+Router(config-subif)#no shutdown
+Router(config-subif)#exit
+Router(config)#
+
+
+Router(config)#interface gi0/0/0.42
+Router(config-subif)#encapsulation dot1q 42
+Router(config-subif)#ip add 172.17.4.18 255.255.255.240
+Router(config-subif)#standby 42 priority 110
+Router(config-subif)#standby 42 preempt
+Router(config-subif)#standby 42 ip 172.17.4.17
+Router(config-subif)#no shutdown
+Router(config-subif)#exit
+Router(config)#
+
+Router(config)#interface gi0/0/0.43
+Router(config-subif)#encapsulation dot1q 43
+Router(config-subif)#ip add 172.17.4.34 255.255.255.240
+Router(config-subif)#standby 43 priority 110
+Router(config-subif)#standby 43 preempt
+Router(config-subif)#standby 43 ip 172.17.4.33
+Router(config-subif)#no shutdown
+Router(config-subif)#exit
+Router(config)#
+
+
+Router(config)#interface gi0/0/0.44
+Router(config-subif)#encapsulation dot1q 44
+Router(config-subif)#ip add 172.17.4.50 255.255.255.240
+Router(config-subif)#standby 44 priority 110
+Router(config-subif)#standby 44 preempt
+Router(config-subif)#standby 44 ip 172.17.4.49
+Router(config-subif)#no shutdown
+Router(config-subif)#exit
+Router(config)#
+
+Router(config)#interface gi0/0/0.99
+Router(config-subif)#encapsulation dot1q 99
+Router(config-subif)#
+
+Router(config)#interface gi0/0/1
+Router(config-if)#ip address 10.199.65.107 255.255.255.224
+Router(config-if)#no shutdown
+Router(config-if)#exit
+
+
+Router(config)#ip route 0.0.0.0 0.0.0.0 10.199.65.100
+
+
+conf t
+interface g0/0/0.42
+ ip helper-address 10.199.64.66
+end
+
+=> moet verplicht gedaan worden anders gaat de router geen broadcast verder sturen en allen in de vlan van de data_users 
+
+---------------------------------------------------------------------------------------
+R02:
+
+Router(config)#interface GigabitEthernet0/0/0
+Router(config-if)#no shutdown
+
+Router(config)#interface gi0/0/0.41
+Router(config-subif)#encapsulation dot1q 41
+Router(config-subif)#ip add 172.17.4.3 255.255.255.240
+Router(config-subif)#standby 41 priority 100
+Router(config-subif)#standby 41 preempt
+Router(config-subif)#standby 41 ip 172.17.4.1
+Router(config-subif)#no shutdown
+Router(config-subif)#exit
+
+
+Router(config)#interface gi0/0/0.42
+Router(config-subif)#encapsulation dot1q 42
+Router(config-subif)#ip add 172.17.4.19 255.255.255.240
+Router(config-subif)#standby 42 priority 100
+Router(config-subif)#standby 42 preempt
+Router(config-subif)#standby 42 ip 172.17.4.17
+Router(config-subif)#no shutdown
+Router(config-subif)#exit
+Router(config)#
+
+
+Router(config)#interface gi0/0/0.43
+Router(config-subif)#encapsulation dot1q 43
+Router(config-subif)#ip add 172.17.4.35 255.255.255.240
+Router(config-subif)#standby 43 priority 100
+Router(config-subif)#standby 43 preempt
+Router(config-subif)#standby 43 ip 172.17.4.33
+Router(config-subif)#no shutdown
+Router(config-subif)#exit
+
+
+Router(config)#interface gi0/0/0.44
+Router(config-subif)#encapsulation dot1q 44
+Router(config-subif)#ip add 172.17.4.51 255.255.255.240
+Router(config-subif)#standby 44 priority 100
+Router(config-subif)#standby 44 preempt
+Router(config-subif)#standby 44 ip 172.17.4.49
+Router(config-subif)#no shutdown
+Router(config-subif)#exit
+
+
+Router(config)#interface gi0/0/0.99
+Router(config-subif)#encapsulation dot1q 99
+Router(config-subif)#
+
+Router(config)#interface gi0/0/1
+Router(config-if)#ip address 10.199.65.207 255.255.255.224
+Router(config-if)#no shutdown
+Router(config-if)#exit
+Router(config)#
+
+
+Router(config)#ip route 0.0.0.0 0.0.0.0 10.199.65.200
+Router(config)#
+
+------------------------------------------------------------------------------------
+testen:
+Router 1:
+
+
+Router#show ip interface brief
+Interface              IP-Address      OK? Method Status                Protocol
+GigabitEthernet0/0/0   unassigned      YES unset  up                    up
+Gi0/0/0.41             172.17.4.2      YES manual up                    up
+Gi0/0/0.42             172.17.4.18     YES manual up                    up
+Gi0/0/0.43             172.17.4.34     YES manual up                    up
+Gi0/0/0.44             172.17.4.50     YES manual up                    up
+Gi0/0/0.99             unassigned      YES unset  up                    up
+GigabitEthernet0/0/1   10.199.65.107   YES manual up                    up
+Serial0/1/0            unassigned      YES unset  administratively down down
+Serial0/1/1            unassigned      YES unset  administratively down down
+Router#
+
+
+
+
+
+Router 1:
+
+Router#show standby brief
+                     P indicates configured to preempt.
+                     |
+Interface   Grp  Pri P State   Active          Standby         Virtual IP
+Gi0/0/0.41  41   110 P Active  local           172.17.4.3      172.17.4.1
+Gi0/0/0.42  42   110 P Active  local           172.17.4.19     172.17.4.17
+Gi0/0/0.43  43   110 P Active  local           172.17.4.35     172.17.4.33
+Gi0/0/0.44  44   110 P Active  local           172.17.4.51     172.17.4.49
+Router#
+
+
+router 2:
+
+Router#show standby brief
+                     P indicates configured to preempt.
+                     |
+Interface   Grp  Pri P State   Active          Standby         Virtual IP
+Gi0/0/0.41  41   100 P Standby 172.17.4.2      local           172.17.4.1
+Gi0/0/0.42  42   100 P Standby 172.17.4.18     local           172.17.4.17
+Gi0/0/0.43  43   100 P Standby 172.17.4.34     local           172.17.4.33
+Gi0/0/0.44  44   100 P Standby 172.17.4.50     local           172.17.4.49
+Router#
+Router#
+
+
+Nog tegoei verder testen 
+
+Ethernet adapter Ethernet:
+
+   Connection-specific DNS Suffix  . : data.labnet.local
+   Link-local IPv6 Address . . . . . : fe80::4e68:25d4:aaaf:68fd%15
+   IPv4 Address. . . . . . . . . . . : 172.17.4.21
+   Subnet Mask . . . . . . . . . . . : 255.255.255.240
+   Default Gateway . . . . . . . . . : 172.17.4.17
+
+------------------------------------------------------------------------------------------------------------
+EXTRA tracking
+
+Router(config)#track 1 interface GigabitEthernet0/0/1 line-protocol
+Router(config-track)#interface GigabitEthernet0/0/0.41
+Router(config-subif)# standby 41 track 1 decrement 20
+Router(config-subif)#exit
+Router(config)#interface GigabitEthernet0/0/0.42
+Router(config-subif)# standby 42 track 1 decrement 20
+Router(config-subif)#
+Router(config-subif)#interface GigabitEthernet0/0/0.43
+Router(config-subif)# standby 43 track 1 decrement 20
+Router(config-subif)#
+Router(config-subif)#interface GigabitEthernet0/0/0.44
+Router(config-subif)# standby 44 track 1 decrement 20
+Router(config-subif)#exit
+Router(config)#
+
+=> op zowel router 1 als 2 doen 
+
+
+checken: niet uitrekken maar laten steken 
+
+Router(config)#Interface GigabitEthernet 0/0/1
+Router(config-if)#shutdown
+Router(config-if)#end
+
+
+ROUTER 1: 
+Router#show track 1
+Track 1
+  Interface GigabitEthernet0/0/1 line-protocol
+  Line protocol is Down ((hw admin-down))
+    4 changes, last change 00:00:40
+  Tracked by:
+    HSRP GigabitEthernet0/0/0.41 41
+    HSRP GigabitEthernet0/0/0.42 42
+    HSRP GigabitEthernet0/0/0.43 43
+    HSRP GigabitEthernet0/0/0.44 44
+Router#
+
+
+
+ROUTER 2:
+Router#show track 1
+Track 1
+  Interface GigabitEthernet0/0/1 line-protocol
+  Line protocol is Up
+    1 change, last change 00:04:47
+  Tracked by:
+    HSRP GigabitEthernet0/0/0.41 41
+    HSRP GigabitEthernet0/0/0.42 42
+    HSRP GigabitEthernet0/0/0.43 43
+    HSRP GigabitEthernet0/0/0.44 44
+Router#
+
+
+De prioriteit neemt met 20 af als hij het IP niet vindt 
+
+
+

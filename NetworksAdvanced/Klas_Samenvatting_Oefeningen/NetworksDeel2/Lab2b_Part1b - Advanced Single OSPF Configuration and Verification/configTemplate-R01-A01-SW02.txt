@@ -1,0 +1,77 @@
+configure terminal
+!
+hostname LAB-R01-A01-SW02
+login on-success log
+login on-failure log
+!
+ip domain name data.labnet.local
+!
+spanning-tree mode rapid-pvst
+spanning-tree vlan 10,20,30,40,99 root secondary
+errdisable recovery cause bpduguard
+errdisable recovery interval 300
+!
+username student privilege 15 secret secret
+!
+interface range gigabitEthernet 1/0/1-2
+ switchport mode access
+ switchport access vlan 40
+ spanning-tree bpduguard enable
+ spanning-tree portfast
+!
+interface range gigabitEthernet 1/0/3-4
+ switchport mode access
+ switchport access vlan 30
+ spanning-tree bpduguard enable
+ spanning-tree portfast
+!
+interface range gigabitEthernet 1/0/5-21
+ switchport access vlan 99
+ switchport mode access
+ spanning-tree bpduguard enable
+ spanning-tree portfast
+ shutdown
+!
+interface gigabitEthernet 1/0/22
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30,40
+ switchport trunk native vlan 99
+ spanning-tree link-type point-to-point
+!
+interface range gigabitEthernet 1/0/23-24
+ channel-group 1 mode active
+!
+interface port-channel 1
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30,40
+ switchport trunk native vlan 99
+ spanning-tree link-type point-to-point
+!
+interface vlan 10
+ ip address 172.16.1.6 255.255.255.240
+!
+ip default-gateway 172.16.1.1
+!
+vlan 10
+ name Management
+!
+vlan 20
+ name VM-Hosts
+!
+vlan 30
+ name Appliance-Servers
+!
+vlan 40
+ name Data-Users
+!
+vlan 99
+ name Native-Vlan
+!
+line vty 0 15
+ login local
+ transport input ssh
+!
+ntp server 10.199.64.66
+!
+crypto key generate rsa modulus 1024
+!

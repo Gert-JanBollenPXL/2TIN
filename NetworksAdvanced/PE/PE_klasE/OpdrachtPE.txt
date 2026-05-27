@@ -1,0 +1,136 @@
+Inhoud van toets
+
+Vraag
+
+Installeer en configureer je labtestomgeving (LAB 2b) volgens het netwerkdiagram en de instructies.
+Deze lab moet op hardware worden uitgevoerd.
+
+
+Zorg ervoor dat alle netwerkcomponenten hun klok synchroniseren met de centrale NTP-server zoals aangegeven in het diagram.
+Vraag
+
+DEEL 1:
+
+In deel 1 hoef je alleen de apparaten LAB-RA0X-C01(02)-R01 en LAB-RA0X-A01(02)-SW01 te configureren en aan OSPF te verbinden.
+Vraag 1
+
+Verbind je PC met de poort GigabitEthernet1/0/10 van switch LAB-RA0X-A(01-02)-SW01 en zorg ervoor dat je via DHCP een IP-adres
+ontvangt uit het Data-Users subnet.
+Voeg de twee onderstaande screenshots toe:
+
+Maak een screenshot van de uitvoer op je PC waar het IP-adres wordt toegewezen aan de bedrade NIC via DHCP. 
+Gebruik de opdracht "ipconfig /all" in de opdrachtprompt van je Windows PC.
+Maak een screenshot van de uitvoer van de commando's op de switch LAB-RA0X-A(01-02)-SW01:
+"sh running-config interface gigabitEthernet 1/0/10'
+"show clock"
+
+Vraag 2
+Maak via SSH verbinding met de router LAB-RA0X-C(01-02)-R01 vanaf je PC.
+
+Maak de volgende screenshots en plak de uitvoer hieronder:
+De uitvoer op je PC waar de SSH-verbinding met de router succesvol is tot stand gekomen.
+Voer onderstaande commando's uit op de router LAB-RA0X-C(01-02)-R01 in de opdrachtregel:
+'show clock'
+'show ssh'
+
+DEEL 2:
+
+In deel 2 voeg je de apparaten LAB-RA0X-C01(02)-R02 en LAB-RA0X-A01(02)-SW02 toe aan het netwerk en verbind je de router
+LAB-RA0X-C01(02)-R02 met de OSPF-cloud.
+Vraag 3
+
+Configureer HSRP om default-gateway redundancy binnen het LAN te realiseren.
+
+
+Maak een screenshot van onderstaande twee commando's die de HSRP-status en de klok op de primaire router 
+LAB-RA0X-C(01-02)-R02 controleren.
+Gebruik de commando's in de opdrachtregel:
+"show clock "
+"show standby brief" 
+
+Vraag 4
+Activeer OSPF op de router met network-statements en inverse masks. Zorg dat de router alleen de interne subnets 
+Management en Data-Users adverteert en de nodige adjacencies vormt om de aankondiging in de area te laten plaatsvinden. 
+Gebruik de OSPF-configuratiedetails uit het labo.
+Controleer je OSPF-adjacenties en de routeringstabel.
+Voer op beide routers LAB-RA0X-C(01-02)-R01 en LAB-RA0X-C(01-02)-R02 onderstaande commando’s uit:
+'show clock'
+"show ip route"
+"show ip protocols"
+"show ip ospf neighbors"
+
+Maak van beide uitvoeren een duidelijke schermafbeelding waarop de status van de OSPF-adjacenties en de routingtabel zichtbaar is.
+
+Vraag 5
+Koppel de kabels los van zowel de LAN- als de WAN-interface op de router LAB-RA0X-C(01-02)-R01. 
+Als alternatief kun je de poorten uitschakelen in plaats van de kabels fysiek los te koppelen, indien gewenst.
+Verifieer vanaf je PC of de internetverbinding van de router is veranderd.
+Maak een screenshot van de output van onderstaande commando's :
+'show clock' op de switch LAB-RA0X-A(01-02)-SW01
+Voer een tracert uit naar 8.8.8.8 vanaf je PC en voeg een screenshot hieronder toe.
+Beide commando's in 1 screenshot voorzien.
+
+Vraag 6
+Koppel de kabels opnieuw aan de LAN- en WAN-interface van de router LAB-RA0X-C(01-02)-R01, die je voorheen hebt losgekoppeld 
+of uitgeschakeld.
+Optimaliseer vervolgens je WAN-verbinding door de OSPF-configuratie aan te passen volgens onderstaande instructie:
+Zorg ervoor dat de WAN-link van de primaire router LAB-RA0X-C(01-02)-R01 geprefereerd wordt in de routeringstabel van 
+LAB-BR-C-R04. Pas hiervoor de OSPF-configuratie aan op router LAB-RA0X-C(01-02)-R02, zodat deze een minder voorkeur krijgt.
+Maak een screenshot van de uitvoer van onderstaande commando's in de opdrachtregel van de router LAB-RA0X-C(01-02)-R02.
+"show ip ospf interface" op de router LAB-RA0X-C(01-02)-R02
+
+Zorg ervoor dat de screenshot duidelijk de configuratie-instelling toont die een impact heeft op de routeringstabel van 
+LAB-BR-C-R04.
+Voeg indien nodig een korte toelichting toe bij je screenshot om aan te geven welke parameter aangepast werd en 
+waarom dit ervoor zorgt dat de WAN-link van LAB-RA0X-C(01-02)-R01 geprefereerd wordt.
+
+DEEL 3:
+In deel 3 moet je de configuratie-opdrachten van LAB 3 en LAB 4 uitvoeren en het resultaat hiervan aanleveren.
+Koppel de kabels opnieuw aan de LAN- en WAN-interface van de router LAB-RA0X-C(01-02)-R01, die je in de vorige vraag 
+hebt losgekoppeld of uitgeschakeld.
+
+Vraag 7
+Configureer PAT (Port Address Translation) op router LAB-RA0X-C(01-02)-R01 zodat de private IP-adressen van het User-Subnet
+VLAN (VLAN 40) vertaald worden naar het IP-adres van de WAN-interface van de router.
+Connecteer je PC via de eerder geconfigureerde poort en zorg dat je een verbinding maakt met internet.
+Maak een screenshot van de uitvoer van de onderstaande commando's op router LAB-RA0X-C(01-02)-R01 die bevestigt dat PAT 
+correct werkt.
+"show clock"
+"show show access-lists"
+"show ip nat translations"
+
+Vraag 8
+Configureer op de router LAB-RA0X-C(01-02)-R01 een Access Control List ACL om het SSH-verkeer naar de VTY-lijnen 
+(virtual teletype) van de router te beheren.
+De ACL mag maximaal drie  regels bevatten en moet het volgende beleid afdwingen:
+
+Sta SSH-verkeer toe van het bron-IP-adres 10.199.64.134.
+Weiger SSH-verkeer van het bron-IP-adres 10.199.64.137.
+Sta SSH-verkeer toe vanaf bron-IP-adressen die tot het managementsubnet (VLAN 10) van je LAN behoren..
+
+Voeg het sleutelwoord log toe aan alle regels om het SSH-verkeer naar de router te monitoren.
+
+Probeer nu de volgende tests uit vanaf de werkstations in het lab:
+Maak een SSH-verbinding vanaf het werkstation met IP 10.199.64.134 naar de router LAB-RA0X-A(01-02)-R01
+Maak een SSH-verbinding vanaf het werkstation met IP 10.199.64.137 naar de router LAB-RA0X-A(01-02)-R01
+
+Maak een screenshot van de volgende uitvoer van het volgende commando op de router LAB-RA0X-C(01-02)-R01 na het uitvoeren van 
+bovenstaande testen:
+"show log"
+"show access-lists"
+
+Vraag 9
+In LAB 4 heb je apparaten toegevoegd aan de Zabbix SNMP-server.
+Maak een screenshot waarop te zien is dat je router LAB-RA0X-C(01-02)-R01 succesvol is toegevoegd aan de Zabbix-server en dat 
+deze als online wordt weergegeven.
+
+Vraag 10
+In LAB 4 heb je DHCP-verkeer van een client in VLAN 40 (Data-User segment) moeten capturen met Wireshark. 
+Verbind je PC en maak een capture van het DHCP-verkeer.
+Gebruik een filter in Wireshark zodat alleen DHCP-verkeer wordt weergegeven. Het bidirectionele DHCP-proces moet zichtbaar zijn.
+Maak een screenshot en voeg deze hieronder toe.
+
+EINDE:
+Aan het einde van de PE, reset je alle configuraties op je apparaten.
+Als er nog configuratie op het apparaat staat, verlies je 3 punten.
+DeviceResetX is de opdracht die je moet gebruiken om alle configuratie te verwijderen.

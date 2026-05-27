@@ -1,0 +1,81 @@
+! =========================
+! HOSTNAME
+! =========================
+hostname LAB-RA04-C01-R02
+
+! =========================
+! INTERFACE UP
+! =========================
+interface GigabitEthernet0/0/0
+ no shutdown
+exit
+
+! =========================
+! VLAN 41
+! =========================
+interface gi0/0/0.41
+ encapsulation dot1q 41
+ ip address 172.17.4.3 255.255.255.240
+ standby 41 priority 100
+ standby 41 preempt
+ standby 41 ip 172.17.4.1
+ no shutdown
+exit
+
+! =========================
+! VLAN 42
+! =========================
+interface gi0/0/0.42
+ encapsulation dot1q 42
+ ip address 172.17.4.19 255.255.255.240
+ standby 42 priority 100
+ standby 42 preempt
+ standby 42 ip 172.17.4.17
+ ip helper-address 10.199.64.66
+ no shutdown
+exit
+
+! =========================
+! VLAN 43
+! =========================
+interface gi0/0/0.43
+ encapsulation dot1q 43
+ ip address 172.17.4.35 255.255.255.240
+ standby 43 priority 100
+ standby 43 preempt
+ standby 43 ip 172.17.4.33
+ no shutdown
+exit
+
+! =========================
+! VLAN 44
+! =========================
+interface gi0/0/0.44
+ encapsulation dot1q 44
+ ip address 172.17.4.51 255.255.255.240
+ standby 44 priority 100
+ standby 44 preempt
+ standby 44 ip 172.17.4.49
+ no shutdown
+exit
+
+! =========================
+! VLAN 99
+! =========================
+interface gi0/0/0.99
+ encapsulation dot1q 99
+ no shutdown
+exit
+
+! =========================
+! WAN INTERFACE
+! =========================
+interface gi0/0/1
+ ip address 10.199.65.207 255.255.255.224
+ no shutdown
+exit
+
+! =========================
+! DEFAULT ROUTE
+! =========================
+ip route 0.0.0.0 0.0.0.0 10.199.65.200
