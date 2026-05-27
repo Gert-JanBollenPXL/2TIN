@@ -58,8 +58,6 @@ interface GigabitEthernet0/0/1
  ip address 10.199.66.154 255.255.255.192
  ip ospf 10 area 0
 !
-! OSPF via network statements:
-!
 router ospf 10
  router-id 10.199.66.154
  passive-interface GigabitEthernet0/0/0.10
