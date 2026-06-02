@@ -1015,7 +1015,7 @@ Ansible cannot decrypt anything unless it knows the vault password, there are se
 
 - Interactive prompt (default)
 - Password file ``.vault_pass``, given to Ansible-vault with: ``--vault-password-file=.vault_pass``
-- Automatic password configuration by exporting ´´.vault_pass`` to an environment variable
+- Automatic password configuration by exporting ``.vault_pass`` to an environment variable
 - Password client cripts: Ansible can run a script and use its output as the Vault password. That script can read from an environment variable, a keyring, or a secret manager
 - Vault IDs: let you use more than one Vault password in the same project
 For example:
