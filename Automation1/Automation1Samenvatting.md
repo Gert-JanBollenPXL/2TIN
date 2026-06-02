@@ -528,6 +528,8 @@ An example of setting a custom SSH port for the ``dbservers`` group:
 ansible_port=2222
 ```
 
+---
+
 ## 3. Variables
 
 - Variables can be used in tasks, playbooks, roles and inventories
