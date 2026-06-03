@@ -106,4 +106,156 @@ db.movieDetails.find({countries:{$nin:["USA", "UK"]}}, {title:1, countries:1})
 - Opgave 19:
 Hoeveel films zijn van het jaar 2000 of 2010?
 
-db.movieDetails.find({})
+db.movieDetails.find({year:{$in:[2000, 2010]}}, {title:1, year:1, _id:0})
+
+- Opgave 20:
+In welke films speelden de acteurs Harrison Ford of Dennis Hopper mee? Geef de titel, samen met de acteurs weer.
+
+db.movieDetails.find({actors:{$in:["Harrison Ford", "Dennis Hopper"]}}, {title:1, actors:1, _id:0})
+
+- Opgave 21a:
+Hoeveel films zijn zowel in UK als USA gefilmd? Let op: in andere landen kan ook nog gefilmd zijn.
+
+db.movieDetails.find({countries:{$all:["UK", "USA"]}}).count()
+
+- Opgave 21b:
+Hoeveel films werden enkel in UK en USA gefilmd? Is de volgorde van belang?
+
+db.movieDetails.find({countries:["UK", "USA"]}).count()
+=> 20 films
+db.movieDetails.find({countries:["USA", "UK"]}).count()
+=> 17 films
+
+De volgorde is van belang!
+
+- Opgave 22:
+Geef de titels weer van de films geschreven door zowel Sergio Donati als Sergio Leone. Zorg ervoor dat 
+het niet uitmaakt of de namen in hoofdletters of kleine letters in de database staan.
+
+db.movieDetails.find({writers:{$all:[/Sergio Donati/i, Sergio Leone/i]}}, {title:1, _id:0})
+
+- Opgave 23:
+Hoeveel films werden door 5 personen geschreven?
+
+db.movieDetails.find({writers: {$size:5}}).count()
+
+- Opgave 24:
+Hoeveel films hebben 2 awards gewonnen?
+
+db.movieDetails.find({"awards.wins": 2}).count()
+
+- Opgave 25:
+Toon enkel title, countries en genres van maximum 10 films die als genre “Crime” hebben en als country “USA”.
+
+db.movieDetails.find({genres: "Crime", countries: "USA"}, {title:1, countries:1, genres:1, _id:0}).limit(10)
+
+- Opgave 26:
+Toon enkel title, countries en genres van maximum 10 films vanaf de 3 de film die als genre zowel “Western” als “Comedy” 
+hebben en als country “USA”.
+
+db.movieDetails.find({genres: {$all:["Western", "Comedy"]}, countries: "USA"}, {title:1, countries:1, genres:1, _id:0}).skip(2).limit(10)
+
+- Opgave 27:
+Toon enkel title, countries en genres vanaf de 6de film maar beperk het aantal tot maximum 20 films die als 
+genre “Comedy” hebben en als country zowel “USA” als “UK".
+
+db.movieDetails.find({genres: "Comedy", countries: {$all:["USA", "UK"]}}, {title:1, countries:1, genres:1, _id:0}).skip(5).limit(20)
+
+- Opgave 28:
+Toon enkel title, year, countries en genres vanaf de 6de film maar beperk het aantal tot maximum 10
+films die voldoen aan alle volgende voorwaarden:
+- 2de genre “Comedy”
+- 1ste country “USA”
+- year tussen 2010 en 2014 (beide inbegrepen)
+
+db.movieDetails.find({"genres.1": "Comedy", "countries.0": "USA", year: {$gte: 2010, $lte: 2014}}, {title:1, year:1, countries:1, genres:1, _id:0}).skip(5).limit(10)
+
+- Opgave 29:
+Zelfde als vorige opgave maar bij de 1ste voorwaarde moet de film getoond worden als “Comedy” als 1ste of 2de genre opgenomen is.
+
+db.movieDetails.find({$or: [{"genres.1": "Comedy"}, {"genres.0": "Comedy"}], "countries.0": "USA", year: {$gte: 2010, $lte: 2014}}, {title:1, year:1, countries:1, genres:1, _id:0}).skip(5).limit(10)
+
+- Opgave 30:
+Hoeveel films werden in 4 landen opgenomen?
+
+db.movieDetails.find({countries: {$size:4}}).count()
+
+- Opgave 31:
+Welke films zijn zowel in UK als USA gefilmd en zijn ofwel van het jaar 2004 ofwel van 2012? Toon
+enkel titel, jaar en countries in aflopende volgorde van het jaar en daarin oplopende volgorde van de
+titel.
+
+db.movieDetails.find({countries: {$all:["USA", "UK"]}, year: {$in:[2004, 2012]}}, {title:1, year:1, countries:1, _id:0}).sort({year:-1}, {title:1})
+
+- Opgave 32:
+Toon alle films die het woord west in de titel hebben en zijn gefilmd in New Zealand en alle films
+waarin Bruce Willis meespeelt.
+
+db.movieDetails.find({$or: [{title: /west/i, countries: "New Zealand"}, {actors: "Bruce Willis"}]}, {title:1, countries:1, actors:1, _id:0})
+
+- Opgave 33:
+Toon alle films die niet zijn gefilmd in USA of UK maar wel in België of Frankrijk.
+Toon enkel het id, de titel, de producer , de landen van uitgifte en de acteurs van de 51ste film die aan de voorwaarden voldoet.
+
+db.movieDetails.find({$and: [{countries: {$nin:["USA", "UK"]}}, {countries: {$in:["Belgium", "France"]}}]}, {title:1, producer:1, countries:1, _id:1, actors:1}).skip(50).limit(1)
+
+- Opgave 34:
+Zie opgave 33 maar pas de find aan om zowel de films die in België als in Frankrijk zijn gefilmd te
+tonen. En toon ze allemaal.
+
+db.movieDetails.find({$and: [{countries: {$nin:["USA", "UK"]}}, {countries: {$all:["Belgium", "France"]}}]}, {title:1, producer:1, countries:1, _id:1, actors:1})
+
+- Opgave 35:
+Welke films hebben 20 awards gewonnen? Geef naast de titel ook het aantal nominaties weer.
+
+db.movieDetails.find({"awards.wins":20}, {title:1, "awards.wins":1, _id:0})
+
+- Opgave 36:
+Hoeveel films hebben 80 of meer behaald op de tomato meter?
+
+db.movieDetails.find({"tomato.meter": {$gte:80}}).count()
+
+- Opgave 37:
+Toon de films waarbij het woord nominations vermeld wordt in het veld tekst van de awards?
+Toon zowel de titel, het aantal nominaties als de tekst.
+
+db.movieDetails.find({"awards.text": /nominations/}, {title:1, "awards.nomations":1, "awards.text":1, _id:0})
+
+- Opgave 38:
+Toon de 20ste film in de database die geen award heeft gewonnen. Welke film is dit?
+
+db.movieDetails.find({"awards.wins":0}, {title:1, "awards.wins":1, _id:0}).skip(19).limit(1)
+
+- Opgave 39:
+Hoeveel films hebben als eerste locatie niet USA?
+
+db.movieDetails.find({"countries.0": {$ne: "USA"}}).count()
+
+- Opgave 40:
+Geef de titel weer van de films waarvoor meer dan 500.000 stemmen werden uitgebracht en die een
+rating hebben van 8,5 of meer. Geef naast de rating ook het aantal stemmen weer.
+
+db.movieDetails.find({$and: [{"imdb.rating": {$gte: 8.5}}, {"imdb.votes": {$gt: 500000}}]}, {title:1, "imdb.rating":1, "imdb.votes":1, _id:0})
+
+- Opgave 41:
+Hoeveel films hebben een rating van meer dan 8,5 of hebben meer dan 500.000 uitgebrachte stemmen?
+
+db.movieDetails.find({$or: [{"imdb.rating": {$gt: 8.5}}, {"imdb.votes": {$gt: 500000}}]}).count()
+
+- Opgave 42:
+Geef de titel weer van de films waarvoor meer dan 500.000 stemmen werden uitgebracht en die een
+rating hebben van 8,5 of meer, en de films die op de tomato meter 90 of meer hebben. Geef naast de
+rating ook het aantal stemmen en de tomato meter weer.
+
+db.movieDetails.find({$or: [{"imdb.rating": {$gte: 8.5}, "imdb.votes": {$gt: 500000}}, {"tomato.meter": {$gte: 90}}]}, {title:1, "imdb.rating":1, "imdb.votes":1, "tomato.meter":1, _id:0})
+
+- Opgave 43:
+Idem vorige opgave maar sorteer volgens aantal stemmen (oplopend) en bij eenzelfde aantal
+stemmen volgens tomato meter (aflopend). Toon enkel de 10de tot en met 19de film.
+
+db.movieDetails.find({$or: [{"imdb.rating": {$gte: 8.5}, "imdb.votes": {$gt: 500000}}, {"tomato.meter": {$gte: 90}}]}, {title:1, "imdb.rating":1, "imdb.votes":1, "tomato.meter":1, _id:0}).sort({"imdb.votes":1, "tomato.meter":-1}).skip(9).limit(10)
+
+- Opgave 44:
+Bij hoeveel films staat de speeltijd (runtime) ingevuld?
+
+db.movieDetails.find({runtime: {$ne: null}}).count()
