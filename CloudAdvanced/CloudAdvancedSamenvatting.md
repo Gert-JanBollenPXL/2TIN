@@ -144,7 +144,7 @@ When selecting a region these things need to be taking into account:
 - **Latency & performance**: Choosing a region that provides the lowest latency and best network performance for users
 - **Availability of services**: Not all Azure services are available in every region, so make sure to select a region that supports the required services
 - **Resiliency & disaster recovery**: Using regions with multiple availability zones or paired regions for high availability and disaster recovery
-- **Cost**: Pricing for Azure services varies by reion, so cost considerations may influence selection
+- **Cost**: Pricing for Azure services varies by region, so cost considerations may influence selection
 
 #### 1.1.3 Paired regions
 
@@ -152,8 +152,8 @@ Most Azure regions have a paired region, this is a geographically seperated seco
 
 - **Geo-redundancy**: Data and workloads can be replicated between the paired regions to improve resiliency
 - **Disaster recovery**: In the event of a regional outage, Microsoft prioritizes recovery of one region over its pair to minimize downtime
-- **Controlled updates**: Planned maintenance and updates are rolled out sequentially to paired region, reducing the risk of simultanious failures
-- **physical seperation**: Paired regions are located far enough apart to mitigate the impact of regional disasters as earthquakes or floods
+- **Controlled updates**: Planned maintenance and updates are rolled out sequentially to paired regions, reducing the risk of simultanious failures
+- **physical seperation**: Paired regions are located far enough apart to mitigate the impact of regional disasters such as earthquakes or floods
 
 #### 1.1.4 Point of presence
 
@@ -210,7 +210,7 @@ When you create a VM, typically 2 disks are provisioned (OS disk, a **managed** 
 A **Network security group** controls inbound and outbound network traffic to Azure resources by defining rules based on IP addresses and ports.
 
 - **Stateful**: automatically allow response traffic
-- Can be associated with: virtual network subnets or network interfaces
+- Can be associated with: virtual network subnets or network interfaces (NICs)
 
 ##### 1.2.3.2 Virtual networks (VNets)
 
@@ -229,7 +229,7 @@ A **public IP** allows Azure resources to communicate with the internet. Public 
 
 ### 1.3 Azure resource manager
 
-Azure resource manager (ARM) is the deployment and management service for Azure. It does not matter what you used (Portal, CLI, REST) to create, update or delete a resource ARM will handle the request.
+Azure resource manager (ARM) is the deployment and management service for Azure. It does not matter what you used (Portal, CLI, REST) to create, update or delete a resource, ARM will handle the request.
 
 - Azure portal: GUI
 - Azure CLI:
@@ -275,7 +275,7 @@ There are multiple ways to provide outbound connectivity from Azure VMs to the i
 - **public subnets**: This is not the default after 31/05 2026! Now when you create a subnet it is by default private.
 - **private subnets**: common options to grant outbound connectivity:
     - **public IP**: OK for test environments, not for production
-    - **NAT gateway**
+    - **NAT gateway**: recommended
 
 ##### 2.1.1.1 NAT gateway
 
@@ -283,7 +283,7 @@ A NAT gateway is associated with one or more subnets in a virtual network.
 
 - A NAT gateway is attached to subnets! (not the virtual network itself)
 - One NAT gateway can be associated with multiple subnets in the same virtual network
-- The same NAT gateway cannot be used accross differnet virtual networks
+- The same NAT gateway cannot be used accross different virtual networks
 - Each subnet can have at most one NAT gateway
 - Each public IP address provides up to 64k SNAT ports (add more public IPs to increase)
 
@@ -300,15 +300,15 @@ Inbound connectivity is typically handled seperately from outbound connectivity.
 In traditional on-premises and early cloud setups, admins often used a **jump server** to access machines in a private network. This is a **hardened intermediary host** that sits between an untrusted network (such as the internet) and a secure internal network. It serves as a **controlled** entypoint for admin access so that direct connections from the internet to every individual server are not allowed.
 
 The typical setup consists of:
-- A VM is deployed wiuth a public IP
+- A VM deployed with a public IP
 - Admins connect to the jump server using SSH or RDP
 - From the jump server, admins connect to other private VMs using their **private** IPs
 - The jump server acts as a secure "hop" between public acces and the internet environment
 
 Challenges of using a jump server:
 - Jump server must be **secured, patched and monitored**
-- It must expose at least SSH or RDP ports to the internet which increase attack surface
-- If used widely, required **ongoing management and maintenance**
+- It must expose at least SSH or RDP ports to the internet which increases attack surface
+- If used widely, requires **ongoing management and maintenance**
 - Each new target VM may require additional configuration or mangament rules
 
 #### 2.2.2 Azure Bastion: jump host as a service
@@ -450,7 +450,7 @@ Another way to automate Azure operations is by using Azure Automation runbooks, 
 Benefits:
 - Centralized execution
 - Scheduling and triggers
-- operational efficiency (well suited for repeatable tasks)
+- Operational efficiency (well suited for repeatable tasks)
 - Secure authentication options (can use managed identities)
 
 Limitations/drawbacks:
@@ -463,7 +463,7 @@ Limitations/drawbacks:
 
 #### 3.1.3 Infrastructure as code
 
-Another way of automating Azure resources is by defining them through IaC. This uses a declaritive model: you describe the desired state of your environment and the tool determines what to create, update or remove. This is the key difference from Azure CLi scripts which are imperative and require you to define each step explicitly.
+Another way of automating Azure resources is by defining them through IaC. This uses a **declaritive** model: you describe the desired state of your environment and the tool determines what to create, update or remove. This is the key difference from Azure CLi scripts which are **imperative** and require you to define each step explicitly.
 
 Benefits:
 - Version control
@@ -511,7 +511,7 @@ The main advantage of Terraform is its multi-cloud support and strong state-driv
 
 ### 3.3 Terraform
 
-This was handled in class in is fully practical, I am not including it here.
+This was handled in class and is fully practical, I am not including it here.
 
 ---
 
@@ -571,7 +571,7 @@ Server roles run as virtual machines on Type 1 hypervisors (VMware, Hyper-V, Pro
 
 The security gateway between the internal network and the interent:
 - Filters inbound and outbound traffix based on rules
-- Protects internal systems from external threatss
+- Protects internal systems from external threats
 - Terminates VPN tunnels for remote workers
 
 #### 4.1.2 Modern workplace
@@ -653,16 +653,16 @@ Organizations can purchase Microsoft 365 directly from Microsoft or through a pa
 Microsoft Entra ID is Microsoft's cloud based identity and access management (IAM) service. It helps users securely access apps, devices and data. It was previously called Azure Active Directory (Azure AD). It provies core identity capabilities such as:
 - Authentication
 - Authorization
-- Single sing-on (SSO)
+- Single sign-on (SSO)
 - Conditional access
 
-Organizations use Microsoft Entra ID to give employees, guestss and partners secure access to internal and external resources.
+Organizations use Microsoft Entra ID to give employees, guests and partners secure access to internal and external resources.
 
 #### 5.1.1 Terminology
 
 - **UPN**: each user is identified by a unique User Principal Name (UPN)
 - **Tenant**: an instance of Entra ID for a single organization, each tenant has a unique ID and domain name
-- **directory service**: a logical container within a tenant holding and organizing identity related resources
+- **Directory service**: a logical container within a tenant holding and organizing identity related resources
 - **Multi-tenant**: an organization with multiple Entra ID instances often due to reasons like subsidiaries, mergers, ...
 
 #### 5.1.2 Identity types
@@ -671,7 +671,7 @@ In Microsoft Entra ID, there are different types of identities that are supporte
 
 - **User identities**: identities assigned to people (can be internal or external users)
 - **Device identities**: identities assigned to physical devices (mobile phones, desktops, IoT devices, ...)
-- **Workload identities**: identities assigned to software-based objexts (applications, VMs, services, container, ...)
+- **Workload identities**: identities assigned to software-based objects (applications, VMs, services, containers, ...)
     - **Service principal**: Security identity of an application in a tenant, used to grant app-level permissions to resources
     - **Managed identity**: Microsoft Entra identity that Azure creates and manages automatically for supported resources so applications can authenticate without storing or rotating credentials in code
 
