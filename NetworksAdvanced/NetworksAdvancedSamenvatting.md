@@ -29,7 +29,7 @@ Networks Advanced
 - **Ingress**: This is used to describe the port where a frame enters the device
 - **Egress**: This is used to describe the port that frames will use when leaving the device
 
-A LAN switch maintains a table that is referenced when forwarding traffic through the switch. The only intelligence of a LAN switch is its ability to forward traffic. It does this based on the ingress port and the detination MAC address of an ethernet frame. (note: an ethernet frame will never be forwarded out the same port which it was received on)
+A LAN switch maintains a table that is referenced when forwarding traffic through the switch. The only intelligence of a LAN switch is its ability to forward traffic. It does this based on the ingress port and the destination MAC address of an ethernet frame. (note: an ethernet frame will never be forwarded out the same port which it was received on)
 
 ##### 1.2.1.1 The switch MAC address table
 
@@ -72,8 +72,9 @@ Switches make **layer 2** decisions very quickly, they use one of two methods to
 
 **Broadcast domain**: A network segment where a Layer 2 broadcast sent by one device is received by all devices in that domain
 
-- **witches**: Forward broadcasts to all ports, so connected switches remain in the same broadcast domain
+- **Switches**: Forward broadcasts to all ports, so connected switches remain in the same broadcast domain
 - **Routers**: Separate broadcast domains and do not forward Layer 2 broadcasts
+
 Too many broadcasts can cause network congestion and reduce performance.
 
 ---
@@ -147,7 +148,7 @@ DTP (Dynamic Trunking Protocol) is a Cisco proprietary protocol that automatical
 
 - Used to automatically establish trunk links between Cisco switches
 - Operates only between devices that support DTP
-- Default mode on many Cisco switches is dynamic auto
+- Default mode on many Cisco switches is 'dynamic auto'
 - Non-Cisco devices generally do not support DTP
 - DTP can be disabled using ``switchport nonegotiate``
 
@@ -416,7 +417,7 @@ RSTP keeps the STP root and designated port roles and adds 2 new roles:
 
 ---
 
-### 1.6 Ethercahnnel
+### 1.6 Etherchannel
 #### 1.6.1 Etherchannel operation
 
 Link Aggregation combines multiple physical Ethernet links into a single logical link to increase bandwidth and provide redundancy.
@@ -501,7 +502,7 @@ Before a DHCP lease expires, the client renews it using a two-step process:
 
 ### 1.8 SLAAC and DHCPv6
 
-We only briefly touched on IPv6 and barely touched this so I am skipping it
+We only briefly touched on IPv6 and barely used this so I am skipping it
 
 ---
 
@@ -550,7 +551,7 @@ Failover Steps:
 
 ##### 1.9.1.4 FHRP options
 
-There are multiple options available for FHRPs, we will mostly talk about HSRP (hot standby router protocol)
+There are multiple options available for FHRPs, we will mostly talk about HSRP (hot standby router protocol), in the exercises I use vrrp (virtual router redundancy protocol).
 
 #### 1.9.2 HSRP
 
@@ -616,10 +617,10 @@ Security devices:
 | Device     | Purpose                                   |
 | ---------- | ----------------------------------------- |
 | VPN Router | Secure remote access                      |
-| NGFW       | Firewall with advanced threat protection  |
-| NAC (ISE)  | Controls and authenticates network access |
-| ESA        | Protects email traffic                    |
-| WSA        | Protects web traffic                      |
+| NGFW (next generation firewall)       | Firewall with advanced threat protection  |
+| NAC (network access control device)  | Controls and authenticates network access |
+| ESA (email security appliance)        | Protects email traffic                    |
+| WSA (web security appliance)        | Protects web traffic                      |
 
 #### 1.10.2 AAA (authenticaiton, authorization, accounting)
 
@@ -831,6 +832,7 @@ Because WLANs are half-duplex and a client cannot "hear" while it is sending, it
 4. Wait random time if denied
 5. Send data
 6. Receive ACK
+
 No ACK = Assume collision
 
 ##### 1.12.3.3 Wireless client and AP association
@@ -870,22 +872,22 @@ Control and Provisioning of Wireless Access Points which enables a WLC to manage
 
 #### 1.12.5 Channel management
 
-For the 2.4 GHz band each channel is 22MHz bandwidth and is seperated from the next channel by 5 MHz. The best non-overlapping channels are : 1, 6 and 11.
+For the 2.4 GHz band each channel is 22MHz bandwidth and is seperated from the next channel by 5 MHz. The best non-overlapping channels are: 1, 6 and 11.
 
 For the 5GHz band there are 24 channels where each channel is seperated from the next channel by 20MHz. Here the non-overlapping channels are: 36, 48 and 60.
 
 #### 1.12.6 WLAN threats
 
-**Interception of Data**
+**Interception of Data**:
 Sniffing traffic
 
-**Wireless Intruders**
+**Wireless Intruders**:
 Unauthorized users
 
-**DoS Attacks**
+**DoS Attacks**:
 Disrupt service
 
-**Rogue APs**
+**Rogue APs**:
 Unauthorized AP connected to network
 
 Can be used to:
@@ -897,7 +899,7 @@ Often created by:
 - Unauthorized employee
 - Personal hotspot
 
-**Evil twin attack**
+**Evil twin attack**:
 Type of MITM attack, attacker creates AP with same SSID as legitimate AP, victims connect unknowingly
 
 #### 1.12.7 WLAN security
@@ -913,7 +915,7 @@ Type of MITM attack, attacker creates AP with same SSID as legitimate AP, victim
 
 ##### 1.12.7.1 Authentication methods
 
-**Open Authentication**
+**Open Authentication**:
 No password
 
 Examples:
@@ -959,9 +961,9 @@ Routers use their routing table to make forwarding decisions.
 
 Routers select routes using the **longest prefix match** principle.
 
-- Multiple routes may match a destination address.
-- The route with the most matching leftmost bits is selected.
-- The most specific route is always preferred.
+- Multiple routes may match a destination address
+- The route with the most matching leftmost bits is selected
+- The most specific route is always preferred
 
 ##### 1.14.1.3 Building the Routing Table
 
@@ -980,11 +982,11 @@ Routes can come from:
 
 When a router receives a packet:
 
-1. Reads the destination IP address.
-2. Searches the routing table.
-3. Finds the longest matching route.
-4. Encapsulates the packet for the outgoing interface.
-5. Forwards the packet.
+1. Reads the destination IP address
+2. Searches the routing table
+3. Finds the longest matching route
+4. Encapsulates the packet for the outgoing interface
+5. Forwards the packet
 
 If no route exists and no default route is configured, the packet is dropped.
 
@@ -992,9 +994,9 @@ If no route exists and no default route is configured, the packet is dropped.
 
 A router can:
 
-- Forward directly to a destination device.
-- Forward to a next-hop router.
-- Drop the packet.
+- Forward directly to a destination device
+- Forward to a next-hop router
+- Drop the packet
 
 ##### 1.14.2.3 Packet Forwarding Mechanisms
 
@@ -3468,7 +3470,7 @@ Security Associations specify how the VPN tunnel will protect traffic, including
 
 Quality of Service (QoS) is a collection of techniques used to manage network resources and prioritize important traffic during periods of congestion.
 
-Without QoS, all traffic is treated equally. During congestion, delay-sensitive traffic such as voice and video can experience poor performance due to delays and packet loss. QoS becomes active when congestion occurs and allows network devices to prioritize critical traffic. :contentReference[oaicite:0]{index=0}
+Without QoS, all traffic is treated equally. During congestion, delay-sensitive traffic such as voice and video can experience poor performance due to delays and packet loss. QoS becomes active when congestion occurs and allows network devices to prioritize critical traffic.
 
 ##### 2.9.1.1 Bandwidth
 
