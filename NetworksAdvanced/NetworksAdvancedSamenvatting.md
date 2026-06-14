@@ -58,7 +58,7 @@ Switches make **layer 2** decisions very quickly, they use one of two methods to
     - **Automatic buffering**: makes it possible to support any mix of ethernet speeds
 - **Cut-through switching**: the forwarding process is started afer the destination MAC address of an incoming frame and the egress port have been determined
 
-#### 1.2.2 Collision and broadcasst domains
+#### 1.2.2 Collision and broadcast domains
 ##### 1.2.2.1 Collision domains
 
 **Collision domain**: A network segment where devices share the same communication medium, so simultaneous transmissions can cause collisions.
@@ -250,15 +250,12 @@ STP uses the Spanning Tree Algorithm (STA) to create a loop-free network in four
 | ------------------ | ---------------------------------------------------------------------- |
 | BPDU               | Bridge Protocol Data Unit used by switches to exchange STP information |
 | BID (Bridge ID)    | Value used to elect the Root Bridge                                    |
-| Bridge Priority    | Part of the BID; lower value is preferred                              |
-| Extended System ID | Identifies the VLAN associated with the BPDU                           |
-| MAC Address        | Used as a tie-breaker when priorities are equal                        |
 | Root Bridge        | Switch with the lowest BID                                             |
 | Root Port          | Best path to the Root Bridge                                           |
 | Designated Port    | Forwarding port for a network segment                                  |
 | Alternate Port     | Blocked port that prevents loops                                       |
 
-The Bridge ID (BID) is used by STP to elect the Root Bridge.
+The Bridge ID (BID) is used by STP to elect the Root Bridge:
 
 | Component          | Description                                                 |
 | ------------------ | ----------------------------------------------------------- |
@@ -761,7 +758,7 @@ Uses:
 
 ##### 1.12.1.4 802.11 standards & radio frequencies
 
-These standards define how radio frequencies are used for wireless links. Most of the standards specify that wireless devices have one antenna to transmit and receive wireless signales on the specified radio frenquency (2.4 GHz or 5 GHz). Some of the newer standards that transmit and receive at higher speeds require access points and wireless clients to have multiple antennas using the multiple input and multiple ouput technology.
+These standards define how radio frequencies are used for wireless links. Most of the standards specify that wireless devices have one antenna to transmit and receive wireless signals on the specified radio frenquency (2.4 GHz or 5 GHz). Some of the newer standards that transmit and receive at higher speeds require access points and wireless clients to have multiple antennas using the MIMO (multiple input and multiple ouput) technology.
 
 ##### 1.12.1.5 Wireless standards organizations
 
@@ -1394,7 +1391,7 @@ A network administrator should:
 
 
 #### 1.16.3 Common Troubleshooting Commands
-##### 1.16.3.1 ping
+##### 1.16.3.1 ``ping``
 
 Purpose:
 
@@ -1406,7 +1403,7 @@ Benefits:
 - Helps isolate connectivity problems.
 - Extended ping provides additional testing options.
 
-##### 1.16.3.2 traceroute
+##### 1.16.3.2 ``traceroute``
 
 Purpose:
 
@@ -1418,7 +1415,7 @@ Benefits:
 - Helps locate routing failures.
 - Identifies where packets stop progressing.
 
-##### 1.16.3.3 show ip route
+##### 1.16.3.3 ``show ip route``
 
 Purpose:
 
@@ -1430,7 +1427,7 @@ Benefits:
 - Confirm static routes exist.
 - Verify default route configuration.
 
-##### 1.16.3.4 show ip interface brief
+##### 1.16.3.4 ``show ip interface brief``
 
 Purpose:
 
@@ -1442,7 +1439,7 @@ Benefits:
 - Confirm IP addresses are configured correctly.
 - Quickly identify interfaces that are down.
 
-##### 1.16.3.5 show cdp neighbors
+##### 1.16.3.5 ``show cdp neighbors``
 
 Purpose:
 
@@ -1466,25 +1463,6 @@ When connectivity fails:
 - Locate incorrect route entries.
 - Correct routing information.
 - Verify connectivity is restored.
-
-##### 1.16.4.2 Example Problem
-
-Symptoms:
-
-- PC1 cannot communicate with PC3.
-- Pings between routers are successful.
-- End-to-end communication fails.
-
-Investigation:
-
-- Routing table analysis reveals an incorrect static route.
-
-Solution:
-
-- Remove the incorrect static route.
-- Configure the correct static route.
-- Verify the updated route appears in the routing table.
-- Retest connectivity.
 
 #### 1.16.5 Packet Forwarding Review
 ##### 1.16.5.1 End-to-End Packet Flow
